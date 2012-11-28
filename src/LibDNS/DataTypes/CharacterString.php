@@ -7,17 +7,26 @@
 
   class CharacterString extends DataType {
 
-    private $string;
-    private $length;
+    private $string = '';
+    private $length = 0;
 
-    public static function createFromPacket(Packet $packet, $dataLength = NULL) {
+    public function loadFromPacket(Packet $packet, $dataLength = NULL) {
       if ((FALSE === $length = ord($packet->read(1))) || (FALSE === $data = $packet->read($length))) {
         throw new \InvalidArgumentException('Malformed packet');
       }
-      return new self($data);
+      $this->__construct($data);
+      return $this;
     }
 
-    public function __construct($string) {
+    public function getRawData() {
+      return chr(strlen($this->length)).$this->string;
+    }
+
+    public function getFormattedData() {
+      return $this->string;
+    }
+
+    public function setData($string = NULL) {
       if (!is_scalar($string) && $string !== NULL && !(is_object($string) && method_exists($string, '__toString'))) {
         throw new \InvalidArgumentException('Invalid data type');
       } else if (($length = strlen($string)) > 255) {
@@ -27,12 +36,8 @@
       $this->string = (string) $string;
     }
 
-    public function getRawData() {
-      return chr(strlen($this->length)).$this->string;
-    }
-
-    public function getFormattedData() {
-      return $this->string;
+    public function getLength() {
+      return $this->length;
     }
 
   }

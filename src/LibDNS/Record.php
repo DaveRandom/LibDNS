@@ -3,7 +3,6 @@
   namespace DaveRandom\LibDNS;
 
   use \DaveRandom\LibDNS\DataTypes\DomainName;
-  use \DaveRandom\LibDNS\PacketBuilder\PacketBuilder;
 
   abstract class Record {
 
@@ -39,33 +38,37 @@
     protected $type;
     protected $class;
 
-    public function __construct($name, $type = self::TYPE_A, $class = self::CLASS_IN) {
-      if ($name instanceof DomainName) {
-        $this->name = $name;
-      } else {
-        $this->name = new DomainName($name);
+    public function __construct($name = NULL, $type = self::TYPE_A, $class = self::CLASS_IN) {
+      if ($name !== NULL) {
+        $this->setName($name);
       }
-      $this->type = $type;
-      $this->class = $class;
-    }
-
-    public function writeToPacket(PacketBuilder $packetBuilder) {
-      $packetBuilder
-        ->addWriteBlock()
-        ->writeDomainName($this->name)
-        ->write(pack('nn', $this->type, $this->class));
+      $this->setType($type);
+      $this->setClass($class);
     }
 
     public function getName() {
       return $this->name;
     }
+    public function setName($name) {
+      if ($name instanceof DomainName) {
+        $this->name = $name;
+      } else {
+        $this->name = new DomainName($name);
+      }
+    }
 
     public function getType() {
       return $this->type;
     }
+    public function setType($type) {
+      $this->type = (int) $type;
+    }
 
     public function getClass() {
       return $this->class;
+    }
+    public function setClass($class) {
+      $this->class = (int) $class;
     }
 
   }

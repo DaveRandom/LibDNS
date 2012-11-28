@@ -7,8 +7,6 @@
 
   abstract class Vector extends DataType {
 
-    public function __construct($data) {}
-
     public function getRawData() {
       return $this->constructRawData();
     }
@@ -16,6 +14,8 @@
     public function getFormattedData() {
       return $this->constructFormattedData();
     }
+
+    public function setData($data) {}
 
     abstract protected function constructRawData();
 

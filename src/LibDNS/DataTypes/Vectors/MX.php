@@ -13,10 +13,11 @@
     private $preferenceData;
     private $exchangeData;
 
-    public static function createFromPacket(Packet $packet, $dataLength = NULL) {
-      $preference = Short::createFromPacket($packet);
-      $exchange = DomainName::createFromPacket($packet);
-      return new self($preference, $exchange);
+    public function loadFromPacket(Packet $packet, $dataLength = NULL) {
+      $preference = (new Short)->loadFromPacket($packet, 2);
+      $exchange = (new DomainName)->loadFromPacket($packet);
+      $this->__construct($preference, $exchange);
+      return $this;
     }
 
     public function writeToPacket(PacketBuilder $packetBuilder, $withLengthWord = FALSE) {
@@ -26,7 +27,7 @@
         ->writeDomainName($this->eMailData);
     }
 
-    public function __construct($preference, $exchange) {
+    public function __construct($preference = NULL, $exchange = NULL) {
       $this->preferenceData = $preference instanceof Short ? $preference : new Short($preference);
       $this->exchangeData = $exchange instanceof DomainName ? $exchange : new DomainName($exchange);
     }

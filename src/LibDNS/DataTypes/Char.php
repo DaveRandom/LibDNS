@@ -9,14 +9,23 @@
 
     private $char = 0;
 
-    public static function createFromPacket(Packet $packet, $dataLength = 1) {
-      if (FALSE === $data = $packet->read(1)) {
+    public function loadFromPacket(Packet $packet, $dataLength = 1) {
+      if ($dataLength !== 1 || FALSE === $data = $packet->read(1)) {
         throw new \InvalidArgumentException('Malformed packet');
       }
-      return new self(ord($data));
+      $this->__construct(ord($data));
+      return $this;
     }
 
-    public function __construct($char) {
+    public function writeToPacket(Packet $packet, $withLengthWord = FALSE) {
+      $packet->prepareWriteBlock($withLengthWord)->write(chr($this->char));
+    }
+
+    public function getFormattedData() {
+      return $this->char;
+    }
+
+    public function setData() {
       if (is_scalar($char) || $char === NULL) {
         $char = (int) $char;
         if ($char < 0 || $char > 255) {
@@ -26,14 +35,6 @@
       } else {
         throw new \InvalidArgumentException('Invalid data type');
       }
-    }
-
-    public function writeToPacket(Packet $packet, $withLengthWord = FALSE) {
-      $packet->prepareWriteBlock($withLengthWord)->write(chr($this->char));
-    }
-
-    public function getFormattedData() {
-      return $this->char;
     }
 
   }

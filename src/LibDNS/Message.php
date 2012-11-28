@@ -46,8 +46,6 @@
     protected $nameServerRecords = array();
     protected $additionalRecords = array();
 
-    protected $compression = TRUE;
-
     public function __construct($id = NULL) {
       if ($id !== NULL) {
         $this->id = (int) $id;
@@ -71,19 +69,19 @@
       $this->responseCode = $meta & 0x000F;
 
       for ($i = 0; $i < $qdCount; $i++) {
-        $this->questionRecords[] = Query::createFromPacket($packet);
+        $this->questionRecords[] = (new Query)->loadFromPacket($packet);
       }
 
       for ($i = 0; $i < $anCount; $i++) {
-        $this->answerRecords[] = Resource::createFromPacket($packet);
+        $this->answerRecords[] = (new Resource)->loadFromPacket($packet);
       }
 
       for ($i = 0; $i < $nsCount; $i++) {
-        $this->nameServerRecords[] = Resource::createFromPacket($packet);
+        $this->nameServerRecords[] = (new Resource)->loadFromPacket($packet);
       }
 
       for ($i = 0; $i < $arCount; $i++) {
-        $this->additionalRecords[] = Resource::createFromPacket($packet);
+        $this->additionalRecords[] = (new Resource)->loadFromPacket($packet);
       }
 
       return $this;

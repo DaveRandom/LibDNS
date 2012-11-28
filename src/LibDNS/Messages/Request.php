@@ -8,4 +8,6 @@
 
     protected $type = 0;
 
+    protected $compression = FALSE;
+
   }

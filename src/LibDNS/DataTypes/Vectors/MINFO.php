@@ -12,10 +12,11 @@
     private $rMailData;
     private $eMailData;
 
-    public static function createFromPacket(Packet $packet, $dataLength = NULL) {
-      $rMail = DomainName::createFromPacket($packet);
-      $eMail = DomainName::createFromPacket($packet);
-      return new self($rMail, $eMail);
+    public function loadFromPacket(Packet $packet, $dataLength = NULL) {
+      $rMail = (new DomainName)->loadFromPacket($packet);
+      $eMail = (new DomainName)->loadFromPacket($packet);
+      $this->__construct($rMail, $eMail);
+      return $this;
     }
 
     public function writeToPacket(PacketBuilder $packetBuilder, $withLengthWord = FALSE) {
@@ -25,7 +26,7 @@
         ->writeDomainName($this->eMailData);
     }
 
-    public function __construct($rMail, $eMail) {
+    public function __construct($rMail = NULL, $eMail = NULL) {
       $this->rMailData = $rMail instanceof DomainName ? $rMail : new DomainName($rMail);
       $this->eMailData = $eMail instanceof DomainName ? $eMail : new DomainName($eMail);
     }

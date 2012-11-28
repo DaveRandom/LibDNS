@@ -14,14 +14,15 @@
     private $protocolData;
     private $servicesData;
 
-    public static function createFromPacket(Packet $packet, $dataLength) {
-      $address = IPv4Address::createFromPacket($packet);
-      $protocol = Char::createFromPacket($packet);
-      $services = BitMap::createFromPacket($packet, $dataLength - 5);
-      return new self($address, $protocol, $services);
+    public function loadFromPacket(Packet $packet, $dataLength = NULL) {
+      $address = (new IPv4Address)->loadFromPacket($packet, 4);
+      $protocol = (new Char)->loadFromPacket($packet, 1);
+      $services = (new BitMap)->loadFromPacket($packet, $dataLength - 5);
+      $this->__construct($address, $protocol, $services);
+      return $this;
     }
 
-    public function __construct($address, $protocol, $services) {
+    public function __construct($address = NULL, $protocol = NULL, $services = NULL) {
       $this->addressData = $address instanceof IPv4Address ? $address : new IPv4Address($address);
       $this->protocolData = $protocol instanceof Char ? $protocol : new Char($protocol);
       $this->servicesData = $services instanceof BitMap ? $services : new BitMap($services);

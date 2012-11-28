@@ -11,13 +11,14 @@
     private $cpuData;
     private $osData;
 
-    public static function createFromPacket(Packet $packet, $dataLength = NULL) {
-      $cpu = CharacterString::createFromPacket($packet);
-      $os = CharacterString::createFromPacket($packet);
-      return new self($cpu, $os);
+    public function loadFromPacket(Packet $packet, $dataLength = NULL) {
+      $cpu = (new CharacterString)->loadFromPacket($packet);
+      $os = (new CharacterString)->loadFromPacket($packet);
+      $this->__construct($cpu, $os);
+      return $this;
     }
 
-    public function __construct($cpu, $os) {
+    public function __construct($cpu = NULL, $os = NULL) {
       $this->cpuData = $cpu instanceof CharacterString ? $cpu : new CharacterString($cpu);
       $this->osData = $os instanceof CharacterString ? $os : new CharacterString($os);
     }

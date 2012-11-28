@@ -18,18 +18,19 @@
     private $expireData;
     private $minimumData;
 
-    public static function createFromPacket(Packet $packet, $dataLength = NULL) {
-      $mName = DomainName::createFromPacket($packet);
-      $rMail = DomainName::createFromPacket($packet);
-      $serial = Long::createFromPacket($packet);
-      $refresh = Long::createFromPacket($packet);
-      $retry = Long::createFromPacket($packet);
-      $expire = Long::createFromPacket($packet);
-      $minimum = Long::createFromPacket($packet);
-      return new self($mName, $rMail, $serial, $refresh, $retry, $expire, $minimum);
+    public function loadFromPacket(Packet $packet, $dataLength = NULL) {
+      $mName = (new DomainName)->loadFromPacket($packet);
+      $rMail = (new DomainName)->loadFromPacket($packet);
+      $serial = (new Long)->loadFromPacket($packet, 4);
+      $refresh = (new Long)->loadFromPacket($packet, 4);
+      $retry = (new Long)->loadFromPacket($packet, 4);
+      $expire = (new Long)->loadFromPacket($packet, 4);
+      $minimum = (new Long)->loadFromPacket($packet, 4);
+      $this->__construct($mName, $rMail, $serial, $refresh, $retry, $expire, $minimum);
+      return $this;
     }
 
-    public function __construct($mName, $rMail, $serial, $refresh, $retry, $expire, $minimum) {
+    public function __construct($mName = NULL, $rMail = NULL, $serial = NULL, $refresh = NULL, $retry = NULL, $expire = NULL, $minimum = NULL) {
       $this->mNameData = $mName instanceof DomainName ? $mName : new DomainName($mName);
       $this->rMailData = $rMail instanceof DomainName ? $rMail : new DomainName($rMail);
       $this->serialData = $serial instanceof Long ? $serial : new Long($serial);

@@ -9,14 +9,23 @@
 
     private $short = 0;
 
-    public static function createFromPacket(Packet $packet, $dataLength = 2) {
-      if (FALSE === $data = $packet->read(2)) {
+    public function loadFromPacket(Packet $packet, $dataLength = 4) {
+      if ($dataLength !== 2 || FALSE === $data = $packet->read(2)) {
         throw new \InvalidArgumentException('Malformed packet');
       }
-      return new self(current(unpack('n', $data)));
+      $this->__construct(current(unpack('n', $data)));
+      return $this;
     }
 
-    public function __construct($short) {
+    public function getRawData() {
+      return pack('n', $this->short);
+    }
+
+    public function getFormattedData() {
+      return $this->short;
+    }
+
+    public function setData($short) {
       if (is_scalar($short) || $short === NULL) {
         $short = (int) $short;
         if ($short < 0 || $short > 65535) {
@@ -26,14 +35,6 @@
       } else {
         throw new \InvalidArgumentException('Invalid data type');
       }
-    }
-
-    public function getRawData() {
-      return pack('n', $this->short);
-    }
-
-    public function getFormattedData() {
-      return $this->short;
     }
 
   }

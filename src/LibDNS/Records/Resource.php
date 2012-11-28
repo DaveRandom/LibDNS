@@ -13,7 +13,7 @@
     protected $ttl;
     protected $data;
 
-    private static $dataTypes = array(
+    private $dataTypes = array(
       1 => 'IPv4Address',      // A
       2 => 'DomainName',       // NS
       3 => 'DomainName',       // MD
@@ -33,39 +33,50 @@
       28 => 'IPv6Address'      // AAAA
     );
 
-    private static function parseResourceHeader(Packet $packet) {
+    private function parseResourceHeader(Packet $packet) {
       if (FALSE === $header = $packet->read(10)) {
         throw new \InvalidArgumentException('Malformed packet');
       }
       return array_values(unpack('ntype/nclass/Nttl/nlength', $header));
     }
-    private static function createDataObject($packet, $dataLength, $type) {
-      $class = '\\DaveRandom\\LibDNS\\DataTypes\\'.self::$dataTypes[$type];
-      return $class::createFromPacket($packet, $dataLength);
+    private function createDataObject($packet, $dataLength, $type) {
+      $class = '\\DaveRandom\\LibDNS\\DataTypes\\'.$this->dataTypes[$type];
+      $obj = new $class;
+      $obj->loadFromPacket($packet, $dataLength);
+      return $obj;
     }
 
-    public static function createFromPacket(Packet $packet) {
-      $name = DomainName::createFromPacket($packet);
-      list($type, $class, $ttl, $dataLength) = self::parseResourceHeader($packet);
-      $data = self::createDataObject($packet, $dataLength, $type);
-      return new self($name, $type, $class, $ttl, $data);
+    public function loadFromPacket(Packet $packet) {
+      $name = new DomainName;
+      $name->loadFromPacket($packet);
+      list($type, $class, $ttl, $dataLength) = $this->parseResourceHeader($packet);
+      $data = $this->createDataObject($packet, $dataLength, $type);
+      $this->__construct($name, $type, $class, $ttl, $data);
+      return $this;
     }
 
-    public function __construct(DomainName $name, $type, $class, $ttl, DataType $data) {
+    public function __construct($name = NULL, $type = self::TYPE_A, $class = self::CLASS_IN, $ttl = NULL, DataType $data = NULL) {
       parent::__construct($name, $type, $class);
-      $this->ttl = $ttl;
-      $this->data = $data;
+      if ($ttl !== NULL) {
+        $this->setTTL($ttl);
+      }
+      if ($data !== NULL) {
+        $this->setData($data);
+      }
     }
 
     public function writeToPacket(PacketBuilder $packetBuilder) {
-      parent::writeToPacket($packetBuilder);
-      $ttlBlock = $packetBuilder
-        ->addWriteBlock()
-        ->write(pack('N', $this->ttl));
+      if ($this->ttl === NULL || $this->data === NULL) {
+        throw new \Exception('Data incomplete');
+      }
       try {
+        $headBlock = $packetBuilder
+          ->addWriteBlock()
+          ->writeDomainName($this->name)
+          ->write(pack('nnN', $this->type, $this->class, $this->ttl));
         $this->data->writeToPacket($packetBuilder, TRUE);
       } catch (\Exception $e) {
-        $packetBuilder->removeWriteBlock($ttlBlock);
+        $packetBuilder->removeWriteBlock($headBlock);
         throw $e;
       }
     }
@@ -73,9 +84,15 @@
     public function getTTL() {
       return $this->ttl;
     }
+    public function setTTL($ttl) {
+      $this->ttl = (int) $ttl;
+    }
 
     public function getData() {
       return $this->data;
+    }
+    public function setData(DataType $data) {
+      $this->data = $data;
     }
 
   }

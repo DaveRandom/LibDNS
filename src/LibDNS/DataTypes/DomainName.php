@@ -8,16 +8,9 @@
 
   class DomainName extends DataType {
 
-    private $name;
+    private $tokens = array();
 
-    public static function createFromPacket(Packet $packet, $dataLength = NULL) {
-      $position = $packet->tell();
-      $result = new self(self::recordNameToArray($packet, $position));
-      $packet->seek($position);
-      return $result;
-    }
-
-    private static function recordNameToArray(Packet $packet, &$position) {
+    private function recordNameToArray(Packet $packet, &$position) {
       $name = array();
       $complete = FALSE;
       while ($position < $packet->getLength()) {
@@ -33,7 +26,7 @@
             throw new \InvalidArgumentException('Malformed packet');
           }
           $offset = current(unpack('n', $pointer)) & 0x3FFF;
-          $name = array_merge($name, self::recordNameToArray($packet, $offset));
+          $name = array_merge($name, $this->recordNameToArray($packet, $offset));
           $position++;
           $complete = TRUE;
           break;
@@ -50,14 +43,12 @@
       return $name;
     }
 
-    public function __construct($name) {
-      if (is_array($name)) {
-        $this->name = $name;
-      } else if (is_string($name)) {
-        $this->name = explode('.', trim($name));
-      } else {
-        throw new \InvalidArgumentException('Invalid data type');
-      }
+    public function loadFromPacket(Packet $packet, $dataLength = NULL) {
+      $position = $packet->tell();
+      $data = $this->recordNameToArray($packet, $position);
+      $packet->seek($position);
+      $this->__construct($data);
+      return $this;
     }
 
     public function writeToPacket(PacketBuilder $packetBuilder, $withLengthWord = FALSE) {
@@ -68,7 +59,7 @@
 
     public function getRawData() {
       $result = '';
-      foreach ($this->name as $label) {
+      foreach ($this->tokens as $label) {
         $result .= pack('C', strlen($label)).$label;
       }
       $result .= "\x00";
@@ -76,11 +67,21 @@
     }
 
     public function getFormattedData() {
-      return implode('.', $this->name);
+      return implode('.', $this->tokens);
+    }
+
+    public function setData($name) {
+      if (is_array($name)) {
+        $this->tokens = $name;
+      } else if (is_string($name)) {
+        $this->tokens = explode('.', trim($name));
+      } else {
+        throw new \InvalidArgumentException('Invalid data type');
+      }
     }
 
     public function getTokens() {
-      return $this->name;
+      return $this->tokens;
     }
 
   }

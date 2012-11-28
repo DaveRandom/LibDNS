@@ -13,22 +13,14 @@
 
     private $octets = array();
 
-    public static function createFromPacket(Packet $packet, $dataLength = 4) {
-      if (FALSE === $data = $packet->read(4)) {
-        throw new \InvalidArgumentException('Malformed packet');
-      }
-      return new self(current(unpack('N', $data)));
-    }
-
-    private static function validateLongRange($long) {
+    private function validateLongRange($long) {
       if (PHP_INT_MAX < pow(2, 32)) {
         return TRUE; // 32-bit host, always return TRUE because we validated the data as an int
       } else {
         return $long >= 0 && $long <= 0xFFFFFFFF;
       }
     }
-
-    private static function longToOctets($long) {
+    private function longToOctets($long) {
       return array(
         ($long >> 24) & 0xFF,
         ($long >> 16) & 0xFF,
@@ -36,8 +28,7 @@
         $long & 0xFF
       );
     }
-
-    private static function octetsToLong($octets) {
+    private function octetsToLong($octets) {
       $long = 0;
       $long |= ($octets[0] << 24);
       $long |= ($octets[1] << 16);
@@ -46,7 +37,23 @@
       return $long;
     }
 
-    public function __construct($long) {
+    public function loadFromPacket(Packet $packet, $dataLength = 4) {
+      if ($dataLength !== 4 || FALSE === $data = $packet->read(4)) {
+        throw new \InvalidArgumentException('Malformed packet');
+      }
+      $this->__construct(current(unpack('N', $data)));
+      return $this;
+    }
+
+    public function getRawData() {
+      return call_user_func_array('pack', array_merge(array('C*'), $this->octets));
+    }
+
+    public function getFormattedData() {
+      return $this->octetsToLong($this->octets);
+    }
+
+    public function setData($long) {
       if (!is_int($long)) {
         if (is_scalar($long) || $long === NULL) {
           // 32bit-safe way of casting to int
@@ -55,18 +62,10 @@
           throw new \InvalidArgumentException('Invalid data type');
         }
       }
-      if (!self::validateLongRange($long)) {
+      if (!$this->validateLongRange($long)) {
         throw new \InvalidArgumentException('Value outside acceptable range for an unsigned long integer');
       }
-      $this->octets = self::longToOctets($long);
-    }
-
-    public function getRawData() {
-      return call_user_func_array('pack', array_merge(array('C*'), $this->octets));
-    }
-
-    public function getFormattedData() {
-      return self::octetsToLong($this->octets);
+      $this->octets = $this->longToOctets($long);
     }
 
   }

@@ -9,13 +9,6 @@
 
     private $blocks = array();
 
-    public static function createFromPacket(Packet $packet, $dataLength = 16) {
-      if (FALSE === $data = $packet->read(16)) {
-        throw new \InvalidArgumentException('Malformed packet');
-      }
-      return new self(array_values(unpack('n*', $data)));
-    }
-
     private function addressStringToBlockArray($address) {
       $address = preg_replace('/\s*/', '', $address);
       $blocks = explode(':', $address);
@@ -69,16 +62,12 @@
       return $block >= 0 && $block <= 65535;
     }
 
-    public function __construct($address) {
-      if (is_string($address)) {
-        if (!filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-          throw new \InvalidArgumentException('Invalid address data');
-        }
-        $address = $this->addressStringToBlockArray($address);
+    public function loadFromPacket(Packet $packet, $dataLength = 16) {
+      if ($dataLength !== 16 || FALSE === $data = $packet->read(16)) {
+        throw new \InvalidArgumentException('Malformed packet');
       }
-      if (!is_array($address) || !$this->blocks = $this->validateBlockArray($address)) {
-        throw new \InvalidArgumentException('Invalid address data');
-      }
+      $this->__construct(array_values(unpack('n*', $data)));
+      return $this;
     }
 
     public function getRawData() {
@@ -87,6 +76,23 @@
 
     public function getFormattedData() {
       return $this->blockArrayToAddressString($this->blocks);
+    }
+
+    public function setData($address) {
+      if (is_string($address)) {
+        if (!filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+          throw new \InvalidArgumentException('Invalid address data');
+        }
+        $address = $this->addressStringToBlockArray($address);
+      }
+      if (!is_array($address) || !$blocks = $this->validateBlockArray($address)) {
+        throw new \InvalidArgumentException('Invalid address data');
+      }
+      $this->blocks = $blocks;
+    }
+
+    public function getBlocks() {
+      return $this->blocks;
     }
 
   }

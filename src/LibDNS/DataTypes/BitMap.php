@@ -9,14 +9,40 @@
 
     private $map = array();
 
-    public static function createFromPacket(Packet $packet, $dataLength) {
-      if (FALSE === $data = $packet->read($dataLength)) {
-        throw new \InvalidArgumentException('Malformed packet');
+    private function createStringFromMap($map) {
+      $chars = array('C*');
+      end($map);
+      $last = key($map);
+      for ($i = $j = $char = 0; $i <= $last; $i++) {
+        $bit = isset($map[$i]) ? $map[$i] : 0;
+        $char |= ($bit << (7 - $j));
+        if (++$j === 8) {
+          $chars[] = $char;
+          $j = $char = 0;
+        }
       }
-      return new self($data);
+      if ($char) {
+        $chars[] = $char;
+      }
+      return call_user_func_array('pack', $chars);
     }
 
-    private function parseStringToMap($data) {
+    public function getRawData() {
+      return $this->createStringFromMap($this->map);
+    }
+
+    public function getFormattedData() {
+      $data = $this->createStringFromMap($this->map);
+      return call_user_func_array(
+        'sprintf',
+        array_merge(
+          array(str_repeat('%08b', strlen($data))),
+          array_values(unpack('C*', $data))
+        )
+      );
+    }
+
+    public function setData($data) {
       $map = array();
       if (is_array($data)) {
         foreach ($data as $bit) {
@@ -36,42 +62,6 @@
         throw new \InvalidArgumentException('Invalid data type');
       }
       return $map;
-    }
-    private function createStringFromMap($map) {
-      $chars = array('C*');
-      end($map);
-      $last = key($map);
-      for ($i = $j = $char = 0; $i <= $last; $i++) {
-        $bit = isset($map[$i]) ? $map[$i] : 0;
-        $char |= ($bit << (7 - $j));
-        if (++$j === 8) {
-          $chars[] = $char;
-          $j = $char = 0;
-        }
-      }
-      if ($char) {
-        $chars[] = $char;
-      }
-      return call_user_func_array('pack', $chars);
-    }
-
-    public function __construct($data) {
-      $this->map = $this->parseStringToMap($data);
-    }
-
-    public function getRawData() {
-      return $this->createStringFromMap($this->map);
-    }
-
-    public function getFormattedData() {
-      $data = $this->createStringFromMap($this->map);
-      return call_user_func_array(
-        'sprintf',
-        array_merge(
-          array(str_repeat('%08b', strlen($data))),
-          array_values(unpack('C*', $data))
-        )
-      );
     }
 
     public function getMap() {
