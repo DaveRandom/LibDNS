@@ -22,6 +22,11 @@
     const TYPE_MINFO = 14;
     const TYPE_MX    = 15;
     const TYPE_TXT   = 16;
+    const TYPE_RP    = 17;
+    const TYPE_AFSDB = 18;
+    const TYPE_X25   = 19;
+    const TYPE_ISDN  = 20;
+    const TYPE_RT    = 21;
     const TYPE_AAAA  = 28;
     const TYPE_AXFR  = 252;
     const TYPE_MAILB = 253;

@@ -19,7 +19,7 @@
         } else if ($pos === strlen($address) - 2) {
           $splicePos = 8 - $spliceCount;
         } else {
-          $splicePos = array_search('', $blocks, TRUE)) {
+          $splicePos = array_search('', $blocks, TRUE);
         }
         array_splice($blocks, $splicePos, 1, array_fill(0, $spliceCount, '0'));
       }

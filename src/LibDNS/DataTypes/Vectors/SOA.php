@@ -21,11 +21,11 @@
     public function loadFromPacket(Packet $packet, $dataLength = NULL) {
       $mName = (new DomainName)->loadFromPacket($packet);
       $rMail = (new DomainName)->loadFromPacket($packet);
-      $serial = (new Long)->loadFromPacket($packet, 4);
-      $refresh = (new Long)->loadFromPacket($packet, 4);
-      $retry = (new Long)->loadFromPacket($packet, 4);
-      $expire = (new Long)->loadFromPacket($packet, 4);
-      $minimum = (new Long)->loadFromPacket($packet, 4);
+      $serial = (new Long)->loadFromPacket($packet);
+      $refresh = (new Long)->loadFromPacket($packet);
+      $retry = (new Long)->loadFromPacket($packet);
+      $expire = (new Long)->loadFromPacket($packet);
+      $minimum = (new Long)->loadFromPacket($packet);
       $this->__construct($mName, $rMail, $serial, $refresh, $retry, $expire, $minimum);
       return $this;
     }
@@ -42,7 +42,7 @@
 
     public function writeToPacket(PacketBuilder $packetBuilder, $withLengthWord = FALSE) {
       $packetBuilder
-        ->addWriteBlock($withLengthWord)
+        ->addWriteBlock(TRUE)
         ->writeDomainName($this->mNameData)
         ->writeDomainName($this->rMailData)
         ->write($this->serialData->getRawData())

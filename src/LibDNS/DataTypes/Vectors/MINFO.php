@@ -21,7 +21,7 @@
 
     public function writeToPacket(PacketBuilder $packetBuilder, $withLengthWord = FALSE) {
       $packetBuilder
-        ->addWriteBlock($withLengthWord)
+        ->addWriteBlock(TRUE)
         ->writeDomainName($this->rMailData)
         ->writeDomainName($this->eMailData);
     }

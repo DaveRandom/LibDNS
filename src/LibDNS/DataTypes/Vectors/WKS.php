@@ -15,8 +15,8 @@
     private $servicesData;
 
     public function loadFromPacket(Packet $packet, $dataLength = NULL) {
-      $address = (new IPv4Address)->loadFromPacket($packet, 4);
-      $protocol = (new Char)->loadFromPacket($packet, 1);
+      $address = (new IPv4Address)->loadFromPacket($packet);
+      $protocol = (new Char)->loadFromPacket($packet);
       $services = (new BitMap)->loadFromPacket($packet, $dataLength - 5);
       $this->__construct($address, $protocol, $services);
       return $this;

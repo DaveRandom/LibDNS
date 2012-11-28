@@ -14,15 +14,15 @@
     protected $data;
 
     private $dataTypes = array(
-      1 => 'IPv4Address',      // A
-      2 => 'DomainName',       // NS
-      3 => 'DomainName',       // MD
-      4 => 'DomainName',       // MF
-      5 => 'DomainName',       // CNAME
-      6 => 'Vectors\\SOA',     // SOA
-      7 => 'DomainName',       // MB
-      8 => 'DomainName',       // MG
-      9 => 'DomainName',       // MR
+       1 => 'IPv4Address',     // A
+       2 => 'DomainName',      // NS
+       3 => 'DomainName',      // MD
+       4 => 'DomainName',      // MF
+       5 => 'DomainName',      // CNAME
+       6 => 'Vectors\\SOA',    // SOA
+       7 => 'DomainName',      // MB
+       8 => 'DomainName',      // MG
+       9 => 'DomainName',      // MR
       10 => 'Anything',        // NULL
       11 => 'Vectors\\WKS',    // WKS
       12 => 'DomainName',      // PTR
@@ -30,6 +30,11 @@
       14 => 'Vectors\\MINFO',  // MINFO
       15 => 'Vectors\\MX',     // MX
       16 => 'CharacterString', // TXT
+      17 => 'Vectors\\RP',     // RP
+      18 => 'Vectors\\AFSDB',  // AFSDB
+      19 => 'CharacterString', // X25
+      20 => 'Vectors\\ISDN',   // ISDN
+      21 => 'Vectors\\RT',     // RT
       28 => 'IPv6Address'      // AAAA
     );
 

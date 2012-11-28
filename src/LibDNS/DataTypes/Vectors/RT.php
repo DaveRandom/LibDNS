@@ -8,15 +8,15 @@
   use \DaveRandom\LibDNS\DataTypes\DomainName;
   use \DaveRandom\LibDNS\DataTypes\Short;
 
-  class MX extends Vector {
+  class RT extends Vector {
 
     private $preferenceData;
-    private $exchangeData;
+    private $intermediateHostData;
 
     public function loadFromPacket(Packet $packet, $dataLength = NULL) {
       $preference = (new Short)->loadFromPacket($packet);
-      $exchange = (new DomainName)->loadFromPacket($packet);
-      $this->__construct($preference, $exchange);
+      $intermediateHost = (new DomainName)->loadFromPacket($packet);
+      $this->__construct($preference, $intermediateHost);
       return $this;
     }
 
@@ -24,20 +24,20 @@
       $packetBuilder
         ->addWriteBlock(TRUE)
         ->write($this->preferenceData->getRawData())
-        ->writeDomainName($this->exchangeData);
+        ->writeDomainName($this->intermediateHostData);
     }
 
-    public function __construct($preference = NULL, $exchange = NULL) {
+    public function __construct($preference = NULL, $intermediateHost = NULL) {
       $this->preferenceData = $preference instanceof Short ? $preference : new Short($preference);
-      $this->exchangeData = $exchange instanceof DomainName ? $exchange : new DomainName($exchange);
+      $this->intermediateHostData = $intermediateHost instanceof DomainName ? $intermediateHost : new DomainName($intermediateHost);
     }
 
     protected function constructRawData() {
-      return $this->preferenceData->getRawData().$this->exchangeData->getRawData();
+      return $this->preferenceData->getRawData().$this->intermediateHostData->getRawData();
     }
 
     protected function constructFormattedData() {
-      return $this->preferenceData->getFormattedData().' '.$this->exchangeData->getFormattedData();
+      return $this->preferenceData->getFormattedData().' '.$this->intermediateHostData->getFormattedData();
     }
 
     public function preference($newValue = NULL) {
@@ -50,11 +50,11 @@
       return $result;
     }
 
-    public function exchange($newValue = NULL) {
+    public function intermediateHost($newValue = NULL) {
       if ($newValue === NULL) {
-        $result = $this->exchangeData;
+        $result = $this->intermediateHostData;
       } else {
-        $this->exchangeData = $newValue instanceof DomainName ? $newValue : new DomainName($newValue);
+        $this->intermediateHostData = $newValue instanceof DomainName ? $newValue : new DomainName($newValue);
         $result = $this;
       }
       return $result;
