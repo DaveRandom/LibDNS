@@ -10,8 +10,8 @@
     private $string = '';
     private $length = 0;
 
-    public function loadFromPacket(Packet $packet, $dataLength = NULL) {
-      if ((FALSE === $length = ord($packet->read(1))) || (FALSE === $data = $packet->read($length))) {
+    public function loadFromPacket(Packet $packet, $dataLength = null) {
+      if ((false === $length = ord($packet->read(1))) || (false === $data = $packet->read($length))) {
         throw new \InvalidArgumentException('Malformed packet');
       }
       $this->__construct($data);
@@ -19,7 +19,7 @@
     }
 
     public function getRawData() {
-      return chr(strlen($this->length)).$this->string;
+      return chr($this->length).$this->string;
     }
 
     public function getFormattedData() {

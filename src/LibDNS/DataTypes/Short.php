@@ -9,7 +9,7 @@
 
     private $short = 0;
 
-    public function loadFromPacket(Packet $packet, $dataLength = 4) {
+    public function loadFromPacket(Packet $packet, $dataLength = 2) {
       if ($dataLength !== 2 || FALSE === $data = $packet->read(2)) {
         throw new \InvalidArgumentException('Malformed packet');
       }
