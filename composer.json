@@ -1,0 +1,17 @@
+{
+    "name": "DaveRandom/LibDNS",
+    "description": "DNS protocol implementation written in pure PHP",
+    "license": "MIT",
+    "keywords": ["dns"],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "LibDNS": "src"
+        }
+    },
+    "support": {
+        "issues": "https://github.com/DaveRandom/LibDNS/issues"
+    }
+}
