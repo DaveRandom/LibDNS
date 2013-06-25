@@ -1,4 +1,4 @@
-php-dns-lib
-===========
+LibDNS
+======
 
-DNS implementation in pure PHP
+DNS protocol implementation in pure PHP
