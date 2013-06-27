@@ -61,32 +61,35 @@ class IPv6Address extends SimpleType
                 $inBlock = false;
                 $currentPos = $currentLen = 0;
             }
+
+            $shorts[$i] = dechex($shorts[$i]);
         }
         if ($inBlock) {
             $compressLen = $currentLen;
             $compressPos = $currentPos;
         }
 
-        if ($compressLen === 8) {
-            return '::';
-        }
-
         if ($compressLen > 1) {
-            $replace = $compressPos === 0 || $compressPos + $compressLen === 8 ? ['', ''] : [''];
+            if ($compressLen === 8) {
+                $replace = ['', '', ''];
+            } else if ($compressPos === 0 || $compressPos + $compressLen === 8) {
+                $replace = ['', ''];
+            } else {
+                $replace = [''];
+            }
+
             array_splice($shorts, $compressPos, $compressLen, $replace);
         }
 
-        return implode(':', array_map(function($short) {
-            return $short === '' ? '' : dechex($short);
-        }, $shorts));
+        return implode(':', $shorts);
     }
 
     /**
      * Constructor
      *
-     * @param string[] $labels Label list
+     * @param string|int[] $value String representation or shorts list
      *
-     * @throws \UnexpectedValueException When the supplied value is not a valid domain name
+     * @throws \UnexpectedValueException When the supplied value is not a valid IPv6 address
      */
     public function __construct($value = null)
     {

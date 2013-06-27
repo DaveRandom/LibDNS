@@ -25,7 +25,7 @@ class RecordCollection implements \Iterator, \Countable
     /**
      * @var Record[] List of records held in the collection
      */
-    private $items = [];
+    private $records = [];
 
     /**
      * @var Record[][] Map of Records held in the collection grouped by record name
@@ -84,7 +84,7 @@ class RecordCollection implements \Iterator, \Countable
      */
     public function add(Record $record)
     {
-        $this->items[] = $record;
+        $this->records[] = $record;
         $this->addToNameMap($record);
         $this->length++;
     }
@@ -96,9 +96,9 @@ class RecordCollection implements \Iterator, \Countable
      */
     public function remove(Record $record)
     {
-        foreach ($this->items as $key => $item) {
+        foreach ($this->records as $key => $item) {
             if ($item === $record) {
-                array_splice($this->items, $key, 1);
+                array_splice($this->records, $key, 1);
                 $this->removeFromNameMap($record);
                 $this->length--;
                 return;
@@ -109,7 +109,7 @@ class RecordCollection implements \Iterator, \Countable
     }
 
     /**
-     * Test whether t he collection contains a specific record
+     * Test whether the collection contains a specific record
      *
      * @param Record $record       The record to search for
      * @param bool   $sameInstance Whether to perform strict comparisons in search
@@ -118,7 +118,37 @@ class RecordCollection implements \Iterator, \Countable
      */
     public function contains(Record $record, $sameInstance = false)
     {
-        return in_array($record, $this->items, (bool) $sameInstance);
+        return in_array($record, $this->records, (bool) $sameInstance);
+    }
+
+    /**
+     * Get all records in the collection that refer to the specified name
+     *
+     * @param string $name The name to match records against
+     *
+     * @return Record[]
+     */
+    public function getRecordsByName($name)
+    {
+        return isset($this->nameMap[$name = strtolower($name)]) ? $this->nameMap[$name] : [];
+    }
+
+    /**
+     * Get a record from the collection by index
+     *
+     * @param int $index Record index
+     *
+     * @return Record
+     *
+     * @throws \OutOfBoundsException When the supplied index does not refer to a valid record
+     */
+    public function getRecordByIndex($index)
+    {
+        if (isset($this->records[$index])) {
+            return $this->records[$index];
+        }
+
+        throw new \OutOfBoundsException('The specified index ' . $index . ' does not exist in the collection');
     }
 
     /**
@@ -135,33 +165,30 @@ class RecordCollection implements \Iterator, \Countable
         if (isset($this->nameMap[$name = strtolower($name)])) {
             unset($this->nameMap[$name]);
 
-            foreach ($this->items as $index => $item) {
-                if ($item->getName() === $name) {
-                    unset($this->items[$index]);
+            foreach ($this->records as $index => $record) {
+                if ($record->getName() === $name) {
+                    unset($this->records[$index]);
                     $count++;
                 }
             }
 
-            $this->items = array_values($this->items);
+            $this->records = array_values($this->records);
         }
 
         return $count;
     }
 
     /**
-     * Retrieve all records in the collection that refer to the specified name
-     *
-     * @param string $name The name to match records against
-     *
-     * @return Record[]
+     * Remove all records from the collection
      */
-    public function getRecordsByName($name)
+    public function clear()
     {
-        return isset($this->nameMap[$name = strtolower($name)]) ? $this->nameMap[$name] : [];
+        $this->records = $this->nameMap = [];
+        $this->length = $this->position = 0;
     }
 
     /**
-     * Retrieve a list of all names referenced by records in the collection
+     * Get a list of all names referenced by records in the collection
      *
      * @return string[]
      */
@@ -171,52 +198,23 @@ class RecordCollection implements \Iterator, \Countable
     }
 
     /**
-     * Remove all records from the collection
-     */
-    public function clear()
-    {
-        $this->items = $this->nameMap = [];
-        $this->length = $this->position = 0;
-    }
-
-    /**
-     * Retrieve an item from the collection
-     *
-     * @param int|string $index Numeric index or string record name
-     *
-     * @return Record|Record[] The record at the specified index, or an array of records referring to the specified name
-     *
-     * @throws \OutOfBoundsException When the supplied index does not refer to a valid item
-     */
-    public function item($index)
-    {
-        if (isset($this->items[$index])) {
-            return $this->items[$index];
-        } else if (isset($this->nameMap[$name = strtolower($index)])) {
-            return $this->nameMap[$name];
-        } else {
-            throw new \OutOfBoundsException('The specified index ' . $index . ' does not exist in the collection');
-        }
-    }
-
-    /**
-     * Retrieve the item indicated by the iteration pointer (Iterator interface)
+     * Get the record indicated by the iteration pointer (Iterator interface)
      *
      * @return Record
      *
-     * @throws \OutOfBoundsException When the pointer does not refer to a valid item
+     * @throws \OutOfBoundsException When the pointer does not refer to a valid record
      */
     public function current()
     {
-        if (!isset($this->items[$this->position])) {
+        if (!isset($this->records[$this->position])) {
             throw new \OutOfBoundsException('The current pointer position is invalid');
         }
 
-        return $this->items[$this->position];
+        return $this->records[$this->position];
     }
 
     /**
-     * Retrieve the value of the iteration pointer (Iterator interface)
+     * Get the value of the iteration pointer (Iterator interface)
      *
      * @return Record
      */
@@ -242,17 +240,17 @@ class RecordCollection implements \Iterator, \Countable
     }
 
     /**
-     * Determine whether the iteration pointer indicates a valid item (Iterator interface)
+     * Test whether the iteration pointer indicates a valid record (Iterator interface)
      *
      * @return bool
      */
     public function valid()
     {
-        return isset($this->items[$this->position]);
+        return isset($this->records[$this->position]);
     }
 
     /**
-     * Retrieve the number of items in the collection (Iterator interface)
+     * Get the number of records in the collection (Countable interface)
      *
      * @return int
      */

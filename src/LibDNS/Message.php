@@ -13,6 +13,9 @@
  */
 namespace LibDNS;
 
+use \LibDNS\Record\RecordCollection,
+    \LibDNS\Record\RecordCollectionFactory;
+
 /**
  * Represents a DNS protocol message
  *
@@ -65,7 +68,7 @@ class Message
     /**
      * @var RecordCollection Collection of question records
      */
-    private $questions;
+    private $questionRecords;
 
     /**
      * @var RecordCollection Collection of question records
@@ -81,6 +84,19 @@ class Message
      * @var RecordCollection Collection of authority records
      */
     private $additionalRecords;
+
+    /**
+     * Constructor
+     *
+     * @param RecordCollectionFactory $recordCollectionFactory Factory which makes RecordCollection objects
+     */
+    public function __construct(RecordCollectionFactory $recordCollectionFactory)
+    {
+        $this->questionRecords = $recordCollectionFactory->create();
+        $this->answerRecords = $recordCollectionFactory->create();
+        $this->authorityRecords = $recordCollectionFactory->create();
+        $this->additionalRecords = $recordCollectionFactory->create();
+    }
 
     /**
      * Get the value of the message ID field
@@ -260,5 +276,45 @@ class Message
         }
 
         $this->responseCode = $responseCode;
+    }
+
+    /**
+     * Get the question records collection
+     *
+     * @return RecordCollection
+     */
+    public function getQuestionRecords()
+    {
+        return $this->questionRecords;
+    }
+
+    /**
+     * Get the answer records collection
+     *
+     * @return RecordCollection
+     */
+    public function getAnswerRecords()
+    {
+        return $this->answerRecords;
+    }
+
+    /**
+     * Get the authority records collection
+     *
+     * @return RecordCollection
+     */
+    public function getAuthorityRecords()
+    {
+        return $this->authorityRecords;
+    }
+
+    /**
+     * Get the additional records collection
+     *
+     * @return RecordCollection
+     */
+    public function getAdditionalRecords()
+    {
+        return $this->additionalRecords;
     }
 }

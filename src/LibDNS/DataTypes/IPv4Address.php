@@ -35,9 +35,9 @@ class IPv4Address extends SimpleType
     /**
      * Constructor
      *
-     * @param string[] $labels Label list
+     * @param string|int[] $value String representation or octet list
      *
-     * @throws \UnexpectedValueException When the supplied value is not a valid domain name
+     * @throws \UnexpectedValueException When the supplied value is not a valid IPv4 address
      */
     public function __construct($value = null)
     {
