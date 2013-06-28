@@ -29,6 +29,6 @@ class PacketFactory
      */
     public function create($data = '')
     {
-        return new Packet(new LabelRegistry, $data);
+        return new Packet($data);
     }
 }

@@ -38,17 +38,12 @@ class Packet
     private $pointer = 0;
 
     /**
-     * @var \LibDNS\Packets\LabelRegistry
-     */
-    private $labelRegistry;
-
-    /**
      * Constructor
      *
      * @param \LibDNS\Packets\LabelRegistry $labelRegistry
      * @param string                        $data          The initial packet raw data
      */
-    public function __construct(LabelRegistry $labelRegistry, $data = '')
+    public function __construct($data = '')
     {
         $this->labelRegistry = $labelRegistry;
         $this->data = (string) $data;
@@ -107,6 +102,16 @@ class Packet
     }
 
     /**
+     * Get the pointer index
+     *
+     * @return int
+     */
+    public function getPointer()
+    {
+        return $this->pointer;
+    }
+
+    /**
      * Get the data length
      *
      * @return int
@@ -117,12 +122,12 @@ class Packet
     }
 
     /**
-     * Get the label registry
+     * Get the number of remaining bytes from the pointer position
      *
-     * @return \LibDNS\Packets\LabelRegistry
+     * @return int
      */
-    public function getLabelRegistry()
+    public function getBytesRemaining()
     {
-        return $this->labelRegistry;
+        return $this->length - $this->pointer;
     }
 }

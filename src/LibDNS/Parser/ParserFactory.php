@@ -38,6 +38,8 @@ class ParserFactory
      */
     public function create()
     {
+        $dataTypeFactory = new DataTypeFactory;
+
         return new Parser(
             new PacketFactory,
             new MessageFactory(new RecordCollectionFactory),
@@ -45,8 +47,10 @@ class ParserFactory
             new ResourceBuilder(
                 new ResourceFactory,
                 new DataTypeDefinitions,
-                new DataTypeBuilder(new DataTypeFactory)
-            )
+                new DataTypeBuilder($dataTypeFactory)
+            ),
+            $dataTypeFactory,
+            new ParsingContextFactory
         );
     }
 }

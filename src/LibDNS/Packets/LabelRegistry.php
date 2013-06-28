@@ -29,23 +29,31 @@ class LabelRegistry
     private $labels = [];
 
     /**
-     * @var string[] Map of indexes to labels
+     * @var string[][] Map of indexes to labels
      */
     private $indexes = [];
 
     /**
      * Register a new relationship
      *
-     * @param string $label
+     * @param string|string[] $labels
      * @param int $index
      */
-    public function register($label, $index)
+    public function register($labels, $index)
     {
-        if (!isset($this->labels[$label]) || $index < $this->labels[$label]) {
-            $this->labels[$label] = $index;
+        if (is_array($labels)) {
+            $labelsArr = $labels;
+            $labelsStr = implode('.', $labels);
+        } else {
+            $labelsArr = explode('.', $labels);
+            $labelsStr = (string) $labels;
         }
 
-        $this->indexes[$index] = $label;
+        if (!isset($this->labels[$labelsStr]) || $index < $this->labels[$labelsStr]) {
+            $this->labels[$labelsStr] = $index;
+        }
+
+        $this->indexes[$index] = $labelsArr;
     }
 
     /**
@@ -65,7 +73,7 @@ class LabelRegistry
      *
      * @param int $index
      *
-     * @return string|null
+     * @return string[]|null
      */
     public function lookupLabel($index)
     {
