@@ -81,8 +81,8 @@ class DataTypeBuilder
         if (is_array($typeDef)) {
             $result = $this->dataTypeFactory->createComplexType($typeDef);
  
-            foreach ($typeDef as $index, $fieldType) {
-                $result->setField($index, $this->createSimpleType($fieldType);
+            foreach ($typeDef as $index => $fieldType) {
+                $result->setField($index, $this->createSimpleType($fieldType));
             }
         } else {
             if ($typeDef === null) {

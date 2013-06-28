@@ -13,7 +13,7 @@
  */
 namespace LibDNS;
 
-use \LibDNS\Record\RecordCollectionFactory;
+use \LibDNS\Records\RecordCollectionFactory;
 
 /**
  * Factory which creates Message objects
