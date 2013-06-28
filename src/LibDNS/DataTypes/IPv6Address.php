@@ -111,7 +111,20 @@ class IPv6Address extends SimpleType
      */
     public function setValue($value)
     {
-        $this->setShorts(explode('.', $value));
+        $shorts = explode(':', (string) $value);
+
+        $count = count($shorts);
+        if ($count < 3 || $count > 8) {
+            throw new \UnexpectedValueException('Value is not a valid IPv6 address: invalid short count');
+        } else if ($shorts[0] === '' && $shorts[1] === '') {
+            $shorts = array_pad($shorts, -8, '0');
+        } else if ($shorts[$count - 2] === '' && $shorts[$count - 1] === '') {
+            $shorts = array_pad($shorts, 8, '0');
+        } else if (false !== $pos = array_search('', $shorts, true)) {
+            array_splice($shorts, $pos, 1, array_fill(0, 8 - ($count - 1), '0'));
+        }
+
+        $this->setShorts(array_map('hexdec', $shorts));
     }
 
     /**
@@ -138,7 +151,7 @@ class IPv6Address extends SimpleType
         }
 
         foreach ($shorts as &$short) {
-            if (!ctype_digit((string) $short) || $short < 0 || $short > 65535) {
+            if (!ctype_digit((string) $short) || $short < 0x0000 || $short > 0xffff) {
                 throw new \UnexpectedValueException('Short list is not a valid IPv6 address: invalid short value ' . $short);
             }
 

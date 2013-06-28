@@ -20,4 +20,15 @@ namespace LibDNS\Records;
  * @package    Records
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
-class Question extends Record {}
+class Question extends Record
+{
+    /**
+     * Constructor
+     *
+     * @param int $type Record type being requested. Can be indicated using the RecordQTypes enum
+     */
+    public function __construct($type)
+    {
+        $this->type = $type;
+    }
+}

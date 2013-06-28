@@ -27,17 +27,17 @@ abstract class Record
     /**
      * @var DomainName The name to which the record refers
      */
-    private $name;
+    protected $name;
 
     /**
-     * @var int The TYPE of the record, can be indicated using the RecordTypes/RecordQTypes enums
+     * @var int The TYPE of the record
      */
-    private $type;
+    protected $type;
 
     /**
-     * @var int The CLASS of the record, can be indicated using the RecordClasses/RecordQClasses enums
+     * @var int The CLASS of the record
      */
-    private $class;
+    protected $class;
 
     /**
      * Get the value of the record name field
@@ -70,23 +70,6 @@ abstract class Record
     }
 
     /**
-     * Set the value of the record type field
-     *
-     * @param int $type The new value
-     *
-     * @throws \RangeException When the supplied value is outside the valid range 0 - 65535
-     */
-    public function setType($type)
-    {
-        $type = (int) $type;
-        if ($type < 0 || $type > 65535) {
-            throw new \RangeException('Record class must be in the range 0 - 65535');
-        }
-
-        $this->type = $type;
-    }
-
-    /**
      * Get the value of the record class field
      *
      * @return int
@@ -99,7 +82,7 @@ abstract class Record
     /**
      * Set the value of the record class field
      *
-     * @param int $class The new value
+     * @param int $class The new value, can be indicated using the RecordClasses/RecordQClasses enums
      *
      * @throws \RangeException When the supplied value is outside the valid range 0 - 65535
      */

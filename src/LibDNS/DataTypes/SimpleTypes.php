@@ -1,6 +1,6 @@
 <?php
 /**
- * Factory which creates ComplexTypeDefinition objects
+ * Enumeration of simple data types
  *
  * PHP version 5.4
  *
@@ -13,24 +13,24 @@
  */
 namespace LibDNS\DataTypes;
 
+use \LibDNS\Enumeration;
+
 /**
- * Factory which creates ComplexTypeDefinition objects
+ * Enumeration of simple data types
  *
  * @category   LibDNS
  * @package    DataTypes
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
-class ComplexTypeDefinitionFactory
+class SimpleTypes extends Enumeration
 {
-    /**
-     * Build a new ComplexTypeDefinition object
-     *
-     * @param array $typeDef
-     *
-     * @return ComplexTypeDefinition
-     */
-    public function create(array $typeDef)
-    {
-        return new ComplexTypeDefinition($typeDef);
-    }
+    const ANYTHING         = 1;
+    const BITMAP           = 2;
+    const CHAR             = 3;
+    const CHARACTER_STRING = 4;
+    const DOMAIN_NAME      = 5;
+    const IPV4_ADDRESS     = 6;
+    const IPV6_ADDRESS     = 7;
+    const LONG             = 8;
+    const SHORT            = 9;
 }

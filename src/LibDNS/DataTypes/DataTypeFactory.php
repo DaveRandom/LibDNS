@@ -1,6 +1,6 @@
 <?php
 /**
- * Factory which creates SimpleType objects
+ * Factory which creates DataType objects
  *
  * PHP version 5.4
  *
@@ -14,25 +14,24 @@
 namespace LibDNS\DataTypes;
 
 /**
- * Factory which creates SimpleType objects
+ * Factory which creates DataType objects
  *
  * @category   LibDNS
  * @package    DataTypes
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
-class SimpleTypeFactory
+class DataTypeFactory
 {
     /**
-     * Create a new SimpleType object
+     * Create a new ComplexType object
      *
-     * @param string $type  Type name
-     * @param string|int  $value Internal value
+     * @param array $typeDef Type structure definition
      *
-     * @return SimpleType
+     * @return ComplexType
      */
-    public function createAnything($type, $value = null)
+    public function createComplexType(array $typeDef = null)
     {
-        return new Anything($value);
+        return new ComplexType($typeDef);
     }
 
     /**

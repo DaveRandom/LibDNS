@@ -86,7 +86,7 @@ class IPv4Address extends SimpleType
         }
 
         foreach ($octets as &$octet) {
-            if (!ctype_digit((string) $octet) || $octet < 0 || $octet > 255) {
+            if (!ctype_digit((string) $octet) || $octet < 0x00 || $octet > 0xff) {
                 throw new \UnexpectedValueException('Octet list is not a valid IPv4 address: invalid octet value ' . $octet);
             }
 
@@ -94,6 +94,6 @@ class IPv4Address extends SimpleType
         }
 
         $this->octets = array_values($octets);
-        $this->value = implode('.', $octets);
+        $this->value = implode('.', $this->octets);
     }
 }

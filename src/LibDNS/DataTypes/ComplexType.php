@@ -47,9 +47,61 @@ class ComplexType implements DataType, \Iterator, \Countable
      *
      * @param ComplexTypeDefinition $typeDef Structural definition of the complex type
      */
-    public function __construct(ComplexTypeDefinition $typeDef = null)
+    public function __construct(array $typeDef = null)
     {
         $this->typeDef = $typeDef;
+    }
+
+    /**
+     * Get the field indicated by the supplied index
+     *
+     * @param int $index The field index
+     *
+     * @return SimpleType
+     *
+     * @throws \OutOfBoundsException When the supplied index does not refer to a valid field
+     */
+    public function getField($index)
+    {
+        if (!isset($this->fields[$index])) {
+            throw new \OutOfBoundsException('Index ' . $index . ' does not refer to a valid field');
+        }
+
+        return $this->fields[$index];
+    }
+
+    /**
+     * Get the field indicated by the supplied index
+     *
+     * @param int        $index The field index
+     * @param SimpleType $value The field value
+     *
+     * @throws \OutOfBoundsException     When the supplied index does not refer to a valid field
+     * @throws \InvalidArgumentException When the supplied value does not match the type definition
+     */
+    public function setField($index, SimpleType $value)
+    {
+        if (isset($this->typeDef)) {
+            if (!isset($this->typeDef[$index])) {
+                throw new \OutOfBoundsException('Index ' . $index . ' does not refer to a valid field');
+            }
+
+            if (
+                   ($this->typeDef[$index] === SimpleTypes::ANYTHING && !($value instanceof Anything))
+                || ($this->typeDef[$index] === SimpleTypes::BITMAP && !($value instanceof BitMap))
+                || ($this->typeDef[$index] === SimpleTypes::CHAR && !($value instanceof Char))
+                || ($this->typeDef[$index] === SimpleTypes::CHARACTER_STRING && !($value instanceof CharacterString))
+                || ($this->typeDef[$index] === SimpleTypes::DOMAIN_NAME && !($value instanceof DomainName))
+                || ($this->typeDef[$index] === SimpleTypes::IPV4_ADDRESS && !($value instanceof IPv4Address))
+                || ($this->typeDef[$index] === SimpleTypes::IPV6_ADDRESS && !($value instanceof IPv6Address))
+                || ($this->typeDef[$index] === SimpleTypes::LONG && !($value instanceof Long))
+                || ($this->typeDef[$index] === SimpleTypes::SHORT && !($value instanceof Short))
+            ) {
+                throw new \InvalidArgumentException('Value data type does not match type definition');
+            }
+        }
+
+        return $this->fields[$index];
     }
 
     /**
