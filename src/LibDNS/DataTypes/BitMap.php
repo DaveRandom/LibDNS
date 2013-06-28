@@ -1,6 +1,6 @@
 <?php
 /**
- * Class representing a bit map
+ * Represents a bit map
  *
  * PHP version 5.4
  *
@@ -14,7 +14,7 @@
 namespace LibDNS\DataTypes;
 
 /**
- * Class representing a bit map
+ * Represents a bit map
  *
  * @category   LibDNS
  * @package    DataTypes
@@ -23,7 +23,7 @@ namespace LibDNS\DataTypes;
 class BitMap extends SimpleType
 {
     /**
-     * @var string The internal value
+     * @var string
      */
     protected $value = '';
 
@@ -31,8 +31,6 @@ class BitMap extends SimpleType
      * Set the internal value
      *
      * @param string $value The new value
-     *
-     * @throws \UnexpectedValueException When the supplied value is outside the valid length range 0 - 255
      */
     public function setValue($value)
     {

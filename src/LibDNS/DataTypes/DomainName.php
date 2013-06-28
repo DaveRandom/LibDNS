@@ -1,6 +1,6 @@
 <?php
 /**
- * Class representing a fully qualified domain name
+ * Represents a fully qualified domain name
  *
  * PHP version 5.4
  *
@@ -14,7 +14,7 @@
 namespace LibDNS\DataTypes;
 
 /**
- * Class representing a fully qualified domain name
+ * Represents a fully qualified domain name
  *
  * @category   LibDNS
  * @package    DataTypes
@@ -23,19 +23,19 @@ namespace LibDNS\DataTypes;
 class DomainName extends SimpleType
 {
     /**
-     * @var string The internal value
+     * @var string
      */
     protected $value = '';
 
     /**
-     * @var string[] The internal value as a list of labels
+     * @var string[] The value as a list of labels
      */
     private $labels = [];
 
     /**
      * Constructor
      *
-     * @param string[] $labels Label list
+     * @param string|string[] $value
      *
      * @throws \UnexpectedValueException When the supplied value is not a valid domain name
      */

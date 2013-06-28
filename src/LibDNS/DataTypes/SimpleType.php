@@ -1,6 +1,6 @@
 <?php
 /**
- * Interface for simple data types
+ * Shared interface and implementations for simple data types
  *
  * PHP version 5.4
  *
@@ -14,13 +14,13 @@
 namespace LibDNS\DataTypes;
 
 /**
- * Interface for simple data types
+ * Shared interface and implementations for simple data types
  *
  * @category   LibDNS
  * @package    DataTypes
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
-abstract class SimpleType implements DataType
+abstract class SimpleType extends DataType
 {
     /**
      * @var mixed The internal value

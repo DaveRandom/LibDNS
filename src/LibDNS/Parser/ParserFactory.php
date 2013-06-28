@@ -1,6 +1,6 @@
 <?php
 /**
- * Factory which creates Parser objects
+ * Creates Parser objects
  *
  * PHP version 5.4
  *
@@ -22,7 +22,7 @@ use \LibDNS\MessageFactory,
     \LibDNS\DataTypes\DataTypeBuilder;
 
 /**
- * Factory which creates Parser objects
+ * Creates Parser objects
  *
  * @category   LibDNS
  * @package    Parser
@@ -31,16 +31,17 @@ use \LibDNS\MessageFactory,
 class ParserFactory
 {
     /**
-     * Create a new Resource object
+     * Create a new Parser object
      *
-     * @return Resource
+     * @return \LibDNS\Parser\Parser
      */
     public function create()
     {
         return new Parser(
             new MessageFactory(new RecordCollectionFactory),
             new QuestionFactory,
-            new ResourceFactory(
+            new ResourceBuilder(
+                new ResourceFactory,
                 new DataTypeDefinitions,
                 new DataTypeBuilder(new DataTypeFactory)
             )

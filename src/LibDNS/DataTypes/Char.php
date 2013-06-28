@@ -1,6 +1,6 @@
 <?php
 /**
- * Class representing an 8-bit unsigned integer
+ * Represents an 8-bit unsigned integer
  *
  * PHP version 5.4
  *
@@ -14,7 +14,7 @@
 namespace LibDNS\DataTypes;
 
 /**
- * Class representing an 8-bit unsigned integer
+ * Represents an 8-bit unsigned integer
  *
  * @category   LibDNS
  * @package    DataTypes
@@ -23,7 +23,7 @@ namespace LibDNS\DataTypes;
 class Char extends SimpleType
 {
     /**
-     * @var int The internal value
+     * @var int
      */
     protected $value = 0;
 

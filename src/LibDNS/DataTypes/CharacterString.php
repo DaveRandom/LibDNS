@@ -1,6 +1,6 @@
 <?php
 /**
- * Class representing a character string
+ * Represents a binary character string
  *
  * PHP version 5.4
  *
@@ -14,7 +14,7 @@
 namespace LibDNS\DataTypes;
 
 /**
- * Class representing a character string
+ * Represents a binary character string
  *
  * @category   LibDNS
  * @package    DataTypes
@@ -23,7 +23,7 @@ namespace LibDNS\DataTypes;
 class CharacterString extends SimpleType
 {
     /**
-     * @var string The internal value
+     * @var string
      */
     protected $value = '';
 

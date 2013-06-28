@@ -1,6 +1,6 @@
 <?php
 /**
- * Collection for sets of Record objects
+ * Collection of Record objects
  *
  * PHP version 5.4
  *
@@ -14,7 +14,7 @@
 namespace LibDNS\Records;
 
 /**
- * Collection for sets of Record objects
+ * Collection of Record objects
  *
  * @category   LibDNS
  * @package    Records
@@ -23,17 +23,17 @@ namespace LibDNS\Records;
 class RecordCollection implements \Iterator, \Countable
 {
     /**
-     * @var Record[] List of records held in the collection
+     * @var \LibDNS\Records\Record[] List of records held in the collection
      */
     private $records = [];
 
     /**
-     * @var Record[][] Map of Records held in the collection grouped by record name
+     * @var \LibDNS\Records\Record[][] Map of Records in the collection grouped by record name
      */
     private $nameMap = [];
 
     /**
-     * @var int Number of Records held in the collection
+     * @var int Number of Records in the collection
      */
     private $length = 0;
 
@@ -45,7 +45,7 @@ class RecordCollection implements \Iterator, \Countable
     /**
      * Add a record to the correct bucket in the name map
      *
-     * @param Record $record The record to add
+     * @param \LibDNS\Records\Record $record The record to add
      */
     private function addToNameMap(Record $record)
     {
@@ -59,7 +59,7 @@ class RecordCollection implements \Iterator, \Countable
     /**
      * Remove a record from the name map
      *
-     * @param Record $record The record to remove
+     * @param \LibDNS\Records\Record $record The record to remove
      */
     private function removeFromNameMap(Record $record)
     {
@@ -80,7 +80,7 @@ class RecordCollection implements \Iterator, \Countable
     /**
      * Add a record to the collection
      *
-     * @param Record $record The record to add
+     * @param \LibDNS\Records\Record $record The record to add
      */
     public function add(Record $record)
     {
@@ -92,7 +92,7 @@ class RecordCollection implements \Iterator, \Countable
     /**
      * Remove a record from the collection
      *
-     * @param Record $record The record to remove
+     * @param \LibDNS\Records\Record $record The record to remove
      */
     public function remove(Record $record)
     {
@@ -111,8 +111,8 @@ class RecordCollection implements \Iterator, \Countable
     /**
      * Test whether the collection contains a specific record
      *
-     * @param Record $record       The record to search for
-     * @param bool   $sameInstance Whether to perform strict comparisons in search
+     * @param \LibDNS\Records\Record $record       The record to search for
+     * @param bool                   $sameInstance Whether to perform strict comparisons in search
      *
      * @return bool
      */
@@ -126,7 +126,7 @@ class RecordCollection implements \Iterator, \Countable
      *
      * @param string $name The name to match records against
      *
-     * @return Record[]
+     * @return \LibDNS\Records\Record[]
      */
     public function getRecordsByName($name)
     {
@@ -138,7 +138,7 @@ class RecordCollection implements \Iterator, \Countable
      *
      * @param int $index Record index
      *
-     * @return Record
+     * @return \LibDNS\Records\Record
      *
      * @throws \OutOfBoundsException When the supplied index does not refer to a valid record
      */
@@ -200,7 +200,7 @@ class RecordCollection implements \Iterator, \Countable
     /**
      * Get the record indicated by the iteration pointer (Iterator interface)
      *
-     * @return Record
+     * @return \LibDNS\Records\Record
      *
      * @throws \OutOfBoundsException When the pointer does not refer to a valid record
      */
@@ -216,7 +216,7 @@ class RecordCollection implements \Iterator, \Countable
     /**
      * Get the value of the iteration pointer (Iterator interface)
      *
-     * @return Record
+     * @return int
      */
     public function key()
     {

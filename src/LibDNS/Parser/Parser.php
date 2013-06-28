@@ -1,6 +1,6 @@
 <?php
 /**
- * Factory which creates Parser objects
+ * Parses raw network data to Message objects
  *
  * PHP version 5.4
  *
@@ -15,10 +15,10 @@ namespace LibDNS\Parser;
 
 use \LibDNS\MessageFactory,
     \LibDNS\Records\QuestionFactory,
-    \LibDNS\Records\ResourceFactory;
+    \LibDNS\Records\ResourceBuilder;
 
 /**
- * Factory which creates Parser objects
+ * Parses raw network data to Message objects
  *
  * @category   LibDNS
  * @package    Parser
@@ -27,31 +27,42 @@ use \LibDNS\MessageFactory,
 class Parser
 {
     /**
-     * @var MessageFactory Factory which creates Message objects
+     * @var \LibDNS\MessageFactory
      */
     private $messageFactory;
 
     /**
-     * @var QuestionFactory Factory which creates Question objects
+     * @var \LibDNS\Records\QuestionFactory
      */
     private $questionFactory;
 
     /**
-     * @var ResourceFactory Factory which creates Resource objects
+     * @var \LibDNS\Records\ResourceBuilder
      */
-    private $resourceFactory;
+    private $resourceBuilder;
 
     /**
      * Constructor
      *
-     * @param MessageFactory $messageFactory Factory which creates Message objects
-     * @param QuestionFactory $questionFactory Factory which creates Question objects
-     * @param ResourceFactory $resourceFactory Factory which creates Resource objects
+     * @param \LibDNS\MessageFactory $messageFactory
+     * @param \LibDNS\Records\QuestionFactory $questionFactory
+     * @param \LibDNS\Records\ResourceBuilder $resourceBuilder
      */
-    public function __construct(MessageFactory $messageFactory, QuestionFactory $questionFactory, ResourceFactory $resourceFactory)
+    public function __construct(MessageFactory $messageFactory, QuestionFactory $questionFactory, ResourceBuilder $resourceBuilder)
     {
         $this->messageFactory = $messageFactory;
         $this->questionFactory = $questionFactory;
-        $this->resourceFactory = $resourceFactory;
+        $this->resourceBuilder = $resourceBuilder;
+    }
+
+    /**
+     * Parse a Message from raw network data
+     *
+     * @param string $data The data string to parse
+     *
+     * @return \LibDNS\Message
+     */
+    public function parse($data)
+    {
     }
 }

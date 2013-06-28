@@ -1,6 +1,6 @@
 <?php
 /**
- * Class representing an IPv6 address
+ * Represents an IPv6 address
  *
  * PHP version 5.4
  *
@@ -14,7 +14,7 @@
 namespace LibDNS\DataTypes;
 
 /**
- * Class representing an IPv6 address
+ * Represents an IPv6 address
  *
  * @category   LibDNS
  * @package    DataTypes
@@ -23,7 +23,7 @@ namespace LibDNS\DataTypes;
 class IPv6Address extends SimpleType
 {
     /**
-     * @var string The internal value
+     * @var string
      */
     protected $value = '::';
 

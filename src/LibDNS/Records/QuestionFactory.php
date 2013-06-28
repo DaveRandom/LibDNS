@@ -1,6 +1,6 @@
 <?php
 /**
- * Factory which creates Question objects
+ * Creates Question objects
  *
  * PHP version 5.4
  *
@@ -14,7 +14,7 @@
 namespace LibDNS\Records;
 
 /**
- * Factory which creates Question objects
+ * Creates Question objects
  *
  * @category   LibDNS
  * @package    Records
@@ -25,7 +25,9 @@ class QuestionFactory
     /**
      * Create a new Question object
      *
-     * @return Question
+     * @param int $type The record type
+     *
+     * @return \LibDNS\Records\Question
      */
     public function create($type)
     {

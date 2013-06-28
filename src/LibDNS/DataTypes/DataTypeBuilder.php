@@ -1,6 +1,6 @@
 <?php
 /**
- * Class for objects which build data types from type definitions
+ * Builds DataTypes from type definitions
  *
  * PHP version 5.4
  *
@@ -14,7 +14,7 @@
 namespace LibDNS\DataTypes;
 
 /**
- * Class for objects which build data types from type definitions
+ * Builds DataTypes from type definitions
  *
  * @category   LibDNS
  * @package    DataTypes
@@ -23,7 +23,7 @@ namespace LibDNS\DataTypes;
 class DataTypeBuilder
 {
     /**
-     * @var DataTypeFactory Factory which creates SimpleType objects
+     * @var \LibDNS\DataTypes\DataTypeFactory
      */
     private $dataTypeFactory;
 
@@ -32,7 +32,7 @@ class DataTypeBuilder
      *
      * @param int $dataType The data type, can be indicated using the SimpleTypes enum
      *
-     * @return SimpleType
+     * @return \LibDNS\DataTypes\SimpleType
      */
     private function createSimpleType($dataType)
     {
@@ -62,7 +62,7 @@ class DataTypeBuilder
     /**
      * Constructor
      *
-     * @param DataTypeFactory $dataTypeFactory Factory which creates DataType objects
+     * @param \LibDNS\DataTypes\DataTypeFactory $dataTypeFactory
      */
     public function __construct(DataTypeFactory $dataTypeFactory)
     {
@@ -74,7 +74,7 @@ class DataTypeBuilder
      *
      * @param int $recordType The record type, can be indicated using the RecordTypes enum
      *
-     * @return DataType
+     * @return \LibDNS\DataTypes\DataType
      */
     public function build($recordType, $typeDef)
     {

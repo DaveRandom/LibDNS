@@ -1,6 +1,6 @@
 <?php
 /**
- * Class representing a complex type comprising multiple simple types
+ * Represents a data type comprising multiple simple types
  *
  * PHP version 5.4
  *
@@ -14,23 +14,23 @@
 namespace LibDNS\DataTypes;
 
 /**
- * Class representing a complex type comprising multiple simple types
+ * Represents a data type comprising multiple simple types
  *
  * @category   LibDNS
  * @package    DataTypes
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
-class ComplexType implements DataType, \Iterator, \Countable
+class ComplexType extends DataType implements \Iterator, \Countable
 {
     /**
-     * @var SimpleType[] The items that make up the complex type
+     * @var \LibDNS\DataTypes\SimpleType[] The items that make up the complex type
      */
     private $fields = [];
 
     /**
-     * @var int Number of fields that make up the complex type
+     * @var int[] Structural definition of the fields
      */
-    private $length = 0;
+    private $typeDef;
 
     /**
      * @var int Iteration pointer
@@ -38,14 +38,9 @@ class ComplexType implements DataType, \Iterator, \Countable
     private $position = 0;
 
     /**
-     * @var ComplexTypeDefinition Structural definition of the complex type
-     */
-    private $typeDef;
-
-    /**
      * Constructor
      *
-     * @param ComplexTypeDefinition $typeDef Structural definition of the complex type
+     * @param int[] $typeDef Structural definition of the fields
      */
     public function __construct(array $typeDef = null)
     {
@@ -57,7 +52,7 @@ class ComplexType implements DataType, \Iterator, \Countable
      *
      * @param int $index The field index
      *
-     * @return SimpleType
+     * @return \LibDNS\DataTypes\SimpleType
      *
      * @throws \OutOfBoundsException When the supplied index does not refer to a valid field
      */
@@ -73,8 +68,8 @@ class ComplexType implements DataType, \Iterator, \Countable
     /**
      * Get the field indicated by the supplied index
      *
-     * @param int        $index The field index
-     * @param SimpleType $value The field value
+     * @param int                          $index The field index
+     * @param \LibDNS\DataTypes\SimpleType $value The field value
      *
      * @throws \OutOfBoundsException     When the supplied index does not refer to a valid field
      * @throws \InvalidArgumentException When the supplied value does not match the type definition
@@ -105,9 +100,19 @@ class ComplexType implements DataType, \Iterator, \Countable
     }
 
     /**
+     * Get the structural definition of the fields
+     *
+     * @return int[]
+     */
+    public function getTypeDef($index)
+    {
+        return $this->typeDef;
+    }
+
+    /**
      * Get the field indicated by the iteration pointer (Iterator interface)
      *
-     * @return SimpleType
+     * @return \LibDNS\DataTypes\SimpleType
      *
      * @throws \OutOfBoundsException When the pointer does not refer to a valid field
      */
@@ -157,12 +162,12 @@ class ComplexType implements DataType, \Iterator, \Countable
     }
 
     /**
-     * Get the number of fields that make up the complex type (Countable interface)
+     * Get the number of fields (Countable interface)
      *
      * @return int
      */
     public function count()
     {
-        return $this->length;
+        return count($this->fields);
     }
 }

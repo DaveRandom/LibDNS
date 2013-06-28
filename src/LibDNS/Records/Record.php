@@ -1,6 +1,6 @@
 <?php
 /**
- * Abstract class representing an individual DNS record
+ * Represents a DNS record
  *
  * PHP version 5.4
  *
@@ -16,7 +16,7 @@ namespace LibDNS\Records;
 use \LibDNS\DataTypes\DomainName;
 
 /**
- * Abstract class representing an individual DNS record
+ * Represents a DNS record
  *
  * @category   LibDNS
  * @package    Records
@@ -25,24 +25,24 @@ use \LibDNS\DataTypes\DomainName;
 abstract class Record
 {
     /**
-     * @var DomainName The name to which the record refers
+     * @var \LibDNS\DataTypes\DomainName
      */
     protected $name;
 
     /**
-     * @var int The TYPE of the record
+     * @var int
      */
     protected $type;
 
     /**
-     * @var int The CLASS of the record
+     * @var int
      */
     protected $class;
 
     /**
      * Get the value of the record name field
      *
-     * @return DomainName
+     * @return \LibDNS\DataTypes\DomainName
      */
     public function getName()
     {
@@ -52,7 +52,7 @@ abstract class Record
     /**
      * Set the value of the record name field
      *
-     * @param DomainName $name The new value
+     * @param \LibDNS\DataTypes\DomainName $name The new value
      */
     public function setName(DomainName $name)
     {

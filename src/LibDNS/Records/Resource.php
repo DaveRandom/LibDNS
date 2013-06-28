@@ -1,6 +1,6 @@
 <?php
 /**
- * Class representing an individual DNS resource record
+ * Represents a DNS resource record
  *
  * PHP version 5.4
  *
@@ -28,7 +28,7 @@ use \LibDNS\DataTypes\DataType,
     \LibDNS\DataTypes\SimpleTypes;
 
 /**
- * Class representing an individual DNS resource record
+ * Represents a DNS resource record
  *
  * @category   LibDNS
  * @package    Records
@@ -42,7 +42,7 @@ class Resource extends Record
     private $ttl;
 
     /**
-     * @var DataType Data associated with the record
+     * @var \LibDNS\DataTypes\DataType
      */
     private $data;
 
@@ -54,8 +54,8 @@ class Resource extends Record
     /**
      * Assert that a simpletype object is of the subtype indicated by the numeric index
      *
-     * @param int        $type  Data type index of the resource, can be indicated using the SimpleTypes enum
-     * @param SimpleType $value Object of which to inspect the type
+     * @param int                          $type  Data type index of the resource, can be indicated using the SimpleTypes enum
+     * @param \LibDNS\DataTypes\SimpleType $value Object to inspect
      *
      * @return bool
      */
@@ -114,7 +114,7 @@ class Resource extends Record
     /**
      * Get the value of the record data field
      *
-     * @return DataType
+     * @return \LibDNS\DataTypes\DataType
      */
     public function getData()
     {
@@ -124,7 +124,7 @@ class Resource extends Record
     /**
      * Set the value of the record data field
      *
-     * @param DataType $data The new value
+     * @param \LibDNS\DataTypes\DataType $data The new value
      *
      * @throws \InvalidArgumentException When the supplied data does not match the resource type definition
      */

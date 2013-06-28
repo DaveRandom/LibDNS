@@ -1,6 +1,6 @@
 <?php
 /**
- * Class representing an untyped data string
+ * Represents a generic binary data string
  *
  * PHP version 5.4
  *
@@ -14,7 +14,7 @@
 namespace LibDNS\DataTypes;
 
 /**
- * Class representing an untyped data string
+ * Represents a generic binary data string
  *
  * @category   LibDNS
  * @package    DataTypes
@@ -23,7 +23,7 @@ namespace LibDNS\DataTypes;
 class Anything extends SimpleType
 {
     /**
-     * @var string The internal value
+     * @var string
      */
     protected $value = '';
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Factory which creates RecordCollection objects
+ * Creates RecordCollection objects
  *
  * PHP version 5.4
  *
@@ -14,7 +14,7 @@
 namespace LibDNS\Records;
 
 /**
- * Factory which creates RecordCollection objects
+ * Creates RecordCollection objects
  *
  * @category   LibDNS
  * @package    Records
@@ -25,7 +25,7 @@ class RecordCollectionFactory
     /**
      * Create a new RecordCollection object
      *
-     * @return RecordCollection
+     * @return \LibDNS\Records\RecordCollection
      */
     public function create()
     {

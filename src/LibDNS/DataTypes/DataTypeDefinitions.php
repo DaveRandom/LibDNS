@@ -1,6 +1,6 @@
 <?php
 /**
- * Object which holds data about how the RDATA sections of known resource record types are structured
+ * Holds data about how the RDATA sections of known resource record types are structured
  *
  * PHP version 5.4
  *
@@ -14,7 +14,7 @@
 namespace LibDNS\DataTypes;
 
 /**
- * Object which holds data about how the RDATA sections of known resource record types are structured
+ * Holds data about how the RDATA sections of known resource record types are structured
  *
  * @category   LibDNS
  * @package    DataTypes
@@ -23,9 +23,10 @@ namespace LibDNS\DataTypes;
 class DataTypeDefinitions
 {
     /**
-     * @var array[] How the RDATA sections of known resource record types are structured
+     * @var array How the RDATA sections of known resource record types are structured
      */
-    private $typeDefs = [
+    private $typeDefs =
+    [
     ];
 
     /**

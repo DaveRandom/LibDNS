@@ -1,6 +1,6 @@
 <?php
 /**
- * Class representing a 32-bit unsigned integer
+ * Represents a 32-bit unsigned integer
  *
  * PHP version 5.4
  *
@@ -14,7 +14,7 @@
 namespace LibDNS\DataTypes;
 
 /**
- * Class representing a 32-bit unsigned integer
+ * Represents a 32-bit unsigned integer
  *
  * @category   LibDNS
  * @package    DataTypes
@@ -23,7 +23,7 @@ namespace LibDNS\DataTypes;
 class Long extends SimpleType
 {
     /**
-     * @var int The internal value
+     * @var int
      */
     protected $value = 0;
 

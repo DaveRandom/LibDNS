@@ -1,6 +1,6 @@
 <?php
 /**
- * Factory which creates Resource objects
+ * Creates Resource objects
  *
  * PHP version 5.4
  *
@@ -13,12 +13,8 @@
  */
 namespace LibDNS\Records;
 
-use \LibDNS\DataTypes\DataTypeDefinitions,
-    \LibDNS\DataTypes\DataTypeFactory,
-    \LibDNS\DataTypes\DataTypeBuilder;
-
 /**
- * Factory which creates Resource objects
+ * Creates Resource objects
  *
  * @category   LibDNS
  * @package    Records
@@ -27,39 +23,15 @@ use \LibDNS\DataTypes\DataTypeDefinitions,
 class ResourceFactory
 {
     /**
-     * @var DataTypeDefinitions Object which holds data about how the RDATA sections of known resource record types are structured
-     */
-    private $dataTypeDefinitions;
-
-    /**
-     * @var DataTypeBuilder Class for objects which build data types from type definitions
-     */
-    private $dataTypeBuilder;
-
-    /**
-     * Constructor
-     *
-     * @param DataTypeDefinitions $dataTypeDefinitions Holds data about how the RDATA sections of known resource record types are structured
-     * @param DataTypeBuilder $dataTypeBuilder Builds DataType objects from type definitions
-     */
-    public function __construct(DataTypeDefinitions $dataTypeDefinitions, DataTypeBuilder $dataTypeBuilder)
-    {
-        $this->dataTypeDefinitions = $dataTypeDefinitions;
-        $this->dataTypeBuilder = $dataTypeBuilder;
-    }
-
-    /**
      * Create a new Resource object
      *
-     * @return Resource
+     * @param int            $type    Record type of the resource, can be indicated using the RecordTypes enum
+     * @param int|int[]|null $typeDef Structure of the resource RDATA section
+     *
+     * @return \LibDNS\Records\Resource
      */
-    public function create($type)
+    public function create($type, $typeDef)
     {
-        $typeDef = $this->dataTypeDefinitions->getTypeDefinition($type);
-
-        $resource = new Resource($type, $typeDef);
-        $resource->setData($this->dataTypeBuilder->build($type, $typeDef));
-
-        return $resource;
+        return new Resource($type, $typeDef);
     }
 }

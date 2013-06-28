@@ -1,6 +1,6 @@
 <?php
 /**
- * Interface for all data types
+ * Base class for all data types
  *
  * PHP version 5.4
  *
@@ -14,10 +14,10 @@
 namespace LibDNS\DataTypes;
 
 /**
- * Interface for all data types
+ * Base class for all data types
  *
  * @category   LibDNS
  * @package    DataTypes
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
-interface DataType {}
+abstract class DataType {}

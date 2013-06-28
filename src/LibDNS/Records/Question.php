@@ -1,6 +1,6 @@
 <?php
 /**
- * Class representing an individual DNS question record
+ * Represents a DNS question record
  *
  * PHP version 5.4
  *
@@ -14,7 +14,7 @@
 namespace LibDNS\Records;
 
 /**
- * Class representing an individual DNS question record
+ * Represents a DNS question record
  *
  * @category   LibDNS
  * @package    Records
