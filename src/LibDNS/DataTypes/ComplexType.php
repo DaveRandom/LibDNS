@@ -33,9 +33,9 @@ class ComplexType extends DataType implements \Iterator, \Countable
     private $typeDef;
 
     /**
-     * @var int Iteration pointer
+     * @var bool Whether the iteration pointer has more elements to yield
      */
-    private $position = 0;
+    private $pointerValid = 0;
 
     /**
      * Constructor
@@ -118,11 +118,7 @@ class ComplexType extends DataType implements \Iterator, \Countable
      */
     public function current()
     {
-        if (!isset($this->fields[$this->position])) {
-            throw new \OutOfBoundsException('The current pointer position is invalid');
-        }
-
-        return $this->fields[$this->position];
+        return current($this->fields);
     }
 
     /**
@@ -132,7 +128,7 @@ class ComplexType extends DataType implements \Iterator, \Countable
      */
     public function key()
     {
-        return $this->position;
+        return key($this->fields);
     }
 
     /**
@@ -140,7 +136,7 @@ class ComplexType extends DataType implements \Iterator, \Countable
      */
     public function next()
     {
-        $this->position++;
+        $this->pointerValid = next($this->fields) !== false;
     }
 
     /**
@@ -148,7 +144,8 @@ class ComplexType extends DataType implements \Iterator, \Countable
      */
     public function rewind()
     {
-        $this->position = 0;
+        reset($this->fields);
+        $this->pointerValid = count($this->fields) > 0;
     }
 
     /**
@@ -158,7 +155,7 @@ class ComplexType extends DataType implements \Iterator, \Countable
      */
     public function valid()
     {
-        return isset($this->fields[$this->position]);
+        return $this->pointerValid;
     }
 
     /**

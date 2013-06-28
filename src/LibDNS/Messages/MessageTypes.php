@@ -5,19 +5,19 @@
  * PHP version 5.4
  *
  * @category   LibDNS
- * @package    LibDNS
+ * @package    Messages
  * @author     Chris Wright <https://github.com/DaveRandom>
  * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
  * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
  * @version    2.0.0
  */
-namespace LibDNS;
+namespace LibDNS\Messages;
 
 /**
  * Enumeration of possible message types
  *
  * @category   LibDNS
- * @package    LibDNS
+ * @package    Messages
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
 class MessageTypes extends Enumeration

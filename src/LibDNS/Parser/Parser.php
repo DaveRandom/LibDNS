@@ -13,7 +13,7 @@
  */
 namespace LibDNS\Parser;
 
-use \LibDNS\MessageFactory,
+use \LibDNS\Messages\MessageFactory,
     \LibDNS\Records\QuestionFactory,
     \LibDNS\Records\ResourceBuilder;
 
@@ -27,7 +27,7 @@ use \LibDNS\MessageFactory,
 class Parser
 {
     /**
-     * @var \LibDNS\MessageFactory
+     * @var \LibDNS\Messages\MessageFactory
      */
     private $messageFactory;
 
@@ -44,7 +44,7 @@ class Parser
     /**
      * Constructor
      *
-     * @param \LibDNS\MessageFactory $messageFactory
+     * @param \LibDNS\Messages\MessageFactory $messageFactory
      * @param \LibDNS\Records\QuestionFactory $questionFactory
      * @param \LibDNS\Records\ResourceBuilder $resourceBuilder
      */
@@ -60,7 +60,7 @@ class Parser
      *
      * @param string $data The data string to parse
      *
-     * @return \LibDNS\Message
+     * @return \LibDNS\Messages\Message
      */
     public function parse($data)
     {

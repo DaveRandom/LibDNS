@@ -5,13 +5,13 @@
  * PHP version 5.4
  *
  * @category   LibDNS
- * @package    LibDNS
+ * @package    Messages
  * @author     Chris Wright <https://github.com/DaveRandom>
  * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
  * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
  * @version    2.0.0
  */
-namespace LibDNS;
+namespace LibDNS\Messages;
 
 use \LibDNS\Record\RecordCollection,
     \LibDNS\Record\RecordCollectionFactory;
@@ -20,7 +20,7 @@ use \LibDNS\Record\RecordCollection,
  * Represents a DNS protocol message
  *
  * @category   LibDNS
- * @package    LibDNS
+ * @package    Messages
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
 class Message
@@ -66,29 +66,29 @@ class Message
     private $responseCode;
 
     /**
-     * @var RecordCollection Collection of question records
+     * @var \LibDNS\Records\RecordCollection Collection of question records
      */
     private $questionRecords;
 
     /**
-     * @var RecordCollection Collection of question records
+     * @var \LibDNS\Records\RecordCollection Collection of question records
      */
     private $answerRecords;
 
     /**
-     * @var RecordCollection Collection of authority records
+     * @var \LibDNS\Records\RecordCollection Collection of authority records
      */
     private $authorityRecords;
 
     /**
-     * @var RecordCollection Collection of authority records
+     * @var \LibDNS\Records\RecordCollection Collection of authority records
      */
     private $additionalRecords;
 
     /**
      * Constructor
      *
-     * @param RecordCollectionFactory $recordCollectionFactory Factory which makes RecordCollection objects
+     * @param \LibDNS\Records\RecordCollectionFactory $recordCollectionFactory Factory which makes RecordCollection objects
      */
     public function __construct(RecordCollectionFactory $recordCollectionFactory)
     {
@@ -281,7 +281,7 @@ class Message
     /**
      * Get the question records collection
      *
-     * @return RecordCollection
+     * @return \LibDNS\Records\RecordCollection
      */
     public function getQuestionRecords()
     {
@@ -291,7 +291,7 @@ class Message
     /**
      * Get the answer records collection
      *
-     * @return RecordCollection
+     * @return \LibDNS\Records\RecordCollection
      */
     public function getAnswerRecords()
     {
@@ -301,7 +301,7 @@ class Message
     /**
      * Get the authority records collection
      *
-     * @return RecordCollection
+     * @return \LibDNS\Records\RecordCollection
      */
     public function getAuthorityRecords()
     {
@@ -311,7 +311,7 @@ class Message
     /**
      * Get the additional records collection
      *
-     * @return RecordCollection
+     * @return \LibDNS\Records\RecordCollection
      */
     public function getAdditionalRecords()
     {

@@ -13,7 +13,8 @@
  */
 namespace LibDNS\Parser;
 
-use \LibDNS\MessageFactory,
+use \LibDNS\Packets\PacketFactory,
+    \LibDNS\Messages\MessageFactory,
     \LibDNS\Records\RecordCollectionFactory,
     \LibDNS\Records\QuestionFactory,
     \LibDNS\Records\ResourceFactory,
@@ -38,6 +39,7 @@ class ParserFactory
     public function create()
     {
         return new Parser(
+            new PacketFactory,
             new MessageFactory(new RecordCollectionFactory),
             new QuestionFactory,
             new ResourceBuilder(
