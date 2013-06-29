@@ -388,22 +388,6 @@ class Parser
     }
 
     /**
-     * Parse a ComplexType field
-     *
-     * @param \LibDNS\Parser\ParsingContext $parsingContext
-     * @param \LibDNS\DataTypes\ComplexType $complexType    The object to populate with the result
-     * @param int                           $length         Expected data length
-     *
-     * @return int The number of packet bytes consumed by the operation
-     *
-     * @throws \UnexpectedValueException When the packet data is invalid
-     * @throws \InvalidArgumentException When a SimpleType subtype is unknown
-     */
-    private function parseComplexType(ParsingContext $parsingContext, ComplexType $complexType, $length)
-    {   
-    }
-
-    /**
      * Parse a question record
      *
      * @param \LibDNS\Parser\ParsingContext $parsingContext
@@ -433,6 +417,7 @@ class Parser
      * @return \LibDNS\Records\Resource
      *
      * @throws \UnexpectedValueException When the record is invalid
+     * @throws \InvalidArgumentException When a SimpleType subtype is unknown
      */
     private function parseResourceRecord(ParsingContext $parsingContext)
     {
@@ -449,7 +434,13 @@ class Parser
         if ($data instanceof SimpleType) {
             $this->parseSimpleType($parsingContext, $data, $meta['length']);
         } else if ($data instanceof ComplexType) {
-            $this->parseComplexType($parsingContext, $data, $meta['length']);
+            foreach ($data as $simpleType) {
+                $meta['length'] -= $this->parseSimpleType($parsingContext, $simpleType, $meta['length']);
+            }
+
+            if ($meta['length'] !== 0) {
+                throw new \UnexpectedValueException('Parse error: Invalid length for record data section');
+            }
         } else {
             throw new \InvalidArgumentException('Unknown data type ' . get_class($simpleType));
         }
@@ -463,6 +454,9 @@ class Parser
      * @param string $data The data string to parse
      *
      * @return \LibDNS\Messages\Message
+     *
+     * @throws \UnexpectedValueException When the packet data is invalid
+     * @throws \InvalidArgumentException When a SimpleType subtype is unknown
      */
     public function parse($data)
     {
