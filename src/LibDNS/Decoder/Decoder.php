@@ -1,17 +1,17 @@
 <?php
 /**
- * Parses raw network data to Message objects
+ * Decodes raw network data to Message objects
  *
  * PHP version 5.4
  *
  * @category   LibDNS
- * @package    Parser
+ * @package    Decoder
  * @author     Chris Wright <https://github.com/DaveRandom>
  * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
  * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
  * @version    2.0.0
  */
-namespace LibDNS\Parser;
+namespace LibDNS\Decoder;
 
 use \LibDNS\Packets\PacketFactory,
     \LibDNS\Packets\Packet,
@@ -34,13 +34,13 @@ use \LibDNS\Packets\PacketFactory,
     \LibDNS\DataTypes\Short;
 
 /**
- * Parses raw network data to Message objects
+ * Decodes raw network data to Message objects
  *
  * @category   LibDNS
- * @package    Parser
+ * @package    Decoder
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
-class Parser
+class Decoder
 {
     const LABELTYPE_LABEL   = 0b00000000;
     const LABELTYPE_POINTER = 0b11000000;
@@ -66,9 +66,9 @@ class Parser
     private $resourceBuilder;
 
     /**
-     * @var \LibDNS\Parser\ParsingContextFactory
+     * @var \LibDNS\Decoder\DecodingContextFactory
      */
-    private $parsingContextFactory;
+    private $decodingContextFactory;
 
     /**
      * Constructor
@@ -78,7 +78,7 @@ class Parser
      * @param \LibDNS\Records\QuestionFactory $questionFactory
      * @param \LibDNS\Records\ResourceBuilder $resourceBuilder
      * @param \LibDNS\DataTypes\DataTypeFactory $dataTypeFactory
-     * @param \LibDNS\Parser\ParsingContextFactory $parsingContextFactory
+     * @param \LibDNS\Decoder\DecodingContextFactory $decodingContextFactory
      */
     public function __construct(
         PacketFactory $packetFactory,
@@ -86,14 +86,14 @@ class Parser
         QuestionFactory $questionFactory,
         ResourceBuilder $resourceBuilder,
         DataTypeFactory $dataTypeFactory,
-        ParsingContextFactory $parsingContextFactory
+        DecodingContextFactory $decodingContextFactory
     ) {
         $this->packetFactory = $packetFactory;
         $this->messageFactory = $messageFactory;
         $this->questionFactory = $questionFactory;
         $this->resourceBuilder = $resourceBuilder;
         $this->dataTypeFactory = $dataTypeFactory;
-        $this->parsingContextFactory = $parsingContextFactory;
+        $this->decodingContextFactory = $decodingContextFactory;
     }
 
     /**
@@ -109,25 +109,25 @@ class Parser
     private function readDataFromPacket(Packet $packet, $length)
     {
         if ($packet->getBytesRemaining() < $length) {
-            throw new \UnexpectedValueException('Parse error: Incomplete packet');
+            throw new \UnexpectedValueException('Decode error: Incomplete packet');
         }
 
         return $packet->read($length);
     }
 
     /**
-     * Parse the header section of the message
+     * Decode the header section of the message
      *
-     * @param \LibDNS\Parser\ParsingContext $parsingContext
+     * @param \LibDNS\Decoder\DecodingContext $decodingContext
      * @param \LibDNS\Messages\Message      $message
      *
      * @throws \UnexpectedValueException When the header section is invalid
      */
-    private function parseHeader(ParsingContext $parsingContext, Message $message)
+    private function decodeHeader(DecodingContext $decodingContext, Message $message)
     {
-        $header = unpack('nid/c2meta/nqd/nan/nns/nar', $this->readDataFromPacket($parsingContext->getPacket(), 96));
+        $header = unpack('nid/c2meta/nqd/nan/nns/nar', $this->readDataFromPacket($decodingContext->getPacket(), 96));
         if (!$header) {
-            throw new \UnexpectedValueException('Parse error: Header unpack failed');
+            throw new \UnexpectedValueException('Decode error: Header unpack failed');
         }
 
         $message->setID($header['id']);
@@ -139,16 +139,16 @@ class Parser
         $message->isRecusionAvailable(($header['meta2'] & 0b10000000) >> 8);
         $message->setResponseCode($header['meta2'] & 0b00001111);
 
-        $parsingContext->setExpectedQuestionRecords($header['qd']);
-        $parsingContext->setExpectedAnswerRecords($header['an']);
-        $parsingContext->setExpectedAuthorityRecords($header['qd']);
-        $parsingContext->setExpectedAdditoinalRecords($header['ar']);
+        $decodingContext->setExpectedQuestionRecords($header['qd']);
+        $decodingContext->setExpectedAnswerRecords($header['an']);
+        $decodingContext->setExpectedAuthorityRecords($header['qd']);
+        $decodingContext->setExpectedAdditoinalRecords($header['ar']);
     }
 
     /**
-     * Parse an Anything field
+     * Decode an Anything field
      *
-     * @param \LibDNS\Parser\ParsingContext $parsingContext
+     * @param \LibDNS\Decoder\DecodingContext $decodingContext
      * @param int                           $length
      * @param \LibDNS\DataTypes\Anything    $anything       The object to populate with the result
      *
@@ -156,17 +156,17 @@ class Parser
      *
      * @throws \UnexpectedValueException When the packet data is invalid
      */
-    private function parseAnything(ParsingContext $parsingContext, Anything $anything, $length)
+    private function decodeAnything(DecodingContext $decodingContext, Anything $anything, $length)
     {
-        $anything->setValue($this->readDataFromPacket($parsingContext->getPacket(), $length));
+        $anything->setValue($this->readDataFromPacket($decodingContext->getPacket(), $length));
 
         return $length;
     }
 
     /**
-     * Parse a BitMap field
+     * Decode a BitMap field
      *
-     * @param \LibDNS\Parser\ParsingContext $parsingContext
+     * @param \LibDNS\Decoder\DecodingContext $decodingContext
      * @param int                           $length
      * @param \LibDNS\DataTypes\BitMap      $bitMap         The object to populate with the result
      *
@@ -174,44 +174,44 @@ class Parser
      *
      * @throws \UnexpectedValueException When the packet data is invalid
      */
-    private function parseBitMap(ParsingContext $parsingContext, BitMap $bitMap, $length)
+    private function decodeBitMap(DecodingContext $decodingContext, BitMap $bitMap, $length)
     {
-        $bitMap->setValue($this->readDataFromPacket($parsingContext->getPacket(), $length));
+        $bitMap->setValue($this->readDataFromPacket($decodingContext->getPacket(), $length));
 
         return $length;
     }
 
     /**
-     * Parse a Char field
+     * Decode a Char field
      *
-     * @param \LibDNS\Parser\ParsingContext $parsingContext
+     * @param \LibDNS\Decoder\DecodingContext $decodingContext
      * @param \LibDNS\DataTypes\Char        $char           The object to populate with the result
      *
      * @return int The number of packet bytes consumed by the operation
      *
      * @throws \UnexpectedValueException When the packet data is invalid
      */
-    private function parseChar(ParsingContext $parsingContext, Char $char)
+    private function decodeChar(DecodingContext $decodingContext, Char $char)
     {
-        $value = unpack('C', $this->readDataFromPacket($parsingContext->getPacket(), 1))[1];
+        $value = unpack('C', $this->readDataFromPacket($decodingContext->getPacket(), 1))[1];
         $char->setValue($value);
 
         return 1;
     }
 
     /**
-     * Parse a CharacterString field
+     * Decode a CharacterString field
      *
-     * @param \LibDNS\Parser\ParsingContext     $parsingContext
+     * @param \LibDNS\Decoder\DecodingContext     $decodingContext
      * @param \LibDNS\DataTypes\CharacterString $characterString The object to populate with the result
      *
      * @return int The number of packet bytes consumed by the operation
      *
      * @throws \UnexpectedValueException When the packet data is invalid
      */
-    private function parseCharacterString(ParsingContext $parsingContext, CharacterString $characterString)
+    private function decodeCharacterString(DecodingContext $decodingContext, CharacterString $characterString)
     {
-        $packet = $parsingContext->getPacket();
+        $packet = $decodingContext->getPacket();
         $length = ord($this->readDataFromPacket($packet, 1));
         $characterString->setValue($this->readDataFromPacket($packet, $length));
 
@@ -219,19 +219,19 @@ class Parser
     }
 
     /**
-     * Parse a DomainName field
+     * Decode a DomainName field
      *
-     * @param \LibDNS\Parser\ParsingContext $parsingContext
+     * @param \LibDNS\Decoder\DecodingContext $decodingContext
      * @param \LibDNS\DataTypes\DomainName  $domainName     The object to populate with the result
      *
      * @return int The number of packet bytes consumed by the operation
      *
      * @throws \UnexpectedValueException When the packet data is invalid
      */
-    private function parseDomainName(ParsingContext $parsingContext, DomainName $domainName)
+    private function decodeDomainName(DecodingContext $decodingContext, DomainName $domainName)
     {
-        $packet = $parsingContext->getPacket();
-        $labelRegistry = $parsingContext->getLabelRegistry();
+        $packet = $decodingContext->getPacket();
+        $labelRegistry = $decodingContext->getLabelRegistry();
 
         $labels = [];
         $totalLength = 0;
@@ -254,7 +254,7 @@ class Parser
                 $index = (($length & 0b00111111) << 8) | ord($this->readDataFromPacket($packet, 1));
                 $ref = $labelRegistry->lookupLabel($index);
                 if ($ref === null) {
-                    throw new \UnexpectedValueException('Parse error: Invalid compression pointer reference in domain name');
+                    throw new \UnexpectedValueException('Decode error: Invalid compression pointer reference in domain name');
                 }
 
                 array_unshift($labels, $ref);
@@ -262,7 +262,7 @@ class Parser
 
                 break;
             } else {
-                throw new \UnexpectedValueException('Parse error: Invalid label type in domain name');
+                throw new \UnexpectedValueException('Decode error: Invalid label type in domain name');
             }
         }
 
@@ -281,77 +281,77 @@ class Parser
     }
 
     /**
-     * Parse an IPv4Address field
+     * Decode an IPv4Address field
      *
-     * @param \LibDNS\Parser\ParsingContext $parsingContext
+     * @param \LibDNS\Decoder\DecodingContext $decodingContext
      * @param \LibDNS\DataTypes\IPv4Address $ipv4Address    The object to populate with the result
      *
      * @return int The number of packet bytes consumed by the operation
      *
      * @throws \UnexpectedValueException When the packet data is invalid
      */
-    private function parseIPv4Address(ParsingContext $parsingContext, IPv4Address $ipv4Address)
+    private function decodeIPv4Address(DecodingContext $decodingContext, IPv4Address $ipv4Address)
     {
-        $octets = unpack('C4', $this->readDataFromPacket($parsingContext->getPacket(), 4));
+        $octets = unpack('C4', $this->readDataFromPacket($decodingContext->getPacket(), 4));
         $ipv4Address->setOctets($octets);
 
         return 4;
     }
 
     /**
-     * Parse an IPv6Address field
+     * Decode an IPv6Address field
      *
-     * @param \LibDNS\Parser\ParsingContext $parsingContext
+     * @param \LibDNS\Decoder\DecodingContext $decodingContext
      * @param \LibDNS\DataTypes\IPv6Address $ipv6Address    The object to populate with the result
      *
      * @return int The number of packet bytes consumed by the operation
      *
      * @throws \UnexpectedValueException When the packet data is invalid
      */
-    private function parseIPv6Address(ParsingContext $parsingContext, IPv6Address $ipv6Address)
+    private function decodeIPv6Address(DecodingContext $decodingContext, IPv6Address $ipv6Address)
     {
-        $shorts = unpack('n8', $this->readDataFromPacket($parsingContext->getPacket(), 16));
+        $shorts = unpack('n8', $this->readDataFromPacket($decodingContext->getPacket(), 16));
         $ipv6Address->setShorts($shorts);
 
         return 16;
     }
 
     /**
-     * Parse a Long field
+     * Decode a Long field
      *
-     * @param \LibDNS\Parser\ParsingContext $parsingContext
+     * @param \LibDNS\Decoder\DecodingContext $decodingContext
      * @param \LibDNS\DataTypes\Long        $long           The object to populate with the result
      *
      * @return int The number of packet bytes consumed by the operation
      *
      * @throws \UnexpectedValueException When the packet data is invalid
      */
-    private function parseLong(ParsingContext $parsingContext, Long $long)
+    private function decodeLong(DecodingContext $decodingContext, Long $long)
     {
-        $value = unpack('N', $this->readDataFromPacket($parsingContext->getPacket(), 4))[1];
+        $value = unpack('N', $this->readDataFromPacket($decodingContext->getPacket(), 4))[1];
         $long->setValue($value);
     }
 
     /**
-     * Parse a Short field
+     * Decode a Short field
      *
-     * @param \LibDNS\Parser\ParsingContext $parsingContext
+     * @param \LibDNS\Decoder\DecodingContext $decodingContext
      * @param \LibDNS\DataTypes\Short       $short          The object to populate with the result
      *
      * @return int The number of packet bytes consumed by the operation
      *
      * @throws \UnexpectedValueException When the packet data is invalid
      */
-    private function parseShort(ParsingContext $parsingContext, Short $short)
+    private function decodeShort(DecodingContext $decodingContext, Short $short)
     {
-        $value = unpack('n', $this->readDataFromPacket($parsingContext->getPacket(), 2))[1];
+        $value = unpack('n', $this->readDataFromPacket($decodingContext->getPacket(), 2))[1];
         $short->setValue($value);
     }
 
     /**
-     * Parse a SimpleType field
+     * Decode a SimpleType field
      *
-     * @param \LibDNS\Parser\ParsingContext $parsingContext
+     * @param \LibDNS\Decoder\DecodingContext $decodingContext
      * @param \LibDNS\DataTypes\SimpleType  $simpleType     The object to populate with the result
      * @param int                           $length         Expected data length
      *
@@ -360,26 +360,26 @@ class Parser
      * @throws \UnexpectedValueException When the packet data is invalid
      * @throws \InvalidArgumentException When the SimpleType subtype is unknown
      */
-    private function parseSimpleType(ParsingContext $parsingContext, SimpleType $simpleType, $length)
+    private function decodeSimpleType(DecodingContext $decodingContext, SimpleType $simpleType, $length)
     {
         if ($simpleType instanceof Anything) {
-            $result = $this->parseAnything($parsingContext, $simpleType, $length);
+            $result = $this->decodeAnything($decodingContext, $simpleType, $length);
         } else if ($simpleType instanceof BitMap) {
-            $result = $this->parseBitMap($parsingContext, $simpleType, $length);
+            $result = $this->decodeBitMap($decodingContext, $simpleType, $length);
         } else if ($simpleType instanceof Char) {
-            $result = $this->parseChar($parsingContext, $simpleType);
+            $result = $this->decodeChar($decodingContext, $simpleType);
         } else if ($simpleType instanceof CharacterString) {
-            $result = $this->parseCharacterString($parsingContext, $simpleType);
+            $result = $this->decodeCharacterString($decodingContext, $simpleType);
         } else if ($simpleType instanceof DomainName) {
-            $result = $this->parseDomainName($parsingContext, $simpleType);
+            $result = $this->decodeDomainName($decodingContext, $simpleType);
         } else if ($simpleType instanceof IPv4Address) {
-            $result = $this->parseIPv4Address($parsingContext, $simpleType);
+            $result = $this->decodeIPv4Address($decodingContext, $simpleType);
         } else if ($simpleType instanceof IPv6Address) {
-            $result = $this->parseIPv6Address($parsingContext, $simpleType);
+            $result = $this->decodeIPv6Address($decodingContext, $simpleType);
         } else if ($simpleType instanceof Long) {
-            $result = $this->parseLong($parsingContext, $simpleType);
+            $result = $this->decodeLong($decodingContext, $simpleType);
         } else if ($simpleType instanceof Short) {
-            $result = $this->parseShort($parsingContext, $simpleType);
+            $result = $this->decodeShort($decodingContext, $simpleType);
         } else {
             throw new \InvalidArgumentException('Unknown SimpleType ' . get_class($simpleType));
         }
@@ -388,19 +388,19 @@ class Parser
     }
 
     /**
-     * Parse a question record
+     * Decode a question record
      *
-     * @param \LibDNS\Parser\ParsingContext $parsingContext
+     * @param \LibDNS\Decoder\DecodingContext $decodingContext
      *
      * @return \LibDNS\Records\Question
      *
      * @throws \UnexpectedValueException When the record is invalid
      */
-    private function parseQuestionRecord(ParsingContext $parsingContext)
+    private function decodeQuestionRecord(DecodingContext $decodingContext)
     {
         $domainName = $this->dataTypeFactory->createDomainName();
-        $this->parseDomainName($parsingContext, $domainName);
-        $meta = unpack('ntype/nclass', $this->readDataFromPacket($parsingContext->getPacket(), 4));
+        $this->decodeDomainName($decodingContext, $domainName);
+        $meta = unpack('ntype/nclass', $this->readDataFromPacket($decodingContext->getPacket(), 4));
 
         $question = $this->questionFactory->create($meta['type']);
         $question->setName($domainName);
@@ -410,20 +410,20 @@ class Parser
     }
 
     /**
-     * Parse a resource record
+     * Decode a resource record
      *
-     * @param \LibDNS\Parser\ParsingContext $parsingContext
+     * @param \LibDNS\Decoder\DecodingContext $decodingContext
      *
      * @return \LibDNS\Records\Resource
      *
      * @throws \UnexpectedValueException When the record is invalid
      * @throws \InvalidArgumentException When a SimpleType subtype is unknown
      */
-    private function parseResourceRecord(ParsingContext $parsingContext)
+    private function decodeResourceRecord(DecodingContext $decodingContext)
     {
         $domainName = $this->dataTypeFactory->createDomainName();
-        $this->parseDomainName($parsingContext, $domainName);
-        $meta = unpack('ntype/nclass/Nttl/nlength', $this->readDataFromPacket($parsingContext->getPacket(), 10));
+        $this->decodeDomainName($decodingContext, $domainName);
+        $meta = unpack('ntype/nclass/Nttl/nlength', $this->readDataFromPacket($decodingContext->getPacket(), 10));
 
         $resource = $this->resourceBuilder->build($meta['type']);
         $resource->setName($domainName);
@@ -432,14 +432,14 @@ class Parser
 
         $data = $resource->getData();
         if ($data instanceof SimpleType) {
-            $this->parseSimpleType($parsingContext, $data, $meta['length']);
+            $this->decodeSimpleType($decodingContext, $data, $meta['length']);
         } else if ($data instanceof ComplexType) {
             foreach ($data as $simpleType) {
-                $meta['length'] -= $this->parseSimpleType($parsingContext, $simpleType, $meta['length']);
+                $meta['length'] -= $this->decodeSimpleType($decodingContext, $simpleType, $meta['length']);
             }
 
             if ($meta['length'] !== 0) {
-                throw new \UnexpectedValueException('Parse error: Invalid length for record data section');
+                throw new \UnexpectedValueException('Decode error: Invalid length for record data section');
             }
         } else {
             throw new \InvalidArgumentException('Unknown data type ' . get_class($simpleType));
@@ -449,49 +449,49 @@ class Parser
     }
 
     /**
-     * Parse a Message from raw network data
+     * Decode a Message from raw network data
      *
-     * @param string $data The data string to parse
+     * @param string $data The data string to decode
      *
      * @return \LibDNS\Messages\Message
      *
      * @throws \UnexpectedValueException When the packet data is invalid
      * @throws \InvalidArgumentException When a SimpleType subtype is unknown
      */
-    public function parse($data)
+    public function decode($data)
     {
         $packet = $this->packetFactory->create($data);
-        $parsingContext = $this->parsingContextFactory->create($packet);
+        $decodingContext = $this->decodingContextFactory->create($packet);
         $message = $this->messageFactory->create();
 
-        $this->parseHeader($parsingContext, $message);
+        $this->decodeHeader($decodingContext, $message);
 
         $questionRecords = $message->getQuestionRecords();
-        $expected = $parsingContext->getExpectedQuestionRecords();
+        $expected = $decodingContext->getExpectedQuestionRecords();
         for ($i = 0; $i < $expected; $i++) {
-            $questionRecords->add($this->parseQuestionRecord($parsingContext));
+            $questionRecords->add($this->decodeQuestionRecord($decodingContext));
         }
 
         $answerRecords = $message->getAnswerRecords();
-        $expected = $parsingContext->getExpectedAnswerRecords();
+        $expected = $decodingContext->getExpectedAnswerRecords();
         for ($i = 0; $i < $expected; $i++) {
-            $answerRecords->add($this->parseResourceRecord($parsingContext));
+            $answerRecords->add($this->decodeResourceRecord($decodingContext));
         }
 
         $authorityRecords = $message->getAuthorityRecords();
-        $expected = $parsingContext->getExpectedAuthorityRecords();
+        $expected = $decodingContext->getExpectedAuthorityRecords();
         for ($i = 0; $i < $expected; $i++) {
-            $authorityRecords->add($this->parseResourceRecord($parsingContext));
+            $authorityRecords->add($this->decodeResourceRecord($decodingContext));
         }
 
         $addtionalRecords = $message->getAddtionalRecords();
-        $expected = $parsingContext->getExpectedAddtionalRecords();
+        $expected = $decodingContext->getExpectedAddtionalRecords();
         for ($i = 0; $i < $expected; $i++) {
-            $addtionalRecords->add($this->parseResourceRecord($parsingContext));
+            $addtionalRecords->add($this->decodeResourceRecord($decodingContext));
         }
 
         if ($packet->getBytesRemaining() !== 0) {
-            throw new \UnexpectedValueException('Parse error: Unexpected data at end of packet');
+            throw new \UnexpectedValueException('Decode error: Unexpected data at end of packet');
         }
 
         return $message;

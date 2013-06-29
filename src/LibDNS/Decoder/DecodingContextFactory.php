@@ -1,39 +1,39 @@
 <?php
 /**
- * Creates ParsingContext objects
+ * Creates DecodingContext objects
  *
  * PHP version 5.4
  *
  * @category   LibDNS
- * @package    Parser
+ * @package    Decoder
  * @author     Chris Wright <https://github.com/DaveRandom>
  * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
  * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
  * @version    2.0.0
  */
-namespace LibDNS\Parser;
+namespace LibDNS\Decoder;
 
 use \LibDNS\Packets\Packet,
     \LibDNS\Packets\LabelRegistry;
 
 /**
- * Creates ParsingContext objects
+ * Creates DecodingContext objects
  *
  * @category   LibDNS
- * @package    Parser
+ * @package    Decoder
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
-class ParsingContextFactory
+class DecodingContextFactory
 {
     /**
-     * Create a new ParsingContext object
+     * Create a new DecodingContext object
      *
-     * @param \LibDNS\Packets\Packet $packet The packet to be parsed
+     * @param \LibDNS\Packets\Packet $packet The packet to be decoded
      *
-     * @return \LibDNS\Packets\ParsingContext
+     * @return \LibDNS\Packets\DecodingContext
      */
     public function create(Packet $packet)
     {
-        return new ParsingContext($packet, new LabelRegistry);
+        return new DecodingContext($packet, new LabelRegistry);
     }
 }

@@ -1,17 +1,17 @@
 <?php
 /**
- * Creates Parser objects
+ * Creates Decoder objects
  *
  * PHP version 5.4
  *
  * @category   LibDNS
- * @package    Parser
+ * @package    Decoder
  * @author     Chris Wright <https://github.com/DaveRandom>
  * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
  * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
  * @version    2.0.0
  */
-namespace LibDNS\Parser;
+namespace LibDNS\Decoder;
 
 use \LibDNS\Packets\PacketFactory,
     \LibDNS\Messages\MessageFactory,
@@ -23,24 +23,24 @@ use \LibDNS\Packets\PacketFactory,
     \LibDNS\DataTypes\DataTypeBuilder;
 
 /**
- * Creates Parser objects
+ * Creates Decoder objects
  *
  * @category   LibDNS
- * @package    Parser
+ * @package    Decoder
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
-class ParserFactory
+class DecoderFactory
 {
     /**
-     * Create a new Parser object
+     * Create a new Decoder object
      *
-     * @return \LibDNS\Parser\Parser
+     * @return \LibDNS\Decoder\Decoder
      */
     public function create()
     {
         $dataTypeFactory = new DataTypeFactory;
 
-        return new Parser(
+        return new Decoder(
             new PacketFactory,
             new MessageFactory(new RecordCollectionFactory),
             new QuestionFactory,
@@ -50,7 +50,7 @@ class ParserFactory
                 new DataTypeBuilder($dataTypeFactory)
             ),
             $dataTypeFactory,
-            new ParsingContextFactory
+            new DecodingContextFactory
         );
     }
 }

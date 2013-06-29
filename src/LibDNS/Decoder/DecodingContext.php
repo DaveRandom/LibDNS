@@ -1,11 +1,11 @@
 <?php
 /**
- * Holds data associated with a parse operation
+ * Holds data associated with a decode operation
  *
  * PHP version 5.4
  *
  * @category   LibDNS
- * @package    Parser
+ * @package    Decoder
  * @author     Chris Wright <https://github.com/DaveRandom>
  * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
  * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
@@ -17,13 +17,13 @@ use \LibDNS\Packets\Packet,
     \LibDNS\Packets\LabelRegistry;
 
 /**
- * Holds data associated with a parse operation
+ * Holds data associated with a decode operation
  *
  * @category   LibDNS
- * @package    Parser
+ * @package    Decoder
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
-class ParsingContext
+class DecodingContext
 {
     /**
      * @var \LibDNS\Packets\Packet
