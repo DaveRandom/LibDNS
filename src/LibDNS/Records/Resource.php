@@ -16,6 +16,7 @@ namespace LibDNS\Records;
 use \LibDNS\DataTypes\DataType,
     \LibDNS\DataTypes\SimpleType,
     \LibDNS\DataTypes\ComplexType,
+    \LibDNS\DataTypes\SimpleTypes,
     \LibDNS\DataTypes\Anything,
     \LibDNS\DataTypes\BitMap,
     \LibDNS\DataTypes\Char,
@@ -24,8 +25,7 @@ use \LibDNS\DataTypes\DataType,
     \LibDNS\DataTypes\IPv4Address,
     \LibDNS\DataTypes\IPv6Address,
     \LibDNS\DataTypes\Long,
-    \LibDNS\DataTypes\Short,
-    \LibDNS\DataTypes\SimpleTypes;
+    \LibDNS\DataTypes\Short;
 
 /**
  * Represents a DNS resource record
