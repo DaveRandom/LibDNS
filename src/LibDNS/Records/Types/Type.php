@@ -1,26 +1,26 @@
 <?php
 /**
- * Shared interface and implementations for simple data types
+ * Base class for simple data types
  *
  * PHP version 5.4
  *
  * @category   LibDNS
- * @package    DataTypes
+ * @package    Types
  * @author     Chris Wright <https://github.com/DaveRandom>
  * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
  * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
  * @version    2.0.0
  */
-namespace LibDNS\DataTypes;
+namespace LibDNS\Records\Types;
 
 /**
- * Shared interface and implementations for simple data types
+ * Base class for simple data types
  *
  * @category   LibDNS
- * @package    DataTypes
+ * @package    Types
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
-abstract class SimpleType extends DataType
+abstract class Type
 {
     /**
      * @var mixed The internal value

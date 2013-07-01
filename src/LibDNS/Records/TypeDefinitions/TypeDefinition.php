@@ -1,26 +1,26 @@
 <?php
 /**
- * Defines a data type comprising multiple simple types
+ * Defines a data type comprising multiple fields
  *
  * PHP version 5.4
  *
  * @category   LibDNS
- * @package    DataTypes
+ * @package    TypeDefinitions
  * @author     Chris Wright <https://github.com/DaveRandom>
  * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
  * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
  * @version    2.0.0
  */
-namespace LibDNS\DataTypes;
+namespace LibDNS\Records\TypeDefinitions;
 
 /**
- * Defines a data type comprising multiple simple types
+ * Defines a data type comprising multiple fields
  *
  * @category   LibDNS
- * @package    DataTypes
+ * @package    TypeDefinitions
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
-class DataTypeDefinition implements \Iterator, \Countable
+class TypeDefinition implements \Iterator, \Countable
 {
     /**
      * @var FieldDefinitionFactory Creates FieldDefinition objects
@@ -28,12 +28,12 @@ class DataTypeDefinition implements \Iterator, \Countable
     private $fieldDefFactory;
 
     /**
-     * @var int Whether the type definition allows the last field to consist of an arbitrary number of values (>0 indicates minimum number)
+     * @var int Number of fields in the type
      */
     private $fieldCount;
 
     /**
-     * @var \LibDNS\DataTypes\FieldDefinition The last field defined by the data type
+     * @var \LibDNS\Records\TypeDefinitions\FieldDefinition The last field defined by the type
      */
     private $lastField;
 
@@ -43,14 +43,9 @@ class DataTypeDefinition implements \Iterator, \Countable
     private $fieldDefs = [];
 
     /**
-     * @var string[] Map of field indexes to names
-     */
-    private $fieldNameMap = [];
-
-    /**
      * @var int[] Map of field names to indexes
      */
-    private $fieldIndexMap = [];
+    private $fieldNameMap = [];
 
     /**
      * @var bool Whether the iteration pointer indicates a valid item
@@ -76,27 +71,6 @@ class DataTypeDefinition implements \Iterator, \Countable
                 $this->registerField($index++, $name, $type);
             }
         }
-    }
-
-    /**
-     * Assert that a SimpleType object is of the subtype indicated by the bitmask
-     *
-     * @param int                          $type  Data type index of the resource, can be indicated using the SimpleTypes enum
-     * @param \LibDNS\DataTypes\SimpleType $value Object to inspect
-     *
-     * @return bool
-     */
-    private function assertSimpleType($type, SimpleType $value)
-    {
-        return (($type & SimpleTypes::ANYTHING)         && $value instanceof Anything)
-            || (($type & SimpleTypes::BITMAP)           && $value instanceof BitMap)
-            || (($type & SimpleTypes::CHAR)             && $value instanceof Char)
-            || (($type & SimpleTypes::CHARACTER_STRING) && $value instanceof CharacterString)
-            || (($type & SimpleTypes::DOMAIN_NAME)      && $value instanceof DomainName)
-            || (($type & SimpleTypes::IPV4_ADDRESS)     && $value instanceof IPv4Address)
-            || (($type & SimpleTypes::IPV6_ADDRESS)     && $value instanceof IPv6Address)
-            || (($type & SimpleTypes::LONG)             && $value instanceof Long)
-            || (($type & SimpleTypes::SHORT)            && $value instanceof Short);
     }
 
    /**
@@ -135,56 +109,19 @@ class DataTypeDefinition implements \Iterator, \Countable
             $this->lastField = $this->fieldDefs[$index];
         }
 
-        $this->fieldIndexMap[$matches['name']] = $index;
-        $this->fieldNameMap[$index] = $matches['name'];
+        $this->fieldNameMap[$matches['name']] = $index;
     }
 
     /**
-     * Get the field name indicated by the supplied index
+     * Get the field definition indicated by the supplied index
      *
      * @param int $index
      *
-     * @return string
+     * @return \LibDNS\Records\TypeDefinitions\FieldDefinition
      *
      * @throws \OutOfBoundsException When the supplied index does not refer to a valid field
      */
-    public function getFieldNameFromIndex($index)
-    {
-        if (!isset($this->fieldNameMap[$index])) {
-            throw new \OutOfBoundsException('Index ' . $index . ' does not refer to a valid field');
-        }
-
-        return $this->fieldNameMap[$index];
-    }
-
-    /**
-     * Get the field index indicated by the supplied name
-     *
-     * @param string $name
-     *
-     * @return int
-     *
-     * @throws \OutOfBoundsException When the supplied name does not refer to a valid field
-     */
-    public function getFieldIndexFromName($name)
-    {
-        $name = strtolower($name);
-        if (!isset($this->fieldIndexMap[$name])) {
-            throw new \OutOfBoundsException('Name ' . $name . ' does not refer to a valid field');
-        }
-
-        return $this->fieldIndexMap[$name];
-    }
-
-    /**
-     * Assert that the specified value is valid at the specified index
-     *
-     * @param int                          $index
-     * @param \LibDNS\DataTypes\SimpleType $value
-     *
-     * @return bool
-     */
-    public function assertValidByIndex($index, SimpleType $value)
+    public function getFieldDefinition($index)
     {
         $index = (int) $index;
         if (isset($this->fieldDefs[$index])) {
@@ -192,35 +129,35 @@ class DataTypeDefinition implements \Iterator, \Countable
         } else if ($index >= 0 && $this->lastField->allowsMultiple()) {
             $fieldDef = $this->lastField;
         } else {
-            return false;
+            throw new \OutOfBoundsException('Index ' . $index . ' does not refer to a valid field');
         }
 
-        return $this->assertSimpleType($fieldDef->getType(), $value);
+        return $fieldDef;
     }
 
     /**
-     * Assert that the specified value is valid at the specified index
+     * Get the field index indicated by the supplied name
      *
-     * @param string                       $name
-     * @param \LibDNS\DataTypes\SimpleType $value
+     * @param string $index
      *
-     * @return bool
+     * @return int
+     *
+     * @throws \OutOfBoundsException When the supplied name does not refer to a valid field
      */
-    public function assertValidByName($name, SimpleType $value)
+    public function getFieldIndexByName($name)
     {
-        try {
-            $index = $this->getFieldIndexFromName($name);
-        } catch (\OutOfBoundsException $e) {
-            return false;
+        $fieldName = strtolower($name);
+        if (!isset($this->fieldNameMap[$fieldName])) {
+            throw new \OutOfBoundsException('Name ' . $name . ' does not refer to a valid field');
         }
 
-        return $this->assertValidByIndex($index, $value);
+        return $this->fieldNameMap[$fieldName];
     }
 
     /**
      * Get the field indicated by the iteration pointer (Iterator interface)
      *
-     * @return \LibDNS\DataTypes\FieldDefinition
+     * @return \LibDNS\Records\TypeDefinitions\FieldDefinition
      */
     public function current()
     {

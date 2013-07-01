@@ -1,23 +1,35 @@
 <?php
 /**
- * Defines a field in a data type comprising multiple simple types
+ * Defines a field in a type
  *
  * PHP version 5.4
  *
  * @category   LibDNS
- * @package    DataTypes
+ * @package    TypeDefinitions
  * @author     Chris Wright <https://github.com/DaveRandom>
  * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
  * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
  * @version    2.0.0
  */
-namespace LibDNS\DataTypes;
+namespace LibDNS\Records\TypeDefinitions;
+
+use \LibDNS\Records\Types\Type,
+    \LibDNS\Records\Types\Anything,
+    \LibDNS\Records\Types\BitMap,
+    \LibDNS\Records\Types\Char,
+    \LibDNS\Records\Types\CharacterString,
+    \LibDNS\Records\Types\DomainName,
+    \LibDNS\Records\Types\IPv4Address,
+    \LibDNS\Records\Types\IPv6Address,
+    \LibDNS\Records\Types\Long,
+    \LibDNS\Records\Types\Short,
+    \LibDNS\Records\Types\Types;
 
 /**
- * Defines a field in a data type comprising multiple simple types
+ * Defines a field in a type
  *
  * @category   LibDNS
- * @package    DataTypes
+ * @package    TypeDefinitions
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
 class FieldDefinition
@@ -66,7 +78,7 @@ class FieldDefinition
     }
 
     /**
-     * Get the index of the field in the data type
+     * Get the index of the field in the containing type
      *
      * @return int
      */
@@ -113,5 +125,25 @@ class FieldDefinition
     public function getMinimumValues()
     {
         return $this->minimumValues;
+    }
+
+    /**
+     * Assert that a Type object is valid for this field
+     *
+     * @param \LibDNS\Records\Types\Type
+     *
+     * @return bool
+     */
+    public function assertDataValid(Type $value)
+    {
+        return (($this->type & Types::ANYTHING)         && $value instanceof Anything)
+            || (($this->type & Types::BITMAP)           && $value instanceof BitMap)
+            || (($this->type & Types::CHAR)             && $value instanceof Char)
+            || (($this->type & Types::CHARACTER_STRING) && $value instanceof CharacterString)
+            || (($this->type & Types::DOMAIN_NAME)      && $value instanceof DomainName)
+            || (($this->type & Types::IPV4_ADDRESS)     && $value instanceof IPv4Address)
+            || (($this->type & Types::IPV6_ADDRESS)     && $value instanceof IPv6Address)
+            || (($this->type & Types::LONG)             && $value instanceof Long)
+            || (($this->type & Types::SHORT)            && $value instanceof Short);
     }
 }

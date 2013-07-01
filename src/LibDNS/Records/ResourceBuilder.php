@@ -13,8 +13,8 @@
  */
 namespace LibDNS\Records;
 
-use \LibDNS\DataTypes\DataTypeDefinitions,
-    \LibDNS\DataTypes\DataTypeBuilder;
+use \LibDNS\Records\TypeDefinitions\TypeDefinitionManager,
+    \LibDNS\Records\Types\TypeBuilder;
 
 /**
  * Builds Resource objects of a specific type

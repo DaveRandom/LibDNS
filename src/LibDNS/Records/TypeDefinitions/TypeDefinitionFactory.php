@@ -1,39 +1,39 @@
 <?php
 /**
- * Creates DataTypeDefinition objects
+ * Creates TypeDefinition objects
  *
  * PHP version 5.4
  *
  * @category   LibDNS
- * @package    DataTypes
+ * @package    TypeDefinitions
  * @author     Chris Wright <https://github.com/DaveRandom>
  * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
  * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
  * @version    2.0.0
  */
-namespace LibDNS\DataTypes;
+namespace LibDNS\Records\TypeDefinitions;
 
 /**
- * Creates DataTypeDefinition objects
+ * Creates TypeDefinition objects
  *
  * @category   LibDNS
- * @package    DataTypes
+ * @package    TypeDefinitions
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
-class DataTypeDefinitionFactory
+class TypeDefinitionFactory
 {
     /**
-     * Create a new DataTypeDefinition object
+     * Create a new TypeDefinition object
      *
      * @param FieldDefinitionFactory $fieldDefFactory
      * @param int[]                  $typeDef         Structural definition of the fields
      *
-     * @return \LibDNS\DataTypes\DataTypeDefinition
+     * @return \LibDNS\Record\TypeDefinitions\TypeDefinition
      *
      * @throws \InvalidArgumentException When the type definition is invalid
      */
     public function create(FieldDefinitionFactory $fieldDefFactory, array $typeDef)
     {
-        return new DataTypeDefinition($fieldDefFactory, $typeDef);
+        return new TypeDefinition($fieldDefFactory, $typeDef);
     }
 }
