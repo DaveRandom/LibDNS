@@ -52,7 +52,7 @@ class Resource extends Record
     private $typeDef;
 
     /**
-     * Assert that a simpletype object is of the subtype indicated by the numeric index
+     * Assert that a SimpleType object is of the subtype indicated by the bitmask
      *
      * @param int                          $type  Data type index of the resource, can be indicated using the SimpleTypes enum
      * @param \LibDNS\DataTypes\SimpleType $value Object to inspect
@@ -61,15 +61,15 @@ class Resource extends Record
      */
     private function assertSimpleType($type, SimpleType $value)
     {
-        return ($type === SimpleTypes::ANYTHING         && $value instanceof Anything)
-            || ($type === SimpleTypes::BITMAP           && $value instanceof BitMap)
-            || ($type === SimpleTypes::CHAR             && $value instanceof Char)
-            || ($type === SimpleTypes::CHARACTER_STRING && $value instanceof CharacterString)
-            || ($type === SimpleTypes::DOMAIN_NAME      && $value instanceof DomainName)
-            || ($type === SimpleTypes::IPV4_ADDRESS     && $value instanceof IPv4Address)
-            || ($type === SimpleTypes::IPV6_ADDRESS     && $value instanceof IPv6Address)
-            || ($type === SimpleTypes::LONG             && $value instanceof Long)
-            || ($type === SimpleTypes::SHORT            && $value instanceof Short);
+        return (($type & SimpleTypes::ANYTHING)         && $value instanceof Anything)
+            || (($type & SimpleTypes::BITMAP)           && $value instanceof BitMap)
+            || (($type & SimpleTypes::CHAR)             && $value instanceof Char)
+            || (($type & SimpleTypes::CHARACTER_STRING) && $value instanceof CharacterString)
+            || (($type & SimpleTypes::DOMAIN_NAME)      && $value instanceof DomainName)
+            || (($type & SimpleTypes::IPV4_ADDRESS)     && $value instanceof IPv4Address)
+            || (($type & SimpleTypes::IPV6_ADDRESS)     && $value instanceof IPv6Address)
+            || (($type & SimpleTypes::LONG)             && $value instanceof Long)
+            || (($type & SimpleTypes::SHORT)            && $value instanceof Short);
     }
 
     /**

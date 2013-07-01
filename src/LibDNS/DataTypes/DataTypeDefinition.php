@@ -1,6 +1,6 @@
 <?php
 /**
- * Represents a data type comprising multiple simple types
+ * Defines a data type comprising multiple simple types
  *
  * PHP version 5.4
  *
@@ -14,23 +14,18 @@
 namespace LibDNS\DataTypes;
 
 /**
- * Represents a data type comprising multiple simple types
+ * Defines a data type comprising multiple simple types
  *
  * @category   LibDNS
  * @package    DataTypes
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
-class ComplexType extends DataType implements \Iterator, \Countable
+class DataTypeDefinition implements \Iterator, \Countable
 {
     /**
-     * @var \LibDNS\DataTypes\SimpleType[] The items that make up the complex type
+     * @var FieldDefinitionFactory Creates FieldDefinition objects
      */
-    private $fields = [];
-
-    /**
-     * @var int[] Structural definition of the fields
-     */
-    private $typeDef;
+    private $fieldDefFactory;
 
     /**
      * @var int Whether the type definition allows the last field to consist of an arbitrary number of values (>0 indicates minimum number)
@@ -38,22 +33,17 @@ class ComplexType extends DataType implements \Iterator, \Countable
     private $fieldCount;
 
     /**
-     * @var bool Whether the type definition allows the last field to consist of multiple values
+     * @var \LibDNS\DataTypes\FieldDefinition The last field defined by the data type
      */
-    private $allowMultipleLast = false;
-
-    /**
-     * @var int Minimum number of values for the last field
-     */
-    private $lastFieldMinimumValues;
+    private $lastField;
 
     /**
      * @var int[] Map of field indexes to type identifiers
      */
-    private $typeMap = [];
+    private $fieldDefs = [];
 
     /**
-     * @var int[] Map of field indexes to names
+     * @var string[] Map of field indexes to names
      */
     private $fieldNameMap = [];
 
@@ -63,18 +53,19 @@ class ComplexType extends DataType implements \Iterator, \Countable
     private $fieldIndexMap = [];
 
     /**
-     * @var bool Whether the iteration pointer has more elements to yield
+     * @var bool Whether the iteration pointer indicates a valid item
      */
-    private $pointerValid = 0;
+    private $pointerValid = true;
 
     /**
      * Constructor
      *
-     * @param int[] $typeDef Structural definition of the fields
+     * @param FieldDefinitionFactory $fieldDefFactory
+     * @param int[]                  $typeDef         Structural definition of the fields
      *
      * @throws \InvalidArgumentException When the type definition is invalid
      */
-    public function __construct(array $typeDef = null)
+    public function __construct(FieldDefinitionFactory $fieldDefFactory, array $typeDef = null)
     {
         if ($typeDef !== null) {
             $this->typeDef = $typeDef;
@@ -82,7 +73,7 @@ class ComplexType extends DataType implements \Iterator, \Countable
 
             $index = 0;
             foreach ($typeDef as $name => $type) {
-                $this->registerTypeDefField($index++, $name, $type);
+                $this->registerField($index++, $name, $type);
             }
         }
     }
@@ -117,7 +108,7 @@ class ComplexType extends DataType implements \Iterator, \Countable
      *
      * @throws \InvalidArgumentException When the field definition is invalid
      */
-    private function registerTypeDefField($index, $name, $type)
+    private function registerField($index, $name, $type)
     {
         if (!preg_match('/^(?P<name>[\w\-]+)(?P<quantifier>\+|\*)?(?P<minimum>(?<=\+)\d+)?$/', strtolower($name), $matches)) {
             throw new \InvalidArgumentException('Invalid field definition ' . $name . ': Syntax error');
@@ -132,123 +123,118 @@ class ComplexType extends DataType implements \Iterator, \Countable
                 $matches['minimum'] = $matches['quantifier'] === '+' ? 1 : 0;
             }
 
-            $this->allowMultipleLast = true;
-            $this->lastFieldMinimumValues = $matches['minimum'];
+            $allowsMultiple = true;
+            $minimumValues = (int) $matches['minimum'];
+        } else {
+            $allowsMultiple = false;
+            $minimumValues = 0;
         }
 
-        $this->typeMap[$index] = $type;
-        $this->fieldNameMap[$matches['name']] = $index;
-        $this->fieldIndexMap[$index] = $matches['name'];
+        $this->fieldDefs[$index] = $this->fieldDefFactory->create($index, $matches['name'], $type, $allowsMultiple, $minimumValues);
+        if ($index === $this->fieldCount - 1) {
+            $this->lastField = $this->fieldDefs[$index];
+        }
+
+        $this->fieldIndexMap[$matches['name']] = $index;
+        $this->fieldNameMap[$index] = $matches['name'];
     }
 
     /**
-     * Get the field indicated by the supplied index
+     * Get the field name indicated by the supplied index
      *
      * @param int $index
      *
-     * @return \LibDNS\DataTypes\SimpleType
+     * @return string
      *
      * @throws \OutOfBoundsException When the supplied index does not refer to a valid field
      */
-    public function getField($index)
+    public function getFieldNameFromIndex($index)
     {
-        if (!isset($this->fields[$index])) {
+        if (!isset($this->fieldNameMap[$index])) {
             throw new \OutOfBoundsException('Index ' . $index . ' does not refer to a valid field');
         }
 
-        return $this->fields[$index];
+        return $this->fieldNameMap[$index];
     }
 
     /**
-     * Set the field indicated by the supplied index
+     * Get the field index indicated by the supplied name
+     *
+     * @param string $name
+     *
+     * @return int
+     *
+     * @throws \OutOfBoundsException When the supplied name does not refer to a valid field
+     */
+    public function getFieldIndexFromName($name)
+    {
+        $name = strtolower($name);
+        if (!isset($this->fieldIndexMap[$name])) {
+            throw new \OutOfBoundsException('Name ' . $name . ' does not refer to a valid field');
+        }
+
+        return $this->fieldIndexMap[$name];
+    }
+
+    /**
+     * Assert that the specified value is valid at the specified index
      *
      * @param int                          $index
      * @param \LibDNS\DataTypes\SimpleType $value
      *
-     * @throws \OutOfBoundsException     When the supplied index does not refer to a valid field
-     * @throws \InvalidArgumentException When the supplied value does not match the type definition
+     * @return bool
      */
-    public function setField($index, SimpleType $value)
+    public function assertValidByIndex($index, SimpleType $value)
     {
-        if (isset($this->typeDef)) {
-            if (!isset($this->typeMap[$index])) {
-                throw new \OutOfBoundsException('Index ' . $index . ' does not refer to a valid field');
-            }
-
-            if (!$this->assertSimpleType($this->typeMap[$index], $value)) {
-                throw new \InvalidArgumentException('Value data type does not match type definition');
-            }
+        $index = (int) $index;
+        if (isset($this->fieldDefs[$index])) {
+            $fieldDef = $this->fieldDefs[$index];
+        } else if ($index >= 0 && $this->lastField->allowsMultiple()) {
+            $fieldDef = $this->lastField;
+        } else {
+            return false;
         }
 
-        $this->fields[$index] = $value;
+        return $this->assertSimpleType($fieldDef->getType(), $value);
     }
 
     /**
-     * Get the field indicated by the supplied name
-     *
-     * @param string $name
-     *
-     * @return \LibDNS\DataTypes\SimpleType
-     *
-     * @throws \OutOfBoundsException When the supplied name does not refer to a valid field
-     */
-    public function getFieldByName($name)
-    {
-        $fieldName = strtolower($name);
-        if (!isset($this->fieldNameMap[$fieldName])) {
-            throw new \OutOfBoundsException('Name ' . $name . ' does not refer to a valid field');
-        }
-
-        return $this->getField($this->fieldNameMap[$fieldName]);
-    }
-
-    /**
-     * Set the field indicated by the supplied name
+     * Assert that the specified value is valid at the specified index
      *
      * @param string                       $name
      * @param \LibDNS\DataTypes\SimpleType $value
      *
-     * @throws \OutOfBoundsException     When the supplied name does not refer to a valid field
-     * @throws \InvalidArgumentException When the supplied value does not match the type definition
+     * @return bool
      */
-    public function setFieldByName($name, SimpleType $value)
+    public function assertValidByName($name, SimpleType $value)
     {
-        $fieldName = strtolower($name);
-        if (!isset($this->fieldNameMap[$fieldName])) {
-            throw new \OutOfBoundsException('Name ' . $name . ' does not refer to a valid field');
+        try {
+            $index = $this->getFieldIndexFromName($name);
+        } catch (\OutOfBoundsException $e) {
+            return false;
         }
 
-        $this->setField($this->fieldNameMap[$fieldName], $value);
-    }
-
-    /**
-     * Get the structural definition of the fields
-     *
-     * @return int[]
-     */
-    public function getTypeDef($index)
-    {
-        return $this->typeDef;
+        return $this->assertValidByIndex($index, $value);
     }
 
     /**
      * Get the field indicated by the iteration pointer (Iterator interface)
      *
-     * @return \LibDNS\DataTypes\SimpleType
+     * @return \LibDNS\DataTypes\FieldDefinition
      */
     public function current()
     {
-        return current($this->fields);
+        return current($this->fieldDefs);
     }
 
     /**
-     * Get the value of the iteration pointer (Iterator interface)
+     * Get the key indicated by the iteration pointer
      *
-     * @return string
+     * @return int
      */
     public function key()
     {
-        return $this->fieldIndexMap[key($this->fields)];
+        return key($this->fieldDefs);
     }
 
     /**
@@ -256,7 +242,7 @@ class ComplexType extends DataType implements \Iterator, \Countable
      */
     public function next()
     {
-        $this->pointerValid = next($this->fields) !== false;
+        $this->pointerValid = next($this->fieldDefs) !== false;
     }
 
     /**
@@ -264,8 +250,8 @@ class ComplexType extends DataType implements \Iterator, \Countable
      */
     public function rewind()
     {
-        reset($this->fields);
-        $this->pointerValid = count($this->fields) > 0;
+        reset($this->fieldDefs);
+        $this->pointerValid = count($this->fieldDefs) > 0;
     }
 
     /**
@@ -285,6 +271,6 @@ class ComplexType extends DataType implements \Iterator, \Countable
      */
     public function count()
     {
-        return count($this->fields);
+        return $this->fieldCount;
     }
 }

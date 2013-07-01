@@ -24,13 +24,13 @@ use \LibDNS\Enumeration;
  */
 class SimpleTypes extends Enumeration
 {
-    const ANYTHING         = 1;
-    const BITMAP           = 2;
-    const CHAR             = 3;
-    const CHARACTER_STRING = 4;
-    const DOMAIN_NAME      = 5;
-    const IPV4_ADDRESS     = 6;
-    const IPV6_ADDRESS     = 7;
-    const LONG             = 8;
-    const SHORT            = 9;
+    const ANYTHING         = 0b000000001;
+    const BITMAP           = 0b000000010;
+    const CHAR             = 0b000000100;
+    const CHARACTER_STRING = 0b000001000;
+    const DOMAIN_NAME      = 0b000010000;
+    const IPV4_ADDRESS     = 0b000100000;
+    const IPV6_ADDRESS     = 0b001000000;
+    const LONG             = 0b010000000;
+    const SHORT            = 0b100000000;
 }
