@@ -13,6 +13,8 @@
  */
 namespace LibDNS\Messages;
 
+use \LibDNS\Enumeration;
+
 /**
  * Enumeration of possible message types
  *

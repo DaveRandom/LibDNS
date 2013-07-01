@@ -36,23 +36,23 @@ class DataTypeBuilder
      */
     private function createSimpleType($dataType)
     {
-        if ($typeDef === SimpleTypes::ANYTHING) {
+        if ($dataType === SimpleTypes::ANYTHING) {
             $result = $this->dataTypeFactory->createAnything();
-        } else if ($typeDef === SimpleTypes::BITMAP) {
+        } else if ($dataType === SimpleTypes::BITMAP) {
             $result = $this->dataTypeFactory->createBitMap();
-        } else if ($typeDef === SimpleTypes::CHAR) {
+        } else if ($dataType === SimpleTypes::CHAR) {
             $result = $this->dataTypeFactory->createChar();
-        } else if ($typeDef === SimpleTypes::CHARACTER_STRING) {
+        } else if ($dataType === SimpleTypes::CHARACTER_STRING) {
             $result = $this->dataTypeFactory->createCharacterString();
-        } else if ($typeDef === SimpleTypes::DOMAIN_NAME) {
+        } else if ($dataType === SimpleTypes::DOMAIN_NAME) {
             $result = $this->dataTypeFactory->createDomainName();
-        } else if ($typeDef === SimpleTypes::IPV4_ADDRESS) {
+        } else if ($dataType === SimpleTypes::IPV4_ADDRESS) {
             $result = $this->dataTypeFactory->createIPv4Address();
-        } else if ($typeDef === SimpleTypes::IPV6_ADDRESS) {
+        } else if ($dataType === SimpleTypes::IPV6_ADDRESS) {
             $result = $this->dataTypeFactory->createIPv6Address();
-        } else if ($typeDef === SimpleTypes::LONG) {
+        } else if ($dataType === SimpleTypes::LONG) {
             $result = $this->dataTypeFactory->createLong();
-        } else if ($typeDef === SimpleTypes::SHORT) {
+        } else if ($dataType === SimpleTypes::SHORT) {
             $result = $this->dataTypeFactory->createShort();
         }
         

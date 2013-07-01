@@ -29,7 +29,7 @@ class Message
     /**
      * @var int Unsigned short that identifies the DNS transaction
      */
-    private $id
+    private $id = 0;
 
     /**
      * @var int Indicates the type of the message, can be indicated using the MessageTypes enum
@@ -39,12 +39,12 @@ class Message
     /**
      * @var int Message opcode, can be indicated using the MessageOpCodes enum
      */
-    private $opCode;
+    private $opCode = MessageOpCodes::QUERY;
 
     /**
      * @var bool Whether a response message is authoritative
      */
-    private $authoritative;
+    private $authoritative = false;
 
     /**
      * @var bool Whether the message is truncated
@@ -54,17 +54,17 @@ class Message
     /**
      * @var bool Whether a query desires the server to recurse the lookup
      */
-    private $recusionDesired = true;
+    private $recursionDesired = true;
 
     /**
      * @var bool Whether a server could provide recursion in a response
      */
-    private $recusionAvailable = false;
+    private $recursionAvailable = false;
 
     /**
      * @var int Message response code, can be indicated using the MessageResponseCodes enum
      */
-    private $responseCode;
+    private $responseCode = MessageResponseCodes::NO_ERROR;
 
     /**
      * @var \LibDNS\Records\RecordCollection Collection of question records
@@ -90,13 +90,20 @@ class Message
      * Constructor
      *
      * @param \LibDNS\Records\RecordCollectionFactory $recordCollectionFactory Factory which makes RecordCollection objects
+     * @param int                                     $type                    Value of the message type field
+     *
+     * @throws \RangeException When the supplied message type is outside the valid range 0 - 1
      */
-    public function __construct(RecordCollectionFactory $recordCollectionFactory)
+    public function __construct(RecordCollectionFactory $recordCollectionFactory, $type = null)
     {
         $this->questionRecords = $recordCollectionFactory->create(RecordTypes::QUESTION);
         $this->answerRecords = $recordCollectionFactory->create(RecordTypes::RESOURCE);
         $this->authorityRecords = $recordCollectionFactory->create(RecordTypes::RESOURCE);
         $this->additionalRecords = $recordCollectionFactory->create(RecordTypes::RESOURCE);
+
+        if ($type !== null) {
+            $this->setType($type);
+        }
     }
 
     /**
@@ -223,12 +230,12 @@ class Message
      *
      * @return bool The old value
      */
-    public function isRecusionDesired($newValue = null)
+    public function isRecursionDesired($newValue = null)
     {
-        $result = $this->recusionDesired;
+        $result = $this->recursionDesired;
 
         if ($newValue !== null) {
-            $this->recusionDesired = (bool) $newValue;
+            $this->recursionDesired = (bool) $newValue;
         }
 
         return (bool) $result;
@@ -241,12 +248,12 @@ class Message
      *
      * @return bool The old value
      */
-    public function isRecusionAvailable($newValue = null)
+    public function isRecursionAvailable($newValue = null)
     {
-        $result = $this->recusionAvailable;
+        $result = $this->recursionAvailable;
 
         if ($newValue !== null) {
-            $this->recusionAvailable = (bool) $newValue;
+            $this->recursionAvailable = (bool) $newValue;
         }
 
         return (bool) $result;

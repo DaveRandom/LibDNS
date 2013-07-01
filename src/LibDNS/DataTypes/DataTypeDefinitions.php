@@ -13,6 +13,8 @@
  */
 namespace LibDNS\DataTypes;
 
+use \LibDNS\Records\ResourceTypes;
+
 /**
  * Holds data about how the RDATA sections of known resource record types are structured
  *
@@ -27,6 +29,8 @@ class DataTypeDefinitions
      */
     private $typeDefs =
     [
+        ResourceTypes::A     => SimpleTypes::IPV4_ADDRESS,
+        ResourceTypes::AAAA  => SimpleTypes::IPV6_ADDRESS,
     ];
 
     /**
@@ -38,6 +42,6 @@ class DataTypeDefinitions
      */
     public function getTypeDefinition($recordType)
     {
-        return isset($typeDefs[$recordType]) ? $typeDefs[$recordType] : null;
+        return isset($this->typeDefs[$recordType]) ? $this->typeDefs[$recordType] : null;
     }
 }

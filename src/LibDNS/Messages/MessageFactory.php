@@ -25,27 +25,14 @@ use \LibDNS\Records\RecordCollectionFactory;
 class MessageFactory
 {
     /**
-     * @var \LibDNS\Records\RecordCollectionFactory Factory which creates RecordCollection objects
-     */
-    private $recordCollectionFactory;
-
-    /**
-     * Constructor
-     *
-     * @param \LibDNS\Records\RecordCollectionFactory $recordCollectionFactory Factory which creates RecordCollection objects
-     */
-    public function __construct(RecordCollectionFactory $recordCollectionFactory)
-    {
-        $this->recordCollectionFactory = $recordCollectionFactory;
-    }
-
-    /**
      * Create a new Message object
+     *
+     * @param int $type Value of the message type field
      *
      * @return \LibDNS\Messages\Message
      */
-    public function create()
+    public function create($type = null)
     {
-        return new Message($this->recordCollectionFactory);
+        return new Message(new RecordCollectionFactory, $type);
     }
 }

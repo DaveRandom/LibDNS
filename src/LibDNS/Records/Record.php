@@ -37,7 +37,7 @@ abstract class Record
     /**
      * @var int
      */
-    protected $class;
+    protected $class = ResourceClasses::IN;
 
     /**
      * Get the value of the record name field

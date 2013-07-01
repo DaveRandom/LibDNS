@@ -82,14 +82,18 @@ class DomainName extends SimpleType
      *
      * @throws \UnexpectedValueException When the supplied label list is not a valid domain name
      */
-    public function setLabels($labels, $tldFirst = false)
+    public function setLabels(array $labels, $tldFirst = false)
     {
+        if (!$labels) {
+            throw new \InvalidArgumentException('Label list is not a valid domain name: List is empty');
+        }
+
         $length = $count = 0;
 
         foreach ($labels as &$label) {
             $labelLength = strlen($label);
             if ($labelLength > 63) {
-                throw new \InvalidArgumentException('Label list is not a valid domain name: label ' . $label . ' length excedes 63 byte limit');
+                throw new \InvalidArgumentException('Label list is not a valid domain name: Label ' . $label . ' length excedes 63 byte limit');
             }
             $length += $labelLength + 1;
             $label = strtolower($label);
@@ -102,7 +106,7 @@ class DomainName extends SimpleType
         } 
 
         if ($length + 1 > 255) {
-            throw new \InvalidArgumentException('Label list is not a valid domain name: total length excedes 255 byte limit');
+            throw new \InvalidArgumentException('Label list is not a valid domain name: Total length excedes 255 byte limit');
         }
 
         $this->labels = $tldFirst ? array_reverse($labels) : $labels;

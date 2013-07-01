@@ -106,7 +106,7 @@ class Decoder
     private function readDataFromPacket(Packet $packet, $length)
     {
         if ($packet->getBytesRemaining() < $length) {
-            throw new \UnexpectedValueException('Decode error: Incomplete packet');
+            throw new \UnexpectedValueException('Decode error: Incomplete packet (tried to read ' . $length . ' bytes from index ' . $packet->getPointer());
         }
 
         return $packet->read($length);
@@ -133,14 +133,14 @@ class Decoder
         $message->setOpCode(($header['meta'] & 0b0111100000000000) >> 11);
         $message->isAuthoritative(($header['meta'] & 0b0000010000000000) >> 10);
         $message->isTruncated(($header['meta'] & 0b0000001000000000) >> 9);
-        $message->isRecusionDesired(($header['meta'] & 0b0000000100000000) >> 8);
-        $message->isRecusionAvailable(($header['meta'] & 0b0000000010000000) >> 7);
+        $message->isRecursionDesired(($header['meta'] & 0b0000000100000000) >> 8);
+        $message->isRecursionAvailable(($header['meta'] & 0b0000000010000000) >> 7);
         $message->setResponseCode($header['meta'] & 0b0000000000001111);
 
         $decodingContext->setExpectedQuestionRecords($header['qd']);
         $decodingContext->setExpectedAnswerRecords($header['an']);
-        $decodingContext->setExpectedAuthorityRecords($header['qd']);
-        $decodingContext->setExpectedAdditoinalRecords($header['ar']);
+        $decodingContext->setExpectedAuthorityRecords($header['ns']);
+        $decodingContext->setExpectedAdditionalRecords($header['ar']);
     }
 
     /**
@@ -229,6 +229,7 @@ class Decoder
     private function decodeDomainName(DecodingContext $decodingContext, DomainName $domainName)
     {
         $packet = $decodingContext->getPacket();
+        $startIndex = '0x' . dechex($packet->getPointer());
         $labelRegistry = $decodingContext->getLabelRegistry();
 
         $labels = [];
@@ -236,12 +237,8 @@ class Decoder
 
         while ($length = ord($this->readDataFromPacket($packet, 1))) {
             $totalLength++;
-
-            if ($length === 0) {
-                break;
-            }
-
             $labelType = $length & 0b11000000;
+
             if ($labelType === 0b00000000) {
                 $index = $packet->getPointer() - 1;
                 $label = $this->readDataFromPacket($packet, $length);
@@ -252,7 +249,7 @@ class Decoder
                 $index = (($length & 0b00111111) << 8) | ord($this->readDataFromPacket($packet, 1));
                 $ref = $labelRegistry->lookupLabel($index);
                 if ($ref === null) {
-                    throw new \UnexpectedValueException('Decode error: Invalid compression pointer reference in domain name');
+                    throw new \UnexpectedValueException('Decode error: Invalid compression pointer reference in domain name at position ' . $startIndex);
                 }
 
                 array_unshift($labels, $ref);
@@ -260,8 +257,12 @@ class Decoder
 
                 break;
             } else {
-                throw new \UnexpectedValueException('Decode error: Invalid label type in domain name');
+                throw new \UnexpectedValueException('Decode error: Invalid label type ' . $labelType . 'in domain name at position ' . $startIndex);
             }
+        }
+
+        if (!$labels) {
+            throw new \UnexpectedValueException('Decode error: Empty domain name at position ' . $startIndex);
         }
 
         $result = [];
@@ -273,7 +274,7 @@ class Decoder
                 $result = $label;
             }
         }
-        $domainName->setValue($result);
+        $domainName->setLabels($result);
 
         return $totalLength;
     }
@@ -429,21 +430,23 @@ class Decoder
         $resource->setTTL($meta['ttl']);
 
         $data = $resource->getData();
+        $remainingLength = $meta['length'];
+
         if ($data instanceof SimpleType) {
-            $this->decodeSimpleType($decodingContext, $data, $meta['length']);
+            $remainingLength -= $this->decodeSimpleType($decodingContext, $data, $remainingLength);
         } else if ($data instanceof ComplexType) {
             foreach ($data as $simpleType) {
-                $meta['length'] -= $this->decodeSimpleType($decodingContext, $simpleType, $meta['length']);
-            }
-
-            if ($meta['length'] !== 0) {
-                throw new \UnexpectedValueException('Decode error: Invalid length for record data section');
+                $remainingLength -= $this->decodeSimpleType($decodingContext, $simpleType, $remainingLength);
             }
         } else {
             throw new \InvalidArgumentException('Unknown data type ' . get_class($data));
         }
 
-        return $question;
+        if ($remainingLength !== 0) {
+            throw new \UnexpectedValueException('Decode error: Invalid length for record data section');
+        }
+
+        return $resource;
     }
 
     /**
@@ -482,8 +485,8 @@ class Decoder
             $authorityRecords->add($this->decodeResourceRecord($decodingContext));
         }
 
-        $addtionalRecords = $message->getAddtionalRecords();
-        $expected = $decodingContext->getExpectedAddtionalRecords();
+        $addtionalRecords = $message->getAdditionalRecords();
+        $expected = $decodingContext->getExpectedAdditionalRecords();
         for ($i = 0; $i < $expected; $i++) {
             $addtionalRecords->add($this->decodeResourceRecord($decodingContext));
         }

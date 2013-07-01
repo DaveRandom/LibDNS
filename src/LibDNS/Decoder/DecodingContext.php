@@ -11,7 +11,7 @@
  * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
  * @version    2.0.0
  */
-namespace LibDNS\Packets;
+namespace LibDNS\Decoder;
 
 use \LibDNS\Packets\Packet,
     \LibDNS\Packets\LabelRegistry;
@@ -102,9 +102,9 @@ class DecodingContext
      *
      * @param int $num
      */
-    public function setExpectedQuestionRecords($num)
+    public function setExpectedQuestionRecords($expectedQuestionRecords)
     {
-        $this->expectedQuestionRecords = (int) $num;
+        $this->expectedQuestionRecords = (int) $expectedQuestionRecords;
     }
 
     /**
@@ -112,9 +112,9 @@ class DecodingContext
      *
      * @return int
      */
-    public function getExpectedAnswerRecords($num)
+    public function getExpectedAnswerRecords()
     {
-        return $this->expectedQuestionRecords;
+        return $this->expectedAnswerRecords;
     }
 
     /**
@@ -122,9 +122,9 @@ class DecodingContext
      *
      * @param int $num
      */
-    public function setExpectedAnswerRecords()
+    public function setExpectedAnswerRecords($expectedAnswerRecords)
     {
-        $this->expectedQuestionRecords = (int) $num;
+        $this->expectedAnswerRecords = (int) $expectedAnswerRecords;
     }
 
     /**
@@ -132,7 +132,7 @@ class DecodingContext
      *
      * @return int
      */
-    public function getExpectedAuthorityRecords($num)
+    public function getExpectedAuthorityRecords()
     {
         return $this->expectedAuthorityRecords;
     }
@@ -142,9 +142,9 @@ class DecodingContext
      *
      * @param int $num
      */
-    public function setExpectedAuthorityRecords()
+    public function setExpectedAuthorityRecords($expectedAuthorityRecords)
     {
-        $this->expectedAuthorityRecords = (int) $num;
+        $this->expectedAuthorityRecords = (int) $expectedAuthorityRecords;
     }
 
     /**
@@ -152,7 +152,7 @@ class DecodingContext
      *
      * @return int
      */
-    public function getExpectedAdditionalRecords($num)
+    public function getExpectedAdditionalRecords()
     {
         return $this->expectedAdditionalRecords;
     }
@@ -162,8 +162,8 @@ class DecodingContext
      *
      * @param int $num
      */
-    public function setExpectedAdditionalRecords()
+    public function setExpectedAdditionalRecords($expectedAdditionalRecords)
     {
-        $this->expectedAdditionalRecords = (int) $num;
+        $this->expectedAdditionalRecords = (int) $expectedAdditionalRecords;
     }
 }

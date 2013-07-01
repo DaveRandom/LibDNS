@@ -13,6 +13,8 @@
  */
 namespace LibDNS\Encoder;
 
+use \LibDNS\Packets\PacketFactory;
+
 /**
  * Creates Encoder objects
  *
@@ -29,6 +31,6 @@ class EncoderFactory
      */
     public function create()
     {
-        return new Encoder;
+        return new Encoder(new PacketFactory, new EncodingContextFactory);
     }
 }

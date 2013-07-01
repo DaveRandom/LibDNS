@@ -25,12 +25,12 @@ class Packet
     /**
      * @var string
      */
-    private $data = '';
+    private $data;
 
     /**
      * @var int Data length
      */
-    private $length = 0;
+    private $length;
 
     /**
      * @var int Read pointer
@@ -45,8 +45,8 @@ class Packet
      */
     public function __construct($data = '')
     {
-        $this->labelRegistry = $labelRegistry;
         $this->data = (string) $data;
+        $this->length = strlen($this->data);
     }
 
     /**
@@ -74,6 +74,8 @@ class Packet
             $result = substr($this->data, $this->pointer, (int) $length);
             $this->pointer += $length;
         }
+
+        return $result;
     }
 
     /**

@@ -84,8 +84,8 @@ class Encoder
         $header['meta'] |= $message->getOpCode() << 11;
         $header['meta'] |= ((int) $message->isAuthoritative()) << 10;
         $header['meta'] |= ((int) $encodingContext->isTruncated()) << 9;
-        $header['meta'] |= ((int) $message->isRecusionDesired()) << 8;
-        $header['meta'] |= ((int) $message->isRecusionAvailable()) << 7;
+        $header['meta'] |= ((int) $message->isRecursionDesired()) << 8;
+        $header['meta'] |= ((int) $message->isRecursionAvailable()) << 7;
         $header['meta'] |= $message->getResponseCode();
 
         return pack('n*', $header['id'], $header['meta'], $header['qd'], $header['an'], $header['ns'], $header['ar']);
@@ -351,7 +351,7 @@ class Encoder
      */
     public function encode(Message $message, $compress = true)
     {
-        $packet = $this->encodingContextFactory->create();
+        $packet = $this->packetFactory->create();
         $encodingContext = $this->encodingContextFactory->create($packet, $compress);
 
         foreach ($message->getQuestionRecords() as $record) {

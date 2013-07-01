@@ -70,7 +70,7 @@ class RecordCollection implements \Iterator, \Countable
      */
     private function addToNameMap(Record $record)
     {
-        if (!isset($this->nameMap[$name = $record->getName()])) {
+        if (!isset($this->nameMap[$name = (string) $record->getName()])) {
             $this->nameMap[$name] = [];
         }
 
@@ -84,7 +84,7 @@ class RecordCollection implements \Iterator, \Countable
      */
     private function removeFromNameMap(Record $record)
     {
-        if (!empty($this->nameMap[$name = $record->getName()])) {
+        if (!empty($this->nameMap[$name = (string) $record->getName()])) {
             foreach ($this->nameMap[$name] as $key => $item) {
                 if ($item === $record) {
                     array_splice($this->nameMap[$name], $key, 1);

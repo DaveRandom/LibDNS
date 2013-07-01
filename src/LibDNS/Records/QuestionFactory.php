@@ -25,7 +25,7 @@ class QuestionFactory
     /**
      * Create a new Question object
      *
-     * @param int $type The record type
+     * @param int $type The resource type
      *
      * @return \LibDNS\Records\Question
      */
