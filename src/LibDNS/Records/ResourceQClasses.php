@@ -1,6 +1,6 @@
 <?php
 /**
- * Enumeration of possible record CLASS values
+ * Enumeration of possible resource QCLASS values
  *
  * PHP version 5.4
  *
@@ -13,19 +13,14 @@
  */
 namespace LibDNS\Records;
 
-use \LibDNS\Enumeration;
-
 /**
- * Enumeration of possible record CLASS values
+ * Enumeration of possible resource QCLASS values
  *
  * @category   LibDNS
  * @package    Records
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
-class RecordClasses extends Enumeration
+class ResourceQClasses extends ResourceClasses
 {
-    const IN = 1;
-    const CS = 2;
-    const CH = 3;
-    const HS = 4;
+    const ANY = 255;
 }

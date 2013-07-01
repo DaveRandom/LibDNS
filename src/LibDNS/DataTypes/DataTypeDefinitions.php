@@ -32,7 +32,7 @@ class DataTypeDefinitions
     /**
      * Get a complex type definition for a record type if it is known
      *
-     * @param int $recordType The record type, can be indicated using the RecordTypes enum
+     * @param int $recordType Resource type, can be indicated using the ResourceTypes enum
      *
      * @return int|int[]|null
      */

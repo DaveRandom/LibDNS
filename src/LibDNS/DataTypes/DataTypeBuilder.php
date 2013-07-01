@@ -72,7 +72,7 @@ class DataTypeBuilder
     /**
      * Build a new DataType object corresponding to a resource record type
      *
-     * @param int $recordType The record type, can be indicated using the RecordTypes enum
+     * @param int $recordType Resource type, can be indicated using the ResourceTypes enum
      *
      * @return \LibDNS\DataTypes\DataType
      */

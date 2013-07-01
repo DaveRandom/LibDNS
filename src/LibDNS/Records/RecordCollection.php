@@ -38,9 +38,30 @@ class RecordCollection implements \Iterator, \Countable
     private $length = 0;
 
     /**
+     * @var int Whether the collection holds question or resource records
+     */
+    private $type;
+
+    /**
      * @var int Iteration pointer
      */
     private $position = 0;
+
+    /**
+     * Constructor
+     *
+     * @param int $type Can be indicated using the RecordTypes enum
+     *
+     * @throws \InvalidArgumentException When the specified record type is invalid
+     */
+    public function __construct($type)
+    {
+        if ($type !== RecordTypes::QUESTION && $type !== RecordTypes::RESOURCE) {
+            throw new \InvalidArgumentException('Record type must be QUESTION or RESOURCE');
+        }
+
+        $this->type = $type;
+    }
 
     /**
      * Add a record to the correct bucket in the name map
@@ -81,9 +102,16 @@ class RecordCollection implements \Iterator, \Countable
      * Add a record to the collection
      *
      * @param \LibDNS\Records\Record $record The record to add
+     *
+     * @throws \InvalidArgumentException When the wrong record type is supplied
      */
     public function add(Record $record)
     {
+        if (($this->type === RecordTypes::QUESTION && !($record instanceof Question))
+          || ($this->type === RecordTypes::RESOURCE && !($record instanceof Resource))) {
+            throw new \InvalidArgumentException('Incorrect record type for this collection');
+        }
+
         $this->records[] = $record;
         $this->addToNameMap($record);
         $this->length++;
@@ -195,6 +223,16 @@ class RecordCollection implements \Iterator, \Countable
     public function getNames()
     {
         return array_keys($this->nameMap);
+    }
+
+    /**
+     * Get whether the collection holds question or resource records
+     *
+     * @return int
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**

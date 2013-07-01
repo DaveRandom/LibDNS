@@ -82,7 +82,7 @@ abstract class Record
     /**
      * Set the value of the record class field
      *
-     * @param int $class The new value, can be indicated using the RecordClasses/RecordQClasses enums
+     * @param int $class The new value, can be indicated using the ResourceClasses/ResourceQClasses enums
      *
      * @throws \RangeException When the supplied value is outside the valid range 0 - 65535
      */

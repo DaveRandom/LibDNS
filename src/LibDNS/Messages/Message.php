@@ -13,8 +13,9 @@
  */
 namespace LibDNS\Messages;
 
-use \LibDNS\Record\RecordCollection,
-    \LibDNS\Record\RecordCollectionFactory;
+use \LibDNS\Records\RecordCollection,
+    \LibDNS\Records\RecordCollectionFactory,
+    \LibDNS\Records\RecordTypes;
 
 /**
  * Represents a DNS protocol message
@@ -92,10 +93,10 @@ class Message
      */
     public function __construct(RecordCollectionFactory $recordCollectionFactory)
     {
-        $this->questionRecords = $recordCollectionFactory->create();
-        $this->answerRecords = $recordCollectionFactory->create();
-        $this->authorityRecords = $recordCollectionFactory->create();
-        $this->additionalRecords = $recordCollectionFactory->create();
+        $this->questionRecords = $recordCollectionFactory->create(RecordTypes::QUESTION);
+        $this->answerRecords = $recordCollectionFactory->create(RecordTypes::RESOURCE);
+        $this->authorityRecords = $recordCollectionFactory->create(RecordTypes::RESOURCE);
+        $this->additionalRecords = $recordCollectionFactory->create(RecordTypes::RESOURCE);
     }
 
     /**

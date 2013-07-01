@@ -1,6 +1,6 @@
 <?php
 /**
- * Represents a DNS question record
+ * Enumeration of possible resource CLASS values
  *
  * PHP version 5.4
  *
@@ -13,22 +13,19 @@
  */
 namespace LibDNS\Records;
 
+use \LibDNS\Enumeration;
+
 /**
- * Represents a DNS question record
+ * Enumeration of possible resource CLASS values
  *
  * @category   LibDNS
  * @package    Records
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
-class Question extends Record
+class ResourceClasses extends Enumeration
 {
-    /**
-     * Constructor
-     *
-     * @param int $type Resource type being requested, can be indicated using the ResourceQTypes enum
-     */
-    public function __construct($type)
-    {
-        $this->type = $type;
-    }
+    const IN = 1;
+    const CS = 2;
+    const CH = 3;
+    const HS = 4;
 }

@@ -25,10 +25,14 @@ class RecordCollectionFactory
     /**
      * Create a new RecordCollection object
      *
+     * @param int $type Can be indicated using the RecordTypes enum
+     *
      * @return \LibDNS\Records\RecordCollection
+     *
+     * @throws \InvalidArgumentException When the specified record type is invalid
      */
-    public function create()
+    public function create($type)
     {
-        return new RecordCollection;
+        return new RecordCollection($type);
     }
 }

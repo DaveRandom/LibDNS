@@ -75,7 +75,7 @@ class Resource extends Record
     /**
      * Constructor
      *
-     * @param int            $type    Record type of the resource, can be indicated using the RecordTypes enum
+     * @param int            $type    Type of the resource, can be indicated using the ResourceTypes enum
      * @param int|int[]|null $typeDef Structure of the resource RDATA section
      */
     public function __construct($type, $typeDef)

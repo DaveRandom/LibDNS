@@ -1,6 +1,6 @@
 <?php
 /**
- * Enumeration of possible record QTYPE values
+ * Enumeration of possible resource QTYPE values
  *
  * PHP version 5.4
  *
@@ -14,13 +14,13 @@
 namespace LibDNS\Records;
 
 /**
- * Enumeration of possible record QTYPE values
+ * Enumeration of possible resource QTYPE values
  *
  * @category   LibDNS
  * @package    Records
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
-class RecordQTypes extends RecordTypes
+class ResourceQTypes extends ResourceTypes
 {
     const AXFR = 252;
     const MAILB = 253;

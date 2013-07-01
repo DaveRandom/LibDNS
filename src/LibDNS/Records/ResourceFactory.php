@@ -25,7 +25,7 @@ class ResourceFactory
     /**
      * Create a new Resource object
      *
-     * @param int            $type    Record type of the resource, can be indicated using the RecordTypes enum
+     * @param int            $type    Type of the resource, can be indicated using the ResourceTypes enum
      * @param int|int[]|null $typeDef Structure of the resource RDATA section
      *
      * @return \LibDNS\Records\Resource

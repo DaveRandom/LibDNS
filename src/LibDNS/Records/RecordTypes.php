@@ -1,6 +1,6 @@
 <?php
 /**
- * Enumeration of possible record TYPE values
+ * Enumeration of possible record types
  *
  * PHP version 5.4
  *
@@ -16,7 +16,7 @@ namespace LibDNS\Records;
 use \LibDNS\Enumeration;
 
 /**
- * Enumeration of possible record TYPE values
+ * Enumeration of possible record types
  *
  * @category   LibDNS
  * @package    Records
@@ -24,4 +24,6 @@ use \LibDNS\Enumeration;
  */
 class RecordTypes extends Enumeration
 {
+    const QUESTION = 0;
+    const RESOURCE = 1;
 }

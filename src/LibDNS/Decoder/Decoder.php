@@ -42,9 +42,6 @@ use \LibDNS\Packets\PacketFactory,
  */
 class Decoder
 {
-    const LABELTYPE_LABEL   = 0b00000000;
-    const LABELTYPE_POINTER = 0b11000000;
-
     /**
      * @var \LibDNS\Packets\PacketFactory
      */
@@ -73,11 +70,11 @@ class Decoder
     /**
      * Constructor
      *
-     * @param \LibDNS\Packets\PacketFactory $packetFactory
-     * @param \LibDNS\Messages\MessageFactory $messageFactory
-     * @param \LibDNS\Records\QuestionFactory $questionFactory
-     * @param \LibDNS\Records\ResourceBuilder $resourceBuilder
-     * @param \LibDNS\DataTypes\DataTypeFactory $dataTypeFactory
+     * @param \LibDNS\Packets\PacketFactory          $packetFactory
+     * @param \LibDNS\Messages\MessageFactory        $messageFactory
+     * @param \LibDNS\Records\QuestionFactory        $questionFactory
+     * @param \LibDNS\Records\ResourceBuilder        $resourceBuilder
+     * @param \LibDNS\DataTypes\DataTypeFactory      $dataTypeFactory
      * @param \LibDNS\Decoder\DecodingContextFactory $decodingContextFactory
      */
     public function __construct(
@@ -119,25 +116,26 @@ class Decoder
      * Decode the header section of the message
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\Messages\Message      $message
+     * @param \LibDNS\Messages\Message        $message
      *
      * @throws \UnexpectedValueException When the header section is invalid
      */
     private function decodeHeader(DecodingContext $decodingContext, Message $message)
     {
-        $header = unpack('nid/c2meta/nqd/nan/nns/nar', $this->readDataFromPacket($decodingContext->getPacket(), 96));
+        $header = unpack('nid/nmeta/nqd/nan/nns/nar', $this->readDataFromPacket($decodingContext->getPacket(), 12));
         if (!$header) {
             throw new \UnexpectedValueException('Decode error: Header unpack failed');
         }
 
         $message->setID($header['id']);
-        $message->setType(($header['meta1'] & 0b10000000) >> 8);
-        $message->setOpCode(($header['meta1'] & 0b01111000) >> 3);
-        $message->isAuthoritative(($header['meta1'] & 0b00000100) >> 2);
-        $message->isTruncated(($header['meta1'] & 0b00000010) >> 1);
-        $message->isRecusionDesired($header['meta1'] & 0b00000001);
-        $message->isRecusionAvailable(($header['meta2'] & 0b10000000) >> 8);
-        $message->setResponseCode($header['meta2'] & 0b00001111);
+
+        $message->setType(($header['meta'] & 0b1000000000000000) >> 16);
+        $message->setOpCode(($header['meta'] & 0b0111100000000000) >> 11);
+        $message->isAuthoritative(($header['meta'] & 0b0000010000000000) >> 10);
+        $message->isTruncated(($header['meta'] & 0b0000001000000000) >> 9);
+        $message->isRecusionDesired(($header['meta'] & 0b0000000100000000) >> 8);
+        $message->isRecusionAvailable(($header['meta'] & 0b0000000010000000) >> 7);
+        $message->setResponseCode($header['meta'] & 0b0000000000001111);
 
         $decodingContext->setExpectedQuestionRecords($header['qd']);
         $decodingContext->setExpectedAnswerRecords($header['an']);
@@ -149,8 +147,8 @@ class Decoder
      * Decode an Anything field
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param int                           $length
-     * @param \LibDNS\DataTypes\Anything    $anything       The object to populate with the result
+     * @param \LibDNS\DataTypes\Anything      $anything        The object to populate with the result
+     * @param int                             $length
      *
      * @return int The number of packet bytes consumed by the operation
      *
@@ -167,8 +165,8 @@ class Decoder
      * Decode a BitMap field
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param int                           $length
-     * @param \LibDNS\DataTypes\BitMap      $bitMap         The object to populate with the result
+     * @param \LibDNS\DataTypes\BitMap        $bitMap          The object to populate with the result
+     * @param int                             $length
      *
      * @return int The number of packet bytes consumed by the operation
      *
@@ -185,7 +183,7 @@ class Decoder
      * Decode a Char field
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\DataTypes\Char        $char           The object to populate with the result
+     * @param \LibDNS\DataTypes\Char          $char            The object to populate with the result
      *
      * @return int The number of packet bytes consumed by the operation
      *
@@ -202,7 +200,7 @@ class Decoder
     /**
      * Decode a CharacterString field
      *
-     * @param \LibDNS\Decoder\DecodingContext     $decodingContext
+     * @param \LibDNS\Decoder\DecodingContext   $decodingContext
      * @param \LibDNS\DataTypes\CharacterString $characterString The object to populate with the result
      *
      * @return int The number of packet bytes consumed by the operation
@@ -222,7 +220,7 @@ class Decoder
      * Decode a DomainName field
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\DataTypes\DomainName  $domainName     The object to populate with the result
+     * @param \LibDNS\DataTypes\DomainName    $domainName      The object to populate with the result
      *
      * @return int The number of packet bytes consumed by the operation
      *
@@ -244,13 +242,13 @@ class Decoder
             }
 
             $labelType = $length & 0b11000000;
-            if ($labelType === self::LABELTYPE_LABEL) {
+            if ($labelType === 0b00000000) {
                 $index = $packet->getPointer() - 1;
                 $label = $this->readDataFromPacket($packet, $length);
 
                 array_unshift($labels, [$index, $label]);
                 $totalLength += $length;
-            } else if ($labelType === self::LABELTYPE_POINTER) {
+            } else if ($labelType === 0b11000000) {
                 $index = (($length & 0b00111111) << 8) | ord($this->readDataFromPacket($packet, 1));
                 $ref = $labelRegistry->lookupLabel($index);
                 if ($ref === null) {
@@ -284,7 +282,7 @@ class Decoder
      * Decode an IPv4Address field
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\DataTypes\IPv4Address $ipv4Address    The object to populate with the result
+     * @param \LibDNS\DataTypes\IPv4Address   $ipv4Address     The object to populate with the result
      *
      * @return int The number of packet bytes consumed by the operation
      *
@@ -302,7 +300,7 @@ class Decoder
      * Decode an IPv6Address field
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\DataTypes\IPv6Address $ipv6Address    The object to populate with the result
+     * @param \LibDNS\DataTypes\IPv6Address   $ipv6Address     The object to populate with the result
      *
      * @return int The number of packet bytes consumed by the operation
      *
@@ -320,7 +318,7 @@ class Decoder
      * Decode a Long field
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\DataTypes\Long        $long           The object to populate with the result
+     * @param \LibDNS\DataTypes\Long          $long            The object to populate with the result
      *
      * @return int The number of packet bytes consumed by the operation
      *
@@ -336,7 +334,7 @@ class Decoder
      * Decode a Short field
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\DataTypes\Short       $short          The object to populate with the result
+     * @param \LibDNS\DataTypes\Short         $short           The object to populate with the result
      *
      * @return int The number of packet bytes consumed by the operation
      *
@@ -352,8 +350,8 @@ class Decoder
      * Decode a SimpleType field
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\DataTypes\SimpleType  $simpleType     The object to populate with the result
-     * @param int                           $length         Expected data length
+     * @param \LibDNS\DataTypes\SimpleType    $simpleType      The object to populate with the result
+     * @param int                             $length          Expected data length
      *
      * @return int The number of packet bytes consumed by the operation
      *
@@ -442,7 +440,7 @@ class Decoder
                 throw new \UnexpectedValueException('Decode error: Invalid length for record data section');
             }
         } else {
-            throw new \InvalidArgumentException('Unknown data type ' . get_class($simpleType));
+            throw new \InvalidArgumentException('Unknown data type ' . get_class($data));
         }
 
         return $question;
