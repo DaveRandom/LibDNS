@@ -13,7 +13,8 @@
  */
 namespace LibDNS\Records;
 
-use \LibDNS\DataTypes\DomainName;
+use \LibDNS\Records\Types\DomainName,
+    \LibDNS\Records\Types\TypeFactory;
 
 /**
  * Represents a DNS record
@@ -25,7 +26,12 @@ use \LibDNS\DataTypes\DomainName;
 abstract class Record
 {
     /**
-     * @var \LibDNS\DataTypes\DomainName
+     * @var \LibDNS\Records\Types\TypeFactory
+     */
+    protected $typeFactory;
+
+    /**
+     * @var \LibDNS\Records\Types\DomainName
      */
     protected $name;
 
@@ -42,7 +48,7 @@ abstract class Record
     /**
      * Get the value of the record name field
      *
-     * @return \LibDNS\DataTypes\DomainName
+     * @return \LibDNS\Records\Types\DomainName
      */
     public function getName()
     {
@@ -52,10 +58,16 @@ abstract class Record
     /**
      * Set the value of the record name field
      *
-     * @param \LibDNS\DataTypes\DomainName $name The new value
+     * @param string|\LibDNS\Records\Types\DomainName $name
+     *
+     * @throws \UnexpectedValueException When the supplied value is not a valid domain name
      */
-    public function setName(DomainName $name)
+    public function setName($name)
     {
+        if (!($name instanceof DomainName)) {
+            $name = $this->typeFactory->createDomainName($name);
+        }
+
         $this->name = $name;
     }
 

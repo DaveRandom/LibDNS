@@ -61,6 +61,22 @@ class RData implements \Iterator, \Countable
     }
 
     /**
+     * Magic method for type coersion to string
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        if ($handler = $this->typeDef->getToStringFunction()) {
+            $result = call_user_func_array($handler, $this->fields);
+        } else {
+            $result = implode(',', $this->fields);
+        }
+
+        return $result;
+    }
+
+    /**
      * Get the field indicated by the supplied index
      *
      * @param int $index
@@ -81,7 +97,7 @@ class RData implements \Iterator, \Countable
     /**
      * Set the field indicated by the supplied index
      *
-     * @param int                $index
+     * @param int                        $index
      * @param \LibDNS\Records\Types\Type $value
      *
      * @throws \InvalidArgumentException When the supplied index/value pair does not match the type definition

@@ -46,6 +46,8 @@ class TypeBuilder
      */
     public function build($type)
     {
+        $type = (int) $type;
+
         if ($type === Types::ANYTHING) {
             $result = $this->typeFactory->createAnything();
         } else if ($type === Types::BITMAP) {
@@ -64,6 +66,8 @@ class TypeBuilder
             $result = $this->typeFactory->createLong();
         } else if ($type === Types::SHORT) {
             $result = $this->typeFactory->createShort();
+        } else {
+            throw new \InvalidArgumentException('Invalid Type identifier ' . $type);
         }
         
         return $result;

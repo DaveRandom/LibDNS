@@ -25,15 +25,15 @@ class TypeDefinitionFactory
     /**
      * Create a new TypeDefinition object
      *
-     * @param FieldDefinitionFactory $fieldDefFactory
-     * @param int[]                  $typeDef         Structural definition of the fields
+     * @param FieldDefinitionFactory $fieldDefinitionFactory
+     * @param int[]                  $definition             Structural definition of the fields
      *
      * @return \LibDNS\Record\TypeDefinitions\TypeDefinition
      *
      * @throws \InvalidArgumentException When the type definition is invalid
      */
-    public function create(FieldDefinitionFactory $fieldDefFactory, array $typeDef)
+    public function create(FieldDefinitionFactory $fieldDefinitionFactory, array $definition)
     {
-        return new TypeDefinition($fieldDefFactory, $typeDef);
+        return new TypeDefinition($fieldDefinitionFactory, $definition);
     }
 }

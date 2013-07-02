@@ -29,74 +29,88 @@ class TypeDefinitionManager
      * @var array How the RDATA sections of known resource record types are structured
      */
     private $definitions = [
-        ResourceTypes::A => [
-            'host' => Types::IPV4_ADDRESS
+        ResourceTypes::A => [ // RFC 1035
+            'address' => Types::IPV4_ADDRESS,
         ],
-        ResourceTypes::AAAA  => [
-            'host' => Types::IPV6_ADDRESS
+        ResourceTypes::AAAA  => [ // RFC 3596
+            'address' => Types::IPV6_ADDRESS,
         ],
-        ResourceTypes::AFSDB => [
+        ResourceTypes::AFSDB => [ // RFC 1183
+            'subtype'  => Types::SHORT,
+            'hostname' => Types::DOMAIN_NAME,
         ],
-        ResourceTypes::CNAME => [
-            'name' => Types::DOMAIN_NAME
+        ResourceTypes::CNAME => [ // RFC 1035
+            'cname' => Types::DOMAIN_NAME,
         ],
-        ResourceTypes::HINFO => [
+        ResourceTypes::HINFO => [ // RFC 1035
             'cpu' => Types::CHARACTER_STRING,
             'os'  => Types::CHARACTER_STRING,
         ],
-        ResourceTypes::ISDN => [
+        ResourceTypes::ISDN => [ // RFC 1183
+            'isdn-address' => Types::CHARACTER_STRING,
+            'sa'           => Types::CHARACTER_STRING,
         ],
-        ResourceTypes::MB => [
-            Types::DOMAIN_NAME
+        ResourceTypes::MB => [ // RFC 1035
+            'madname' => Types::DOMAIN_NAME,
         ],
-        ResourceTypes::MD => [
-            Types::DOMAIN_NAME
+        ResourceTypes::MD => [ // RFC 1035
+            'madname' => Types::DOMAIN_NAME,
         ],
-        ResourceTypes::MF => [
-            Types::DOMAIN_NAME
+        ResourceTypes::MF => [ // RFC 1035
+            'madname' => Types::DOMAIN_NAME,
         ],
-        ResourceTypes::MG => [
-            Types::DOMAIN_NAME
+        ResourceTypes::MG => [ // RFC 1035
+            'mgmname' => Types::DOMAIN_NAME,
         ],
-        ResourceTypes::MINFO => [
+        ResourceTypes::MINFO => [ // RFC 1035
             'rmailbx' => Types::DOMAIN_NAME,
             'emailbx' => Types::DOMAIN_NAME,
         ],
-        ResourceTypes::MR => [
-            Types::DOMAIN_NAME
+        ResourceTypes::MR => [ // RFC 1035
+            'newname' => Types::DOMAIN_NAME,
         ],
-        ResourceTypes::MX => [
+        ResourceTypes::MX => [ // RFC 1035
             'preference' => Types::SHORT,
             'exchange'   => Types::DOMAIN_NAME,
         ],
-        ResourceTypes::NS => [
-            Types::DOMAIN_NAME
+        ResourceTypes::NS => [ // RFC 1035
+            'nsdname' => Types::DOMAIN_NAME,
         ],
-        ResourceTypes::NULL => [
-            Types::ANYTHING
+        ResourceTypes::NULL => [ // RFC 1035
+            'data' => Types::ANYTHING,
         ],
-        ResourceTypes::PTR => [
-            Types::DOMAIN_NAME
+        ResourceTypes::PTR => [ // RFC 1035
+            'ptrdname' => Types::DOMAIN_NAME,
         ],
-        ResourceTypes::RP => [
+        ResourceTypes::RP => [ // RFC 1183
+            'mbox-dname' => Types::DOMAIN_NAME,
+            'txt-dname'  => Types::DOMAIN_NAME,
         ],
-        ResourceTypes::RT => [
+        ResourceTypes::RT => [ // RFC 1183
+            'preference'        => Types::SHORT,
+            'intermediate-host' => Types::DOMAIN_NAME,
         ],
-        ResourceTypes::SOA => [
-            'mname'   => Types::DOMAIN_NAME,
-            'rname'   => Types::DOMAIN_NAME,
-            'serial'  => Types::LONG,
-            'refresh' => Types::LONG,
-            'retry'   => Types::LONG,
-            'expire'  => Types::LONG,
-            'minimum' => Types::LONG,
+        ResourceTypes::SOA => [ // RFC 1035
+            'mname'      => Types::DOMAIN_NAME,
+            'rname'      => Types::DOMAIN_NAME,
+            'serial'     => Types::LONG,
+            'refresh'    => Types::LONG,
+            'retry'      => Types::LONG,
+            'expire'     => Types::LONG,
+            'minimum'    => Types::LONG,
+            '__toString' => function() {
+            },
         ],
-        ResourceTypes::TXT => [
-            'txtdata+' => Types::CHARACTER_STRING
+        ResourceTypes::TXT => [ // RFC 1035
+            'txtdata+' => Types::CHARACTER_STRING,
         ],
-        ResourceTypes::WKS => [
+        ResourceTypes::WKS => [ // RFC 1035
+            'address'  => Types::IPV4_ADDRESS,
+            'protocol' => Types::SHORT,
+            'bit-map'  => Types::BITMAP,
         ],
-        ResourceTypes::X25 => [
+        ResourceTypes::X25 => [ // RFC 1183
+            'psdn-address' => Types::CHARACTER_STRING,
         ],
     ];
 
@@ -139,15 +153,8 @@ class TypeDefinitionManager
         $recordType = (int) $recordType;
 
         if (!isset($this->typeDefs[$recordType])) {
-            if (isset($this->definitions[$recordType])) {
-                if (is_array($this->definitions[$recordType])) {
-                    $this->typeDefs[$recordType] = $this->typeDefFactory->create($this->fieldDefFactory, $this->definitions[$recordType]);
-                } else {
-                    $this->typeDefs[$recordType] = $this->definitions[$recordType];
-                }
-            } else {
-                $this->typeDefs[$recordType] = Types::ANYTHING;
-            }
+            $definition = isset($this->definitions[$recordType]) ? $this->definitions[$recordType] : ['data' => Types::ANYTHING];
+            $this->typeDefs[$recordType] = $this->typeDefFactory->create($this->fieldDefFactory, $definition);
         }
 
         return $this->typeDefs[$recordType];
@@ -156,16 +163,21 @@ class TypeDefinitionManager
     /**
      * Register a custom type definition
      *
-     * @param int                                            $recordType Resource type, can be indicated using the ResourceTypes enum
-     * @param \LibDNS\Records\TypeDefinitions\TypeDefinition $typeDef
+     * @param int                                                  $resourceType Resource type, can be indicated using the ResourceTypes enum
+     * @param int[]|\LibDNS\Records\TypeDefinitions\TypeDefinition $definition
+     *
+     * @throws \InvalidArgumentException When the type definition is invalid
      */
-    public function registerTypeDefinition($recordType, $typeDef)
+    public function registerTypeDefinition($recordType, $definition)
     {
-        $recordType = (int) $recordType;
-        if (!($typeDef instanceof TypeDefinition)) {
-            $typeDef = (int) $typeDef;
+        if (!($definition instanceof TypeDefinition)) {
+            if (!is_array($definition)) {
+                throw new \InvalidArgumentException('Definition must be an array or an instance of ' . __NAMESPACE__ . '\TypeDefinition');
+            }
+
+            $typeDef = (int) $this->typeDefFactory->create($this->fieldDefFactory, $definition);
         }
 
-        $this->typeDefs[$recordType] = $typeDef;
+        $this->typeDefs[(int) $recordType] = $typeDef;
     }
 }

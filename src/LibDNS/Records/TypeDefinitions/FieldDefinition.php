@@ -104,7 +104,7 @@ class FieldDefinition
      */
     public function getType()
     {
-        return $this->index;
+        return $this->type;
     }
 
     /**

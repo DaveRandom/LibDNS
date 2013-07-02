@@ -13,8 +13,7 @@
  */
 namespace LibDNS\Records;
 
-use \LibDNS\Records\TypeDefinitions\TypeDefinitionManager,
-    \LibDNS\Records\Types\TypeBuilder;
+use \LibDNS\Records\TypeDefinitions\TypeDefinitionManager;
 
 /**
  * Builds Resource objects of a specific type
@@ -31,27 +30,27 @@ class ResourceBuilder
     private $resourceFactory;
 
     /**
-     * @var \LibDNS\DataTypes\DataTypeDefinitions
+     * @var \LibDNS\Records\RDataBuilder
      */
-    private $dataTypeDefinitions;
+    private $rDataBuilder;
 
     /**
-     * @var \LibDNS\DataTypes\DataTypeBuilder
+     * @var \LibDNS\Records\TypeDefinitions\TypeDefinitionManager
      */
-    private $dataTypeBuilder;
+    private $typeDefinitionManager;
 
     /**
      * Constructor
      *
-     * @param \LibDNS\Records\ResourceFactory $resourceFactory
-     * @param \LibDNS\DataTypes\DataTypeDefinitions $dataTypeDefinitions
-     * @param \LibDNS\DataTypes\DataTypeBuilder $dataTypeBuilder
+     * @param \LibDNS\Records\ResourceFactory                       $resourceFactory
+     * @param \LibDNS\Records\RDataBuilder                          $rDataBuilder
+     * @param \LibDNS\Records\TypeDefinitions\TypeDefinitionManager $typeDefinitionManager
      */
-    public function __construct(ResourceFactory $resourceFactory, DataTypeDefinitions $dataTypeDefinitions, DataTypeBuilder $dataTypeBuilder)
+    public function __construct(ResourceFactory $resourceFactory, RDataBuilder $rDataBuilder, TypeDefinitionManager $typeDefinitionManager)
     {
         $this->resourceFactory = $resourceFactory;
-        $this->dataTypeDefinitions = $dataTypeDefinitions;
-        $this->dataTypeBuilder = $dataTypeBuilder;
+        $this->rDataBuilder = $rDataBuilder;
+        $this->typeDefinitionManager = $typeDefinitionManager;
     }
 
     /**
@@ -63,12 +62,9 @@ class ResourceBuilder
      */
     public function build($type)
     {
-        $typeDef = $this->dataTypeDefinitions->getTypeDefinition($type);
-        $data = $this->dataTypeBuilder->build($type, $typeDef);
+        $typeDefinition = $this->typeDefinitionManager->getTypeDefinition($type);
+        $rData = $this->rDataBuilder->build($typeDefinition);
 
-        $resource = $this->resourceFactory->create($type, $typeDef);
-        $resource->setData($data);
-
-        return $resource;
+        return $this->resourceFactory->create($type, $rData);
     }
 }

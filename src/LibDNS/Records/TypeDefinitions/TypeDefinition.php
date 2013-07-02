@@ -48,6 +48,11 @@ class TypeDefinition implements \Iterator, \Countable
     private $fieldNameMap = [];
 
     /**
+     * @var callable Custom implementation for __toString() handling
+     */
+    private $toStringFunction;
+
+    /**
      * @var bool Whether the iteration pointer indicates a valid item
      */
     private $pointerValid = true;
@@ -60,20 +65,27 @@ class TypeDefinition implements \Iterator, \Countable
      *
      * @throws \InvalidArgumentException When the type definition is invalid
      */
-    public function __construct(FieldDefinitionFactory $fieldDefFactory, array $typeDef = null)
+    public function __construct(FieldDefinitionFactory $fieldDefFactory, array $definition)
     {
-        if ($typeDef !== null) {
-            $this->typeDef = $typeDef;
-            $this->fieldCount = count($typeDef);
+        $this->fieldDefFactory = $fieldDefFactory;
 
-            $index = 0;
-            foreach ($typeDef as $name => $type) {
-                $this->registerField($index++, $name, $type);
+        if (isset($definition['__toString'])) {
+            if (!is_callable($definition['__toString'])) {
+                throw new \InvalidArgumentException('Invalid type definition: __toString() implementation is not callable');
             }
+
+            $this->toStringFunction = $definition['__toString'];
+            unset($definition['__toString']);
+        }
+
+        $this->fieldCount = count($definition);
+        $index = 0;
+        foreach ($definition as $name => $type) {
+            $this->registerField($index++, $name, $type);
         }
     }
 
-   /**
+    /**
      * Register a field from the type definition
      *
      * @param int    $index
@@ -152,6 +164,16 @@ class TypeDefinition implements \Iterator, \Countable
         }
 
         return $this->fieldNameMap[$fieldName];
+    }
+
+    /**
+     * Get the __toString() implementation
+     *
+     * @return callable|null
+     */
+    public function getToStringFunction()
+    {
+        return $this->toStringFunction;
     }
 
     /**

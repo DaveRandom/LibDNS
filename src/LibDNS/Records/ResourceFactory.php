@@ -13,6 +13,8 @@
  */
 namespace LibDNS\Records;
 
+use \LibDNS\Records\Types\TypeFactory;
+
 /**
  * Creates Resource objects
  *
@@ -25,13 +27,13 @@ class ResourceFactory
     /**
      * Create a new Resource object
      *
-     * @param int            $type    Type of the resource, can be indicated using the ResourceTypes enum
-     * @param int|int[]|null $typeDef Structure of the resource RDATA section
+     * @param int                   $type Can be indicated using the ResourceTypes enum
+     * @param \LibDNS\Records\RData $data
      *
      * @return \LibDNS\Records\Resource
      */
-    public function create($type, $typeDef)
+    public function create($type, $data)
     {
-        return new Resource($type, $typeDef);
+        return new Resource(new TypeFactory, $type, $data);
     }
 }

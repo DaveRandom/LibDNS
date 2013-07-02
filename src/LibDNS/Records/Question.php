@@ -13,6 +13,8 @@
  */
 namespace LibDNS\Records;
 
+use \LibDNS\Records\Types\TypeFactory;
+
 /**
  * Represents a DNS question record
  *
@@ -27,8 +29,9 @@ class Question extends Record
      *
      * @param int $type Resource type being requested, can be indicated using the ResourceQTypes enum
      */
-    public function __construct($type)
+    public function __construct(TypeFactory $typeFactory, $type)
     {
+        $this->typeFactory = $typeFactory;
         $this->type = $type;
     }
 }
