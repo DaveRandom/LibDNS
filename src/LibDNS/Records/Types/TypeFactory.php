@@ -1,45 +1,33 @@
 <?php
 /**
- * Creates DataType objects
+ * Creates Type objects
  *
  * PHP version 5.4
  *
  * @category   LibDNS
- * @package    DataTypes
+ * @package    Types
  * @author     Chris Wright <https://github.com/DaveRandom>
  * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
  * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
  * @version    2.0.0
  */
-namespace LibDNS\DataTypes;
+namespace LibDNS\Records\Types;
 
 /**
- * Creates DataType objects
+ * Creates Type objects
  *
  * @category   LibDNS
- * @package    DataTypes
+ * @package    Types
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
-class DataTypeFactory
+class TypeFactory
 {
-    /**
-     * Create a new ComplexType object
-     *
-     * @param array $typeDef Type structure definition
-     *
-     * @return \LibDNS\DataTypes\ComplexType
-     */
-    public function createComplexType(array $typeDef = null)
-    {
-        return new ComplexType($typeDef);
-    }
-
     /**
      * Create a new Anything object
      *
      * @param string $value
      *
-     * @return \LibDNS\DataTypes\Anything
+     * @return \LibDNS\Records\Types\Anything
      */
     public function createAnything($value = null)
     {
@@ -51,7 +39,7 @@ class DataTypeFactory
      *
      * @param string $value
      *
-     * @return \LibDNS\DataTypes\BitMap
+     * @return \LibDNS\Records\Types\BitMap
      */
     public function createBitMap($value = null)
     {
@@ -63,7 +51,7 @@ class DataTypeFactory
      *
      * @param int $value
      *
-     * @return \LibDNS\DataTypes\Char
+     * @return \LibDNS\Records\Types\Char
      */
     public function createChar($value = null)
     {
@@ -75,7 +63,7 @@ class DataTypeFactory
      *
      * @param string $value
      *
-     * @return \LibDNS\DataTypes\CharacterString
+     * @return \LibDNS\Records\Types\CharacterString
      */
     public function createCharacterString($value = null)
     {
@@ -87,7 +75,7 @@ class DataTypeFactory
      *
      * @param string|string[] $value
      *
-     * @return \LibDNS\DataTypes\DomainName
+     * @return \LibDNS\Records\Types\DomainName
      */
     public function createDomainName($value = null)
     {
@@ -99,7 +87,7 @@ class DataTypeFactory
      *
      * @param string $value
      *
-     * @return \LibDNS\DataTypes\IPv4Address
+     * @return \LibDNS\Records\Types\IPv4Address
      */
     public function createIPv4Address($value = null)
     {
@@ -111,7 +99,7 @@ class DataTypeFactory
      *
      * @param string $value
      *
-     * @return \LibDNS\DataTypes\IPv6Address
+     * @return \LibDNS\Records\Types\IPv6Address
      */
     public function createIPv6Address($value = null)
     {
@@ -123,7 +111,7 @@ class DataTypeFactory
      *
      * @param int $value
      *
-     * @return \LibDNS\DataTypes\Long
+     * @return \LibDNS\Records\Types\Long
      */
     public function createLong($value = null)
     {
@@ -135,7 +123,7 @@ class DataTypeFactory
      *
      * @param int $value
      *
-     * @return \LibDNS\DataTypes\Short
+     * @return \LibDNS\Records\Types\Short
      */
     public function createShort($value = null)
     {

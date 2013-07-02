@@ -17,18 +17,17 @@ use \LibDNS\Packets\PacketFactory,
     \LibDNS\Messages\Message,
     \LibDNS\Records\Question,
     \LibDNS\Records\Resource,
-    \LibDNS\DataTypes\SimpleType,
-    \LibDNS\DataTypes\ComplexType,
-    \LibDNS\DataTypes\SimpleTypes,
-    \LibDNS\DataTypes\Anything,
-    \LibDNS\DataTypes\BitMap,
-    \LibDNS\DataTypes\Char,
-    \LibDNS\DataTypes\CharacterString,
-    \LibDNS\DataTypes\DomainName,
-    \LibDNS\DataTypes\IPv4Address,
-    \LibDNS\DataTypes\IPv6Address,
-    \LibDNS\DataTypes\Long,
-    \LibDNS\DataTypes\Short;
+    \LibDNS\Records\Types\Type,
+    \LibDNS\Records\Types\Anything,
+    \LibDNS\Records\Types\BitMap,
+    \LibDNS\Records\Types\Char,
+    \LibDNS\Records\Types\CharacterString,
+    \LibDNS\Records\Types\DomainName,
+    \LibDNS\Records\Types\IPv4Address,
+    \LibDNS\Records\Types\IPv6Address,
+    \LibDNS\Records\Types\Long,
+    \LibDNS\Records\Types\Short,
+    \LibDNS\Records\Types\Types;
 
 /**
  * Encodes Message objects to raw network data
@@ -95,7 +94,7 @@ class Encoder
      * Encode an Anything field
      *
      * @param \LibDNS\Encoder\EncodingContext $encodingContext
-     * @param \LibDNS\DataTypes\Anything      $anything
+     * @param \LibDNS\Records\Types\Anything  $anything
      *
      * @return string
      */
@@ -108,7 +107,7 @@ class Encoder
      * Encode a BitMap field
      *
      * @param \LibDNS\Encoder\EncodingContext $encodingContext
-     * @param \LibDNS\DataTypes\BitMap        $bitMap
+     * @param \LibDNS\Records\Types\BitMap    $bitMap
      *
      * @return string
      */
@@ -121,7 +120,7 @@ class Encoder
      * Encode a Char field
      *
      * @param \LibDNS\Encoder\EncodingContext $encodingContext
-     * @param \LibDNS\DataTypes\Char          $char
+     * @param \LibDNS\Records\Types\Char      $char
      *
      * @return string
      */
@@ -133,8 +132,8 @@ class Encoder
     /**
      * Encode a CharacterString field
      *
-     * @param \LibDNS\Encoder\EncodingContext   $encodingContext
-     * @param \LibDNS\DataTypes\CharacterString $characterString
+     * @param \LibDNS\Encoder\EncodingContext       $encodingContext
+     * @param \LibDNS\Records\Types\CharacterString $characterString
      *
      * @return string
      */
@@ -147,8 +146,8 @@ class Encoder
     /**
      * Encode a DomainName field
      *
-     * @param \LibDNS\Encoder\EncodingContext $encodingContext
-     * @param \LibDNS\DataTypes\DomainName    $domainName
+     * @param \LibDNS\Encoder\EncodingContext  $encodingContext
+     * @param \LibDNS\Records\Types\DomainName $domainName
      *
      * @return string
      */
@@ -196,8 +195,8 @@ class Encoder
     /**
      * Encode an IPv4Address field
      *
-     * @param \LibDNS\Encoder\EncodingContext $encodingContext
-     * @param \LibDNS\DataTypes\IPv4Address   $ipv4Address
+     * @param \LibDNS\Encoder\EncodingContext   $encodingContext
+     * @param \LibDNS\Records\Types\IPv4Address $ipv4Address
      *
      * @return string
      */
@@ -210,8 +209,8 @@ class Encoder
     /**
      * Encode an IPv6Address field
      *
-     * @param \LibDNS\Encoder\EncodingContext $encodingContext
-     * @param \LibDNS\DataTypes\IPv6Address   $ipv6Address
+     * @param \LibDNS\Encoder\EncodingContext   $encodingContext
+     * @param \LibDNS\Records\Types\IPv6Address $ipv6Address
      *
      * @return string
      */
@@ -225,7 +224,7 @@ class Encoder
      * Encode a Long field
      *
      * @param \LibDNS\Encoder\EncodingContext $encodingContext
-     * @param \LibDNS\DataTypes\Long          $long
+     * @param \LibDNS\Records\Types\Long      $long
      *
      * @return string
      */
@@ -238,7 +237,7 @@ class Encoder
      * Encode a Short field
      *
      * @param \LibDNS\Encoder\EncodingContext $encodingContext
-     * @param \LibDNS\DataTypes\Short         $short
+     * @param \LibDNS\Records\Types\Short     $short
      *
      * @return string
      */
@@ -248,35 +247,35 @@ class Encoder
     }
 
     /**
-     * Encode a SimpleType object
+     * Encode a type object
      *
      * @param \LibDNS\Encoder\EncodingContext $encodingContext
-     * @param \LibDNS\DataTypes\SimpleType    $simpleType
+     * @param \LibDNS\Records\Types\Type      $type
      *
      * @return string
      */
-    private function encodeSimpleType(EncodingContext $encodingContext, SimpleType $simpleType)
+    private function encodeType(EncodingContext $encodingContext, Type $type)
     {
-        if ($simpleType instanceof Anything) {
-            $result = $this->encodeAnything($encodingContext, $simpleType);
-        } else if ($simpleType instanceof BitMap) {
-            $result = $this->encodeBitMap($encodingContext, $simpleType);
-        } else if ($simpleType instanceof Char) {
-            $result = $this->encodeChar($encodingContext, $simpleType);
-        } else if ($simpleType instanceof CharacterString) {
-            $result = $this->encodeCharacterString($encodingContext, $simpleType);
-        } else if ($simpleType instanceof DomainName) {
-            $result = $this->encodeDomainName($encodingContext, $simpleType);
-        } else if ($simpleType instanceof IPv4Address) {
-            $result = $this->encodeIPv4Address($encodingContext, $simpleType);
-        } else if ($simpleType instanceof IPv6Address) {
-            $result = $this->encodeIPv6Address($encodingContext, $simpleType);
-        } else if ($simpleType instanceof Long) {
-            $result = $this->encodeLong($encodingContext, $simpleType);
-        } else if ($simpleType instanceof Short) {
-            $result = $this->encodeShort($encodingContext, $simpleType);
+        if ($type instanceof Anything) {
+            $result = $this->encodeAnything($encodingContext, $type);
+        } else if ($type instanceof BitMap) {
+            $result = $this->encodeBitMap($encodingContext, $type);
+        } else if ($type instanceof Char) {
+            $result = $this->encodeChar($encodingContext, $type);
+        } else if ($type instanceof CharacterString) {
+            $result = $this->encodeCharacterString($encodingContext, $type);
+        } else if ($type instanceof DomainName) {
+            $result = $this->encodeDomainName($encodingContext, $type);
+        } else if ($type instanceof IPv4Address) {
+            $result = $this->encodeIPv4Address($encodingContext, $type);
+        } else if ($type instanceof IPv6Address) {
+            $result = $this->encodeIPv6Address($encodingContext, $type);
+        } else if ($type instanceof Long) {
+            $result = $this->encodeLong($encodingContext, $type);
+        } else if ($type instanceof Short) {
+            $result = $this->encodeShort($encodingContext, $type);
         } else {
-            throw new \InvalidArgumentException('Unknown SimpleType ' . get_class($simpleType));
+            throw new \InvalidArgumentException('Unknown Type ' . get_class($type));
         }
 
         return $result;
@@ -316,17 +315,9 @@ class Encoder
             $packet = $encodingContext->getPacket();
             $name = $this->encodeDomainName($encodingContext, $record->getName());
 
-            $rdata = $record->getData();
-            if ($rdata instanceof SimpleType) {
-                $data = $this->encodeSimpleType($encodingContext, $rdata);
-            } else if ($rdata instanceof ComplexType) {
-                $data = '';
-
-                foreach ($rdata as $simpleType) {
-                    $data .= $this->encodeSimpleType($encodingContext, $simpleType);
-                }
-            } else {
-                throw new \InvalidArgumentException('Unknown data type ' . get_class($rdata));
+            $data = '';
+            foreach ($record->getData() as $field) {
+                $data .= $this->encodeType($encodingContext, $field);
             }
 
             $meta = pack('n2Nn', $record->getType(), $record->getClass(), $record->getTTL(), strlen($data));

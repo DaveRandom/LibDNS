@@ -19,19 +19,19 @@ use \LibDNS\Packets\PacketFactory,
     \LibDNS\Messages\Message,
     \LibDNS\Records\QuestionFactory,
     \LibDNS\Records\ResourceBuilder,
-    \LibDNS\DataTypes\DataTypeFactory,
-    \LibDNS\DataTypes\SimpleType,
-    \LibDNS\DataTypes\ComplexType,
-    \LibDNS\DataTypes\SimpleTypes,
-    \LibDNS\DataTypes\Anything,
-    \LibDNS\DataTypes\BitMap,
-    \LibDNS\DataTypes\Char,
-    \LibDNS\DataTypes\CharacterString,
-    \LibDNS\DataTypes\DomainName,
-    \LibDNS\DataTypes\IPv4Address,
-    \LibDNS\DataTypes\IPv6Address,
-    \LibDNS\DataTypes\Long,
-    \LibDNS\DataTypes\Short;
+    \LibDNS\Records\RData,
+    \LibDNS\Records\Types\Type,
+    \LibDNS\Records\Types\Anything,
+    \LibDNS\Records\Types\BitMap,
+    \LibDNS\Records\Types\Char,
+    \LibDNS\Records\Types\CharacterString,
+    \LibDNS\Records\Types\DomainName,
+    \LibDNS\Records\Types\IPv4Address,
+    \LibDNS\Records\Types\IPv6Address,
+    \LibDNS\Records\Types\Long,
+    \LibDNS\Records\Types\Short,
+    \LibDNS\Records\Types\Types,
+    \LibDNS\Records\Types\TypeBuilder;
 
 /**
  * Decodes raw network data to Message objects
@@ -63,6 +63,11 @@ class Decoder
     private $resourceBuilder;
 
     /**
+     * @var \LibDNS\Records\Types\TypeBuilder
+     */
+    private $typeBuilder;
+
+    /**
      * @var \LibDNS\Decoder\DecodingContextFactory
      */
     private $decodingContextFactory;
@@ -74,7 +79,7 @@ class Decoder
      * @param \LibDNS\Messages\MessageFactory        $messageFactory
      * @param \LibDNS\Records\QuestionFactory        $questionFactory
      * @param \LibDNS\Records\ResourceBuilder        $resourceBuilder
-     * @param \LibDNS\DataTypes\DataTypeFactory      $dataTypeFactory
+     * @param \LibDNS\Records\Types\TypeBuilder      $typeBuilder
      * @param \LibDNS\Decoder\DecodingContextFactory $decodingContextFactory
      */
     public function __construct(
@@ -82,14 +87,14 @@ class Decoder
         MessageFactory $messageFactory,
         QuestionFactory $questionFactory,
         ResourceBuilder $resourceBuilder,
-        DataTypeFactory $dataTypeFactory,
+        TypeBuilder $typeBuilder,
         DecodingContextFactory $decodingContextFactory
     ) {
         $this->packetFactory = $packetFactory;
         $this->messageFactory = $messageFactory;
         $this->questionFactory = $questionFactory;
         $this->resourceBuilder = $resourceBuilder;
-        $this->dataTypeFactory = $dataTypeFactory;
+        $this->typeBuilder = $typeBuilder;
         $this->decodingContextFactory = $decodingContextFactory;
     }
 
@@ -147,7 +152,7 @@ class Decoder
      * Decode an Anything field
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\DataTypes\Anything      $anything        The object to populate with the result
+     * @param \LibDNS\Records\Types\Anything  $anything        The object to populate with the result
      * @param int                             $length
      *
      * @return int The number of packet bytes consumed by the operation
@@ -165,7 +170,7 @@ class Decoder
      * Decode a BitMap field
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\DataTypes\BitMap        $bitMap          The object to populate with the result
+     * @param \LibDNS\Records\Types\BitMap    $bitMap          The object to populate with the result
      * @param int                             $length
      *
      * @return int The number of packet bytes consumed by the operation
@@ -183,7 +188,7 @@ class Decoder
      * Decode a Char field
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\DataTypes\Char          $char            The object to populate with the result
+     * @param \LibDNS\Records\Types\Char      $char            The object to populate with the result
      *
      * @return int The number of packet bytes consumed by the operation
      *
@@ -200,8 +205,8 @@ class Decoder
     /**
      * Decode a CharacterString field
      *
-     * @param \LibDNS\Decoder\DecodingContext   $decodingContext
-     * @param \LibDNS\DataTypes\CharacterString $characterString The object to populate with the result
+     * @param \LibDNS\Decoder\DecodingContext       $decodingContext
+     * @param \LibDNS\Records\Types\CharacterString $characterString The object to populate with the result
      *
      * @return int The number of packet bytes consumed by the operation
      *
@@ -219,8 +224,8 @@ class Decoder
     /**
      * Decode a DomainName field
      *
-     * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\DataTypes\DomainName    $domainName      The object to populate with the result
+     * @param \LibDNS\Decoder\DecodingContext  $decodingContext
+     * @param \LibDNS\Records\Types\DomainName $domainName      The object to populate with the result
      *
      * @return int The number of packet bytes consumed by the operation
      *
@@ -282,8 +287,8 @@ class Decoder
     /**
      * Decode an IPv4Address field
      *
-     * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\DataTypes\IPv4Address   $ipv4Address     The object to populate with the result
+     * @param \LibDNS\Decoder\DecodingContext   $decodingContext
+     * @param \LibDNS\Records\Types\IPv4Address $ipv4Address     The object to populate with the result
      *
      * @return int The number of packet bytes consumed by the operation
      *
@@ -300,8 +305,8 @@ class Decoder
     /**
      * Decode an IPv6Address field
      *
-     * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\DataTypes\IPv6Address   $ipv6Address     The object to populate with the result
+     * @param \LibDNS\Decoder\DecodingContext   $decodingContext
+     * @param \LibDNS\Records\Types\IPv6Address $ipv6Address     The object to populate with the result
      *
      * @return int The number of packet bytes consumed by the operation
      *
@@ -319,7 +324,7 @@ class Decoder
      * Decode a Long field
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\DataTypes\Long          $long            The object to populate with the result
+     * @param \LibDNS\Records\Types\Long      $long            The object to populate with the result
      *
      * @return int The number of packet bytes consumed by the operation
      *
@@ -329,13 +334,15 @@ class Decoder
     {
         $value = unpack('N', $this->readDataFromPacket($decodingContext->getPacket(), 4))[1];
         $long->setValue($value);
+
+        return 4;
     }
 
     /**
      * Decode a Short field
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\DataTypes\Short         $short           The object to populate with the result
+     * @param \LibDNS\Records\Types\Short     $short           The object to populate with the result
      *
      * @return int The number of packet bytes consumed by the operation
      *
@@ -345,42 +352,44 @@ class Decoder
     {
         $value = unpack('n', $this->readDataFromPacket($decodingContext->getPacket(), 2))[1];
         $short->setValue($value);
+
+        return 2;
     }
 
     /**
-     * Decode a SimpleType field
+     * Decode a Type field
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\DataTypes\SimpleType    $simpleType      The object to populate with the result
+     * @param \LibDNS\Records\Types\Type      $type            The object to populate with the result
      * @param int                             $length          Expected data length
      *
      * @return int The number of packet bytes consumed by the operation
      *
      * @throws \UnexpectedValueException When the packet data is invalid
-     * @throws \InvalidArgumentException When the SimpleType subtype is unknown
+     * @throws \InvalidArgumentException When the Type subtype is unknown
      */
-    private function decodeSimpleType(DecodingContext $decodingContext, SimpleType $simpleType, $length)
+    private function decodeType(DecodingContext $decodingContext, Type $type, $length)
     {
-        if ($simpleType instanceof Anything) {
-            $result = $this->decodeAnything($decodingContext, $simpleType, $length);
-        } else if ($simpleType instanceof BitMap) {
-            $result = $this->decodeBitMap($decodingContext, $simpleType, $length);
-        } else if ($simpleType instanceof Char) {
-            $result = $this->decodeChar($decodingContext, $simpleType);
-        } else if ($simpleType instanceof CharacterString) {
-            $result = $this->decodeCharacterString($decodingContext, $simpleType);
-        } else if ($simpleType instanceof DomainName) {
-            $result = $this->decodeDomainName($decodingContext, $simpleType);
-        } else if ($simpleType instanceof IPv4Address) {
-            $result = $this->decodeIPv4Address($decodingContext, $simpleType);
-        } else if ($simpleType instanceof IPv6Address) {
-            $result = $this->decodeIPv6Address($decodingContext, $simpleType);
-        } else if ($simpleType instanceof Long) {
-            $result = $this->decodeLong($decodingContext, $simpleType);
-        } else if ($simpleType instanceof Short) {
-            $result = $this->decodeShort($decodingContext, $simpleType);
+        if ($type instanceof Anything) {
+            $result = $this->decodeAnything($decodingContext, $type, $length);
+        } else if ($type instanceof BitMap) {
+            $result = $this->decodeBitMap($decodingContext, $type, $length);
+        } else if ($type instanceof Char) {
+            $result = $this->decodeChar($decodingContext, $type);
+        } else if ($type instanceof CharacterString) {
+            $result = $this->decodeCharacterString($decodingContext, $type);
+        } else if ($type instanceof DomainName) {
+            $result = $this->decodeDomainName($decodingContext, $type);
+        } else if ($type instanceof IPv4Address) {
+            $result = $this->decodeIPv4Address($decodingContext, $type);
+        } else if ($type instanceof IPv6Address) {
+            $result = $this->decodeIPv6Address($decodingContext, $type);
+        } else if ($type instanceof Long) {
+            $result = $this->decodeLong($decodingContext, $type);
+        } else if ($type instanceof Short) {
+            $result = $this->decodeShort($decodingContext, $type);
         } else {
-            throw new \InvalidArgumentException('Unknown SimpleType ' . get_class($simpleType));
+            throw new \InvalidArgumentException('Unknown Type ' . get_class($type));
         }
 
         return $result;
@@ -397,7 +406,7 @@ class Decoder
      */
     private function decodeQuestionRecord(DecodingContext $decodingContext)
     {
-        $domainName = $this->dataTypeFactory->createDomainName();
+        $domainName = $this->typeBuilder->build(Types::DOMAIN_NAME);
         $this->decodeDomainName($decodingContext, $domainName);
         $meta = unpack('ntype/nclass', $this->readDataFromPacket($decodingContext->getPacket(), 4));
 
@@ -416,11 +425,11 @@ class Decoder
      * @return \LibDNS\Records\Resource
      *
      * @throws \UnexpectedValueException When the record is invalid
-     * @throws \InvalidArgumentException When a SimpleType subtype is unknown
+     * @throws \InvalidArgumentException When a type subtype is unknown
      */
     private function decodeResourceRecord(DecodingContext $decodingContext)
     {
-        $domainName = $this->dataTypeFactory->createDomainName();
+        $domainName = $this->typeBuilder->build(Types::DOMAIN_NAME);
         $this->decodeDomainName($decodingContext, $domainName);
         $meta = unpack('ntype/nclass/Nttl/nlength', $this->readDataFromPacket($decodingContext->getPacket(), 10));
 
@@ -432,14 +441,18 @@ class Decoder
         $data = $resource->getData();
         $remainingLength = $meta['length'];
 
-        if ($data instanceof SimpleType) {
-            $remainingLength -= $this->decodeSimpleType($decodingContext, $data, $remainingLength);
-        } else if ($data instanceof ComplexType) {
-            foreach ($data as $simpleType) {
-                $remainingLength -= $this->decodeSimpleType($decodingContext, $simpleType, $remainingLength);
+        foreach ($resource->getData()->getTypeDefinition() as $index => $fieldDef) {
+            $field = $this->typeBuilder->build($fieldDef->getType());
+            $remainingLength -= $this->decodeType($decodingContext, $field, $remainingLength);
+            $data->setField($index, $field);
+        }
+
+        if ($fieldDef->allowsMultiple()) {
+            while ($remainingLength) {
+                $field = $this->typeBuilder->build($fieldDef->getType());
+                $remainingLength -= $this->decodeType($decodingContext, $field, $remainingLength);
+                $data->setField(++$index, $field);
             }
-        } else {
-            throw new \InvalidArgumentException('Unknown data type ' . get_class($data));
         }
 
         if ($remainingLength !== 0) {
@@ -457,7 +470,7 @@ class Decoder
      * @return \LibDNS\Messages\Message
      *
      * @throws \UnexpectedValueException When the packet data is invalid
-     * @throws \InvalidArgumentException When a SimpleType subtype is unknown
+     * @throws \InvalidArgumentException When a type subtype is unknown
      */
     public function decode($data)
     {

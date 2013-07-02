@@ -19,9 +19,13 @@ use \LibDNS\Packets\PacketFactory,
     \LibDNS\Records\QuestionFactory,
     \LibDNS\Records\ResourceBuilder,
     \LibDNS\Records\ResourceFactory,
-    \LibDNS\DataTypes\DataTypeDefinitions,
-    \LibDNS\DataTypes\DataTypeFactory,
-    \LibDNS\DataTypes\DataTypeBuilder;
+    \LibDNS\Records\RDataBuilder,
+    \LibDNS\Records\RDataFactory,
+    \LibDNS\Records\Types\TypeBuilder,
+    \LibDNS\Records\Types\TypeFactory,
+    \LibDNS\Records\TypeDefinitions\TypeDefinitionManager,
+    \LibDNS\Records\TypeDefinitions\TypeDefinitionFactory,
+    \LibDNS\Records\TypeDefinitions\FieldDefinitionFactory;
 
 /**
  * Creates Decoder objects
@@ -37,9 +41,9 @@ class DecoderFactory
      *
      * @return \LibDNS\Decoder\Decoder
      */
-    public function create()
+    public function create(TypeDefinitionManager $typeDefinitionManager = null)
     {
-        $dataTypeFactory = new DataTypeFactory;
+        $typeBuilder = new TypeBuilder(new TypeFactory);
 
         return new Decoder(
             new PacketFactory,
@@ -47,10 +51,16 @@ class DecoderFactory
             new QuestionFactory,
             new ResourceBuilder(
                 new ResourceFactory,
-                new DataTypeDefinitions,
-                new DataTypeBuilder($dataTypeFactory)
+                new RDataBuilder(
+                    new RDataFactory,
+                    $typeBuilder
+                ),
+                $typeDefinitionManager ?: new TypeDefinitionManager(
+                    new TypeDefinitionFactory,
+                    new FieldDefinitionFactory
+                )
             ),
-            $dataTypeFactory,
+            $typeBuilder,
             new DecodingContextFactory
         );
     }
