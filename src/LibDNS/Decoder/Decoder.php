@@ -334,6 +334,8 @@ class Decoder
     {
         $value = unpack('N', $this->readDataFromPacket($decodingContext->getPacket(), 4))[1];
         $long->setValue($value);
+
+        return 4;
     }
 
     /**
@@ -350,6 +352,8 @@ class Decoder
     {
         $value = unpack('n', $this->readDataFromPacket($decodingContext->getPacket(), 2))[1];
         $short->setValue($value);
+
+        return 2;
     }
 
     /**

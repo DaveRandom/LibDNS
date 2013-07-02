@@ -98,8 +98,6 @@ class TypeDefinitionManager
             'retry'      => Types::LONG,
             'expire'     => Types::LONG,
             'minimum'    => Types::LONG,
-            '__toString' => function() {
-            },
         ],
         ResourceTypes::TXT => [ // RFC 1035
             'txtdata+' => Types::CHARACTER_STRING,

@@ -177,6 +177,16 @@ class TypeDefinition implements \Iterator, \Countable
     }
 
     /**
+     * Set the __toString() implementation
+     *
+     * @param callable $function
+     */
+    public function setToStringFunction(callable $function)
+    {
+        $this->toStringFunction = $function;
+    }
+
+    /**
      * Get the field indicated by the iteration pointer (Iterator interface)
      *
      * @return \LibDNS\Records\TypeDefinitions\FieldDefinition
