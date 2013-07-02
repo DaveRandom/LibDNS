@@ -5,13 +5,13 @@
  * PHP version 5.4
  *
  * @category   LibDNS
- * @package    DataTypes
+ * @package    Types
  * @author     Chris Wright <https://github.com/DaveRandom>
  * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
  * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
  * @version    2.0.0
  */
-namespace LibDNS\DataTypes;
+namespace LibDNS\Records\Types;
 
 use \LibDNS\Enumeration;
 
@@ -19,10 +19,10 @@ use \LibDNS\Enumeration;
  * Enumeration of simple data types
  *
  * @category   LibDNS
- * @package    DataTypes
+ * @package    Types
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
-class SimpleTypes extends Enumeration
+class Types extends Enumeration
 {
     const ANYTHING         = 0b000000001;
     const BITMAP           = 0b000000010;

@@ -17,7 +17,17 @@ use \RecursiveIteratorIterator,
     \RecursiveDirectoryIterator,
     \FilesystemIterator;
 
-$srcDir = __DIR__ . '/../src';
+error_reporting(0);
+ini_set('display_errors', 0);
+
+if (!isset($argv[1])) {
+    $srcDir = getcwd();
+} else if (in_array(strtolower($argv[1]), ['--help', '?', '/?'])) {
+    echo "Syntax: $file [source directory]\n";
+} else if (!is_dir($srcDir = $argv[1])) {
+    echo "Invalid source directory\n\nSyntax: $file [source directory]\n";
+}
+$srcDir = str_replace('\\', '/', $srcDir);
 
 $iterator = new RecursiveIteratorIterator(
     new RecursiveDirectoryIterator(
@@ -30,10 +40,10 @@ $items = [];
 $stripLength = strlen($srcDir) + 1;
 $maxLength = 0;
 foreach ($iterator as $item) {
-    if ($item->isFile() && strtolower($item->getExtension()) === 'php') {
+    if ($item->isFile() && $item->getFilename() !== 'autoload.php' && strtolower($item->getExtension()) === 'php') {
         $classPath = substr($item->getPath() . '\\' . $item->getBasename('.' . $item->getExtension()), $stripLength);
         $lookupName = strtolower(str_replace('/', '\\', $classPath));
-        $loadPath = "__DIR__ . '/../src/" . str_replace('\\', '/', $classPath) . ".php'";
+        $loadPath = "__DIR__ . '/$srcDir/" . str_replace('\\', '/', $classPath) . ".php'";
 
         $length = strlen($classPath);
         if ($length > $maxLength) {
@@ -77,4 +87,4 @@ $output .= <<<'PHP'
 
 PHP;
 
-file_put_contents(__DIR__ . '/../examples/autoload.php', $output);
+file_put_contents(getcwd() . '/autoload.php', $output);

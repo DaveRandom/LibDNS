@@ -1,6 +1,6 @@
 <?php
 /**
- * Creates Resource objects
+ * Creates RData objects
  *
  * PHP version 5.4
  *
@@ -13,27 +13,26 @@
  */
 namespace LibDNS\Records;
 
-use \LibDNS\Records\Types\TypeFactory;
+use \LibDNS\Records\TypeDefinitions\TypeDefinition;
 
 /**
- * Creates Resource objects
+ * Creates RData objects
  *
  * @category   LibDNS
  * @package    Records
  * @author     Chris Wright <https://github.com/DaveRandom>
  */
-class ResourceFactory
+class RDataFactory
 {
     /**
-     * Create a new Resource object
+     * Create a new RData object
      *
-     * @param int                   $type Can be indicated using the ResourceTypes enum
-     * @param \LibDNS\Records\RData $data
+     * @param \LibDNS\Records\TypeDefinitions\TypeDefinition $typeDef
      *
-     * @return \LibDNS\Records\Resource
+     * @return \LibDNS\Records\RData
      */
-    public function create($type, $data)
+    public function create(TypeDefinition $typeDefinition)
     {
-        return new Resource(new TypeFactory, $type, $data);
+        return new RData($typeDefinition);
     }
 }

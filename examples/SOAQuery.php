@@ -16,36 +16,30 @@ namespace LibDNS\Examples;
 use \LibDNS\Messages\MessageFactory,
     \LibDNS\Messages\MessageTypes,
     \LibDNS\Records\QuestionFactory,
+    \LibDNS\Records\ResourceTypes,
     \LibDNS\Records\ResourceQTypes,
-    \LibDNS\DataTypes\DataTypeFactory,
     \LibDNS\Encoder\EncoderFactory,
-    \LibDNS\Decoder\DecoderFactory;
+    \LibDNS\Decoder\DecoderFactory,
+    \LibDNS\Records\TypeDefinitions\TypeDefinitionManagerFactory;
 
 // Config
-$queryDomain    = 'google.com';
+$queryName      = 'google.com';
 $serverIP       = '8.8.8.8';
 $requestTimeout = 3;
 
 require __DIR__ . '/autoload.php';
 
-$messageFactory = new MessageFactory;
-$questionFactory = new QuestionFactory;
-$dataTypeFactory = new DataTypeFactory;
-$encoderFactory = new EncoderFactory;
-$decoderFactory = new DecoderFactory;
-
 // Create question record
-$queryName = $dataTypeFactory->createDomainName($queryDomain);
-$question = $questionFactory->create(ResourceQTypes::SOA);
+$question = (new QuestionFactory)->create(ResourceQTypes::SOA);
 $question->setName($queryName);
 
 // Create request message
-$request = $messageFactory->create(MessageTypes::QUERY);
+$request = (new MessageFactory)->create(MessageTypes::QUERY);
 $request->getQuestionRecords()->add($question);
 $request->isRecursionDesired(true);
 
 // Encode request message
-$encoder = $encoderFactory->create();
+$encoder = (new EncoderFactory)->create();
 $requestPacket = $encoder->encode($request);
 
 echo "\n" . $queryName . ":\n";
@@ -60,9 +54,25 @@ if (!stream_select($r, $w, $e, $requestTimeout)) {
     exit;
 }
 
+// Create type definition manager for custom manipulation
+$typeDefs = (new TypeDefinitionManagerFactory)->create();
+$typeDefs->getTypeDefinition(ResourceTypes::SOA)->setToStringFunction(function($mname, $rname, $serial, $refresh, $retry, $expire, $minimum) {
+    return <<<DATA
+{
+    Primary Name Server : $mname
+    Responsible Mail    : $rname
+    Serial              : $serial
+    Refresh             : $refresh
+    Retry               : $retry
+    Expire              : $expire
+    Default TTL         : $minimum
+}
+DATA;
+});
+
 // Decode response message
+$decoder = (new DecoderFactory)->create($typeDefs);
 $responsePacket = fread($socket, 512);
-$decoder = $decoderFactory->create();
 $response = $decoder->decode($responsePacket);
 
 // Handle response

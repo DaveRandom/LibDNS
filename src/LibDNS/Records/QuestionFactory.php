@@ -13,6 +13,8 @@
  */
 namespace LibDNS\Records;
 
+use \LibDNS\Records\Types\TypeFactory;
+
 /**
  * Creates Question objects
  *
@@ -31,6 +33,6 @@ class QuestionFactory
      */
     public function create($type)
     {
-        return new Question($type);
+        return new Question(new TypeFactory, $type);
     }
 }
