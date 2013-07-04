@@ -22,6 +22,8 @@ namespace LibDNS\Records\Types;
  */
 class DomainName extends Type
 {
+    const FLAG_NO_COMPRESSION = 0x80000000;
+
     /**
      * @var string
      */
