@@ -1,103 +1,86 @@
 <?php
+/**
+ * Represents a DNS resource record
+ *
+ * PHP version 5.4
+ *
+ * @category   LibDNS
+ * @package    Records
+ * @author     Chris Wright <https://github.com/DaveRandom>
+ * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @version    2.0.0
+ */
+namespace LibDNS\Records;
 
-  namespace DaveRandom\LibDNS\Records;
+use \LibDNS\Records\Types\TypeFactory;
 
-  use \DaveRandom\LibDNS\Packet;
-  use \DaveRandom\LibDNS\PacketBuilder\PacketBuilder;
-  use \DaveRandom\LibDNS\Record;
-  use \DaveRandom\LibDNS\DataType;
-  use \DaveRandom\LibDNS\DataTypes\DomainName;
+/**
+ * Represents a DNS resource record
+ *
+ * @category   LibDNS
+ * @package    Records
+ * @author     Chris Wright <https://github.com/DaveRandom>
+ */
+class Resource extends Record
+{
+    /**
+     * @var int Value of the resource's time-to-live property
+     */
+    private $ttl;
 
-  class Resource extends Record {
+    /**
+     * @var \LibDNS\Records\RData
+     */
+    private $data;
 
-    protected $ttl;
-    protected $data;
-
-    private $dataTypes = array(
-       1 => 'IPv4Address',     // A
-       2 => 'DomainName',      // NS
-       3 => 'DomainName',      // MD
-       4 => 'DomainName',      // MF
-       5 => 'DomainName',      // CNAME
-       6 => 'Vectors\\SOA',    // SOA
-       7 => 'DomainName',      // MB
-       8 => 'DomainName',      // MG
-       9 => 'DomainName',      // MR
-      10 => 'Anything',        // NULL
-      11 => 'Vectors\\WKS',    // WKS
-      12 => 'DomainName',      // PTR
-      13 => 'Vectors\\HINFO',  // HINFO
-      14 => 'Vectors\\MINFO',  // MINFO
-      15 => 'Vectors\\MX',     // MX
-      16 => 'CharacterString', // TXT
-      17 => 'Vectors\\RP',     // RP
-      18 => 'Vectors\\AFSDB',  // AFSDB
-      19 => 'CharacterString', // X25
-      20 => 'Vectors\\ISDN',   // ISDN
-      21 => 'Vectors\\RT',     // RT
-      28 => 'IPv6Address'      // AAAA
-    );
-
-    private function parseResourceHeader(Packet $packet) {
-      if (FALSE === $header = $packet->read(10)) {
-        throw new \InvalidArgumentException('Malformed packet');
-      }
-      return array_values(unpack('ntype/nclass/Nttl/nlength', $header));
-    }
-    private function createDataObject($packet, $dataLength, $type) {
-      $class = '\\DaveRandom\\LibDNS\\DataTypes\\'.$this->dataTypes[$type];
-      $obj = new $class;
-      $obj->loadFromPacket($packet, $dataLength);
-      return $obj;
+    /**
+     * Constructor
+     *
+     * @param int                   $type Can be indicated using the ResourceTypes enum
+     * @param \LibDNS\Records\RData $data
+     */
+    public function __construct(TypeFactory $typeFactory, $type, $data)
+    {
+        $this->typeFactory = $typeFactory;
+        $this->type = $type;
+        $this->data = $data;
     }
 
-    public function loadFromPacket(Packet $packet) {
-      $name = new DomainName;
-      $name->loadFromPacket($packet);
-      list($type, $class, $ttl, $dataLength) = $this->parseResourceHeader($packet);
-      $data = $this->createDataObject($packet, $dataLength, $type);
-      $this->__construct($name, $type, $class, $ttl, $data);
-      return $this;
+    /**
+     * Get the value of the record TTL field
+     *
+     * @return int
+     */
+    public function getTTL()
+    {
+        return $this->ttl;
     }
 
-    public function __construct($name = NULL, $type = self::TYPE_A, $class = self::CLASS_IN, $ttl = NULL, DataType $data = NULL) {
-      parent::__construct($name, $type, $class);
-      if ($ttl !== NULL) {
-        $this->setTTL($ttl);
-      }
-      if ($data !== NULL) {
-        $this->setData($data);
-      }
+    /**
+     * Set the value of the record TTL field
+     *
+     * @param int $ttl The new value
+     *
+     * @throws \RangeException When the supplied value is outside the valid range 0 - 4294967296
+     */
+    public function setTTL($ttl)
+    {
+        $ttl = (int) $ttl;
+        if ($ttl < 0 || $ttl > 4294967296) {
+            throw new \RangeException('Record class must be in the range 0 - 4294967296');
+        }
+
+        $this->ttl = $ttl;
     }
 
-    public function writeToPacket(PacketBuilder $packetBuilder) {
-      if ($this->ttl === NULL || $this->data === NULL) {
-        throw new \Exception('Data incomplete');
-      }
-      try {
-        $headBlock = $packetBuilder
-          ->addWriteBlock()
-          ->writeDomainName($this->name)
-          ->write(pack('nnN', $this->type, $this->class, $this->ttl));
-        $this->data->writeToPacket($packetBuilder, TRUE);
-      } catch (\Exception $e) {
-        $packetBuilder->removeWriteBlock($headBlock);
-        throw $e;
-      }
+    /**
+     * Get the value of the resource data field
+     *
+     * @return \LibDNS\Records\RData
+     */
+    public function getData()
+    {
+        return $this->data;
     }
-
-    public function getTTL() {
-      return $this->ttl;
-    }
-    public function setTTL($ttl) {
-      $this->ttl = (int) $ttl;
-    }
-
-    public function getData() {
-      return $this->data;
-    }
-    public function setData(DataType $data) {
-      $this->data = $data;
-    }
-
-  }
+}

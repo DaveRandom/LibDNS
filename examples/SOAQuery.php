@@ -1,41 +1,91 @@
 <?php
+/**
+ * Makes a simple A record lookup query and outputs the results
+ *
+ * PHP version 5.4
+ *
+ * @category   LibDNS
+ * @package    Examples
+ * @author     Chris Wright <https://github.com/DaveRandom>
+ * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @version    1.0.0
+ */
+namespace LibDNS\Examples;
 
-  // Makes a simple A record lookup query for google.com
+use \LibDNS\Messages\MessageFactory,
+    \LibDNS\Messages\MessageTypes,
+    \LibDNS\Records\QuestionFactory,
+    \LibDNS\Records\ResourceTypes,
+    \LibDNS\Records\ResourceQTypes,
+    \LibDNS\Encoder\EncoderFactory,
+    \LibDNS\Decoder\DecoderFactory,
+    \LibDNS\Records\TypeDefinitions\TypeDefinitionManagerFactory;
 
-  use \DaveRandom\LibDNS\Packet;
-  use \DaveRandom\LibDNS\Records\Query;
-  use \DaveRandom\LibDNS\Messages\Request;
-  use \DaveRandom\LibDNS\Messages\Response;
+// Config
+$queryName      = 'google.com';
+$serverIP       = '8.8.8.8';
+$requestTimeout = 3;
 
-  function __autoload($className) {
-    include str_replace('\\', '/', preg_replace('#^\\\\?DaveRandom#i', '../src', $className)).'.php';
-  }
+require __DIR__ . '/autoload.php';
 
-  $queryDomain = 'google.com';
-  $serverIP    = '8.8.8.8';
+// Create question record
+$question = (new QuestionFactory)->create(ResourceQTypes::SOA);
+$question->setName($queryName);
 
-  // Define the request
-  $request = new Request;
-  $questionRecord = new Query($queryDomain, Query::TYPE_SOA);
-  $request->addQuestionRecord($questionRecord);
-  $request->isRecursionDesired(TRUE);
+// Create request message
+$request = (new MessageFactory)->create(MessageTypes::QUERY);
+$request->getQuestionRecords()->add($question);
+$request->isRecursionDesired(true);
 
-  // Create the client socket
-  $socket = stream_socket_client("udp://$serverIP:53");
+// Encode request message
+$encoder = (new EncoderFactory)->create();
+$requestPacket = $encoder->encode($request);
 
-  // Send the request
-  stream_socket_sendto($socket, $request->writeToPacket());
+echo "\n" . $queryName . ":\n";
 
-  // Wait for the response
-  $r = array($socket);
-  $w = $e = array();
-  stream_select($r, $w, $e, NULL);
+// Send request
+$socket = stream_socket_client("udp://$serverIP:53");
+stream_socket_sendto($socket, $requestPacket);
+$r = [$socket];
+$w = $e = [];
+if (!stream_select($r, $w, $e, $requestTimeout)) {
+    echo "    Request timeout.\n";
+    exit;
+}
 
-  // Load the response
-  $packet = new Packet(fread($socket, 512));
-  $response = new Response;
-  $response->loadFromPacket($packet);
+// Create type definition manager for custom manipulation
+$typeDefs = (new TypeDefinitionManagerFactory)->create();
+$typeDefs->getTypeDefinition(ResourceTypes::SOA)->setToStringFunction(function($mname, $rname, $serial, $refresh, $retry, $expire, $minimum) {
+    return <<<DATA
+{
+    Primary Name Server : $mname
+    Responsible Mail    : $rname
+    Serial              : $serial
+    Refresh             : $refresh
+    Retry               : $retry
+    Expire              : $expire
+    Default TTL         : $minimum
+}
+DATA;
+});
 
-  // Display the results
-  $record = $response->getAnswerRecords()[0];
-  echo $record->getName().': '.$record->getData()."\n";
+// Decode response message
+$decoder = (new DecoderFactory)->create($typeDefs);
+$responsePacket = fread($socket, 512);
+$response = $decoder->decode($responsePacket);
+
+// Handle response
+if ($response->getResponseCode() !== 0) {
+    echo "    Server returned error code " . $response->getResponseCode() . ".\n";
+    exit;
+}
+
+$answers = $response->getAnswerRecords();
+if (count($answers)) {
+    foreach ($response->getAnswerRecords() as $record) {
+        echo "    " . $record->getData() . "\n";
+    }
+} else {
+    echo "    Not found.\n";
+}
