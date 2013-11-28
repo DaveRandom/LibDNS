@@ -134,7 +134,7 @@ class Decoder
 
         $message->setID($header['id']);
 
-        $message->setType(($header['meta'] & 0b1000000000000000) >> 16);
+        $message->setType(($header['meta'] & 0b1000000000000000) >> 15);
         $message->setOpCode(($header['meta'] & 0b0111100000000000) >> 11);
         $message->isAuthoritative(($header['meta'] & 0b0000010000000000) >> 10);
         $message->isTruncated(($header['meta'] & 0b0000001000000000) >> 9);
@@ -240,8 +240,7 @@ class Decoder
         $labels = [];
         $totalLength = 0;
 
-        while ($length = ord($this->readDataFromPacket($packet, 1))) {
-            $totalLength++;
+        while (++$totalLength && $length = ord($this->readDataFromPacket($packet, 1))) {
             $labelType = $length & 0b11000000;
 
             if ($labelType === 0b00000000) {
