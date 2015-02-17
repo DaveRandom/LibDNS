@@ -86,7 +86,7 @@ class IPv4Address extends Type
         }
 
         foreach ($octets as &$octet) {
-            if (strspn((string)$short, "0123456789") !== strlen($short) || $octet < 0x00 || $octet > 0xff) {
+            if (strspn((string)$octet, "0123456789") !== strlen($octet) || $octet < 0x00 || $octet > 0xff) {
                 throw new \UnexpectedValueException('Octet list is not a valid IPv4 address: invalid octet value ' . $octet);
             }
 
