@@ -151,7 +151,7 @@ class IPv6Address extends Type
         }
 
         foreach ($shorts as &$short) {
-            if (!ctype_digit((string) $short) || $short < 0x0000 || $short > 0xffff) {
+            if (strspn((string)$short, "0123456789") !== strlen($short) || $short < 0x0000 || $short > 0xffff) {
                 throw new \UnexpectedValueException('Short list is not a valid IPv6 address: invalid short value ' . $short);
             }
 
