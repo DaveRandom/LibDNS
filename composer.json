@@ -7,8 +7,8 @@
         "php": ">=5.4.0"
     },
     "autoload": {
-        "psr-0": {
-            "LibDNS": "src"
+        "psr-4": {
+            "LibDNS\\": "src/"
         }
     },
     "support": {
