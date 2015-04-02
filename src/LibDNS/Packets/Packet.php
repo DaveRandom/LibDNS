@@ -58,7 +58,7 @@ class Packet
      */
     public function read($length = null)
     {
-        if ($this->pointer >= $this->length) {
+        if ($this->pointer > $this->length) {
             throw new \OutOfBoundsException('Pointer position invalid');
         }
 

@@ -136,7 +136,7 @@ class RData implements \Iterator, \Countable
      */
     public function setFieldByName($name, Type $value)
     {
-        $this->setField($this->typeDef->getFieldIndexFromName($name), $value);
+        $this->setField($this->typeDef->getFieldIndexByName($name), $value);
     }
 
     /**
@@ -166,7 +166,7 @@ class RData implements \Iterator, \Countable
      */
     public function key()
     {
-        return $this->fieldIndexMap[key($this->fields)];
+        return key($this->fields);
     }
 
     /**
