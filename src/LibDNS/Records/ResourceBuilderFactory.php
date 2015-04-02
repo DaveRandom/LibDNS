@@ -13,11 +13,11 @@
  */
 namespace LibDNS\Records;
 
-use \LibDNS\Records\Types\TypeBuilder,
-    \LibDNS\Records\Types\TypeFactory,
-    \LibDNS\Records\TypeDefinitions\TypeDefinitionManager,
-    \LibDNS\Records\TypeDefinitions\TypeDefinitionFactory,
-    \LibDNS\Records\TypeDefinitions\FieldDefinitionFactory;
+use \LibDNS\Records\Types\TypeBuilder;
+use \LibDNS\Records\Types\TypeFactory;
+use \LibDNS\Records\TypeDefinitions\TypeDefinitionManager;
+use \LibDNS\Records\TypeDefinitions\TypeDefinitionFactory;
+use \LibDNS\Records\TypeDefinitions\FieldDefinitionFactory;
 
 /**
  * Creates ResourceBuilder objects

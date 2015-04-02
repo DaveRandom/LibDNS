@@ -13,8 +13,8 @@
  */
 namespace LibDNS\Messages;
 
-use \LibDNS\Records\RecordCollectionFactory,
-    \LibDNS\Records\RecordTypes;
+use \LibDNS\Records\RecordCollectionFactory;
+use \LibDNS\Records\RecordTypes;
 
 /**
  * Represents a DNS protocol message

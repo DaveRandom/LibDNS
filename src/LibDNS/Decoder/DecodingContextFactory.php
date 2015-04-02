@@ -13,8 +13,8 @@
  */
 namespace LibDNS\Decoder;
 
-use \LibDNS\Packets\Packet,
-    \LibDNS\Packets\LabelRegistry;
+use \LibDNS\Packets\Packet;
+use \LibDNS\Packets\LabelRegistry;
 
 /**
  * Creates DecodingContext objects

@@ -13,8 +13,8 @@
  */
 namespace LibDNS\Records;
 
-use \LibDNS\Records\TypeDefinitions\TypeDefinition,
-    \LibDNS\Records\Types\TypeBuilder;
+use \LibDNS\Records\TypeDefinitions\TypeDefinition;
+use \LibDNS\Records\Types\TypeBuilder;
 
 /**
  * Creates RData objects

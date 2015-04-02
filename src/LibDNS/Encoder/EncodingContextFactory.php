@@ -13,8 +13,8 @@
  */
 namespace LibDNS\Encoder;
 
-use \LibDNS\Packets\Packet,
-    \LibDNS\Packets\LabelRegistry;
+use \LibDNS\Packets\Packet;
+use \LibDNS\Packets\LabelRegistry;
 
 /**
  * Creates EncodingContext objects

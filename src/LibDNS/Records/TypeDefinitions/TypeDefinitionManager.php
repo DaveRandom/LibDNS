@@ -13,9 +13,9 @@
  */
 namespace LibDNS\Records\TypeDefinitions;
 
-use \LibDNS\Records\ResourceTypes,
-    \LibDNS\Records\Types\Types,
-    \LibDNS\Records\Types\DomainName;
+use \LibDNS\Records\ResourceTypes;
+use \LibDNS\Records\Types\Types;
+use \LibDNS\Records\Types\DomainName;
 
 /**
  * Holds data about how the RDATA sections of known resource record types are structured

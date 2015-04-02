@@ -13,9 +13,9 @@
  */
 namespace LibDNS\Tools;
 
-use \RecursiveIteratorIterator,
-    \RecursiveDirectoryIterator,
-    \FilesystemIterator;
+use \RecursiveIteratorIterator;
+use \RecursiveDirectoryIterator;
+use \FilesystemIterator;
 
 error_reporting(0);
 ini_set('display_errors', 0);

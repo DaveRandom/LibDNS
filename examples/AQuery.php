@@ -13,12 +13,12 @@
  */
 namespace LibDNS\Examples;
 
-use \LibDNS\Messages\MessageFactory,
-    \LibDNS\Messages\MessageTypes,
-    \LibDNS\Records\QuestionFactory,
-    \LibDNS\Records\ResourceQTypes,
-    \LibDNS\Encoder\EncoderFactory,
-    \LibDNS\Decoder\DecoderFactory;
+use \LibDNS\Messages\MessageFactory;
+use \LibDNS\Messages\MessageTypes;
+use \LibDNS\Records\QuestionFactory;
+use \LibDNS\Records\ResourceQTypes;
+use \LibDNS\Encoder\EncoderFactory;
+use \LibDNS\Decoder\DecoderFactory;
 
 // Config
 $queryName      = 'google.com';
