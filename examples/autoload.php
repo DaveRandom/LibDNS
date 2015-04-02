@@ -67,6 +67,7 @@ spl_autoload_register(function($className) {
 
     $className = strtolower($className);
     if (isset($classMap[$className])) {
+        /** @noinspection PhpIncludeInspection */
         require $classMap[$className];
     }
 });

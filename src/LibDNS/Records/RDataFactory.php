@@ -27,8 +27,7 @@ class RDataFactory
     /**
      * Create a new RData object
      *
-     * @param \LibDNS\Records\TypeDefinitions\TypeDefinition $typeDef
-     *
+     * @param \LibDNS\Records\TypeDefinitions\TypeDefinition $typeDefinition
      * @return \LibDNS\Records\RData
      */
     public function create(TypeDefinition $typeDefinition)

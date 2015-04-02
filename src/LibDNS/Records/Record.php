@@ -13,8 +13,7 @@
  */
 namespace LibDNS\Records;
 
-use \LibDNS\Records\Types\DomainName,
-    \LibDNS\Records\Types\TypeFactory;
+use \LibDNS\Records\Types\DomainName;
 
 /**
  * Represents a DNS record

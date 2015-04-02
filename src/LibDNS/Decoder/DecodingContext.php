@@ -53,7 +53,7 @@ class DecodingContext
     /**
      * @var int
      */
-    private $expectedAddtionalRecords = 0;
+    private $expectedAdditionalRecords = 0;
 
     /**
      * Constructor
@@ -100,7 +100,7 @@ class DecodingContext
     /**
      * Get the number of question records expected in the message
      *
-     * @param int $num
+     * @param int $expectedQuestionRecords
      */
     public function setExpectedQuestionRecords($expectedQuestionRecords)
     {
@@ -120,7 +120,7 @@ class DecodingContext
     /**
      * Set the number of answer records expected in the message
      *
-     * @param int $num
+     * @param int $expectedAnswerRecords
      */
     public function setExpectedAnswerRecords($expectedAnswerRecords)
     {
@@ -140,7 +140,7 @@ class DecodingContext
     /**
      * Set the number of authority records expected in the message
      *
-     * @param int $num
+     * @param int $expectedAuthorityRecords
      */
     public function setExpectedAuthorityRecords($expectedAuthorityRecords)
     {
@@ -160,7 +160,7 @@ class DecodingContext
     /**
      * Set the number of additional records expected in the message
      *
-     * @param int $num
+     * @param int $expectedAdditionalRecords
      */
     public function setExpectedAdditionalRecords($expectedAdditionalRecords)
     {

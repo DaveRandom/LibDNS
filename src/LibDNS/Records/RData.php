@@ -13,18 +13,8 @@
  */
 namespace LibDNS\Records;
 
-use \LibDNS\Records\Types\Type,
-    \LibDNS\Records\Types\Anything,
-    \LibDNS\Records\Types\BitMap,
-    \LibDNS\Records\Types\Char,
-    \LibDNS\Records\Types\CharacterString,
-    \LibDNS\Records\Types\DomainName,
-    \LibDNS\Records\Types\IPv4Address,
-    \LibDNS\Records\Types\IPv6Address,
-    \LibDNS\Records\Types\Long,
-    \LibDNS\Records\Types\Short,
-    \LibDNS\Records\Types\Types,
-    \LibDNS\Records\TypeDefinitions\TypeDefinition;
+use \LibDNS\Records\Types\Type;
+use \LibDNS\Records\TypeDefinitions\TypeDefinition;
 
 /**
  * Represents a data type comprising multiple simple types

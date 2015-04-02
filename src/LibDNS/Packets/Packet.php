@@ -40,8 +40,7 @@ class Packet
     /**
      * Constructor
      *
-     * @param \LibDNS\Packets\LabelRegistry $labelRegistry
-     * @param string                        $data          The initial packet raw data
+     * @param string $data The initial packet raw data
      */
     public function __construct($data = '')
     {
@@ -53,7 +52,7 @@ class Packet
      * Read bytes from the packet data
      *
      * @param int $length The number of bytes to read
-     *
+     * @return string
      * @throws \OutOfBoundsException When the pointer position is invalid or the supplied length is negative
      */
     public function read($length = null)

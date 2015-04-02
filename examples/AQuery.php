@@ -66,6 +66,7 @@ if ($response->getResponseCode() !== 0) {
 $answers = $response->getAnswerRecords();
 if (count($answers)) {
     foreach ($response->getAnswerRecords() as $record) {
+        /** @var \LibDNS\Records\Resource $record */
         echo "    " . $record->getData() . "\n";
     }
 } else {

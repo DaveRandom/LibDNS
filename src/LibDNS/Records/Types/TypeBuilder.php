@@ -46,30 +46,22 @@ class TypeBuilder
      */
     public function build($type)
     {
-        $type = (int) $type;
+        static $typeMap = [
+            Types::ANYTHING         => 'createAnything',
+            Types::BITMAP           => 'createBitMap',
+            Types::CHAR             => 'createChar',
+            Types::CHARACTER_STRING => 'createCharacterString',
+            Types::DOMAIN_NAME      => 'createDomainName',
+            Types::IPV4_ADDRESS     => 'createIPv4Address',
+            Types::IPV6_ADDRESS     => 'createIPv6Address',
+            Types::LONG             => 'createLong',
+            Types::SHORT            => 'createShort',
+        ];
 
-        if ($type === Types::ANYTHING) {
-            $result = $this->typeFactory->createAnything();
-        } else if ($type === Types::BITMAP) {
-            $result = $this->typeFactory->createBitMap();
-        } else if ($type === Types::CHAR) {
-            $result = $this->typeFactory->createChar();
-        } else if ($type === Types::CHARACTER_STRING) {
-            $result = $this->typeFactory->createCharacterString();
-        } else if ($type === Types::DOMAIN_NAME) {
-            $result = $this->typeFactory->createDomainName();
-        } else if ($type === Types::IPV4_ADDRESS) {
-            $result = $this->typeFactory->createIPv4Address();
-        } else if ($type === Types::IPV6_ADDRESS) {
-            $result = $this->typeFactory->createIPv6Address();
-        } else if ($type === Types::LONG) {
-            $result = $this->typeFactory->createLong();
-        } else if ($type === Types::SHORT) {
-            $result = $this->typeFactory->createShort();
-        } else {
+        if (!isset($typeMap[$type])) {
             throw new \InvalidArgumentException('Invalid Type identifier ' . $type);
         }
-        
-        return $result;
+
+        return $this->typeFactory->{$typeMap[$type]}();
     }
 }

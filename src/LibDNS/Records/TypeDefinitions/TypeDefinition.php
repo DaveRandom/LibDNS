@@ -61,8 +61,7 @@ class TypeDefinition implements \Iterator, \Countable
      * Constructor
      *
      * @param FieldDefinitionFactory $fieldDefFactory
-     * @param int[]                  $typeDef         Structural definition of the fields
-     *
+     * @param array $definition Structural definition of the fields
      * @throws \InvalidArgumentException When the type definition is invalid
      */
     public function __construct(FieldDefinitionFactory $fieldDefFactory, array $definition)
@@ -90,8 +89,7 @@ class TypeDefinition implements \Iterator, \Countable
      *
      * @param int    $index
      * @param string $name
-     * @param int    $name
-     *
+     * @param int    $type
      * @throws \InvalidArgumentException When the field definition is invalid
      */
     private function registerField($index, $name, $type)
@@ -128,9 +126,7 @@ class TypeDefinition implements \Iterator, \Countable
      * Get the field definition indicated by the supplied index
      *
      * @param int $index
-     *
      * @return \LibDNS\Records\TypeDefinitions\FieldDefinition
-     *
      * @throws \OutOfBoundsException When the supplied index does not refer to a valid field
      */
     public function getFieldDefinition($index)
@@ -150,10 +146,8 @@ class TypeDefinition implements \Iterator, \Countable
     /**
      * Get the field index indicated by the supplied name
      *
-     * @param string $index
-     *
+     * @param string $name
      * @return int
-     *
      * @throws \OutOfBoundsException When the supplied name does not refer to a valid field
      */
     public function getFieldIndexByName($name)

@@ -27,6 +27,7 @@ class Question extends Record
     /**
      * Constructor
      *
+     * @param \LibDNS\Records\Types\TypeFactory $typeFactory
      * @param int $type Resource type being requested, can be indicated using the ResourceQTypes enum
      */
     public function __construct(TypeFactory $typeFactory, $type)

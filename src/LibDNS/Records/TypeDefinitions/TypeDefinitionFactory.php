@@ -28,7 +28,7 @@ class TypeDefinitionFactory
      * @param FieldDefinitionFactory $fieldDefinitionFactory
      * @param int[]                  $definition             Structural definition of the fields
      *
-     * @return \LibDNS\Record\TypeDefinitions\TypeDefinition
+     * @return \LibDNS\Records\TypeDefinitions\TypeDefinition
      *
      * @throws \InvalidArgumentException When the type definition is invalid
      */

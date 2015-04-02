@@ -95,7 +95,7 @@ class DomainName extends Type
         foreach ($labels as &$label) {
             $labelLength = strlen($label);
             if ($labelLength > 63) {
-                throw new \InvalidArgumentException('Label list is not a valid domain name: Label ' . $label . ' length excedes 63 byte limit');
+                throw new \InvalidArgumentException('Label list is not a valid domain name: Label ' . $label . ' length exceeds 63 byte limit');
             }
             $length += $labelLength + 1;
             $label = strtolower($label);
@@ -105,10 +105,10 @@ class DomainName extends Type
         $tld = $tldFirst ? $labels[0] : $labels[$count - 1];
         if ($tld === '') {
             $length--;
-        } 
+        }
 
         if ($length + 1 > 255) {
-            throw new \InvalidArgumentException('Label list is not a valid domain name: Total length excedes 255 byte limit');
+            throw new \InvalidArgumentException('Label list is not a valid domain name: Total length exceeds 255 byte limit');
         }
 
         $this->labels = $tldFirst ? array_reverse($labels) : $labels;

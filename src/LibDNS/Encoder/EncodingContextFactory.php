@@ -31,7 +31,7 @@ class EncodingContextFactory
      * @param \LibDNS\Packets\Packet $packet   The packet to be decoded
      * @param bool                   $compress Whether message compression is enabled
      *
-     * @return \LibDNS\Packets\EncodingContext
+     * @return \LibDNS\Encoder\EncodingContext
      */
     public function create(Packet $packet, $compress)
     {

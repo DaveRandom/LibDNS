@@ -25,6 +25,7 @@ class PacketFactory
     /**
      * Create a new Packet object
      *
+     * @param string $data
      * @return \LibDNS\Packets\Packet
      */
     public function create($data = '')

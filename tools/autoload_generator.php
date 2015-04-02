@@ -23,9 +23,9 @@ ini_set('display_errors', 0);
 if (!isset($argv[1])) {
     $srcDir = getcwd();
 } else if (in_array(strtolower($argv[1]), ['--help', '?', '/?'])) {
-    echo "Syntax: $file [source directory]\n";
+    exit("Syntax: " . __FILE__ . " [source directory]\n");
 } else if (!is_dir($srcDir = $argv[1])) {
-    echo "Invalid source directory\n\nSyntax: $file [source directory]\n";
+    exit("Invalid source directory\n\nSyntax: " . __FILE__ . " [source directory]\n");
 }
 $srcDir = str_replace('\\', '/', $srcDir);
 
@@ -81,6 +81,7 @@ $output .= <<<'PHP'
 
     $className = strtolower($className);
     if (isset($classMap[$className])) {
+        /** @noinspection PhpIncludeInspection */
         require $classMap[$className];
     }
 });

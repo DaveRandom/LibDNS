@@ -37,7 +37,8 @@ class Resource extends Record
     /**
      * Constructor
      *
-     * @param int                   $type Can be indicated using the ResourceTypes enum
+     * @param \LibDNS\Records\Types\TypeFactory $typeFactory
+     * @param int $type Can be indicated using the ResourceTypes enum
      * @param \LibDNS\Records\RData $data
      */
     public function __construct(TypeFactory $typeFactory, $type, $data)

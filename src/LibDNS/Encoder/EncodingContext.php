@@ -13,8 +13,8 @@
  */
 namespace LibDNS\Encoder;
 
-use \LibDNS\Packets\Packet,
-    \LibDNS\Packets\LabelRegistry;
+use \LibDNS\Packets\Packet;
+use \LibDNS\Packets\LabelRegistry;
 
 /**
  * Holds data associated with an encode operation
@@ -92,6 +92,7 @@ class EncodingContext
     /**
      * Determine or set whether the message is truncated
      *
+     * @param bool $truncate
      * @return bool
      */
     public function isTruncated($truncate = null)

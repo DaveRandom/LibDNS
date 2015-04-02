@@ -13,21 +13,20 @@
  */
 namespace LibDNS\Encoder;
 
-use \LibDNS\Packets\PacketFactory,
-    \LibDNS\Messages\Message,
-    \LibDNS\Records\Question,
-    \LibDNS\Records\Resource,
-    \LibDNS\Records\Types\Type,
-    \LibDNS\Records\Types\Anything,
-    \LibDNS\Records\Types\BitMap,
-    \LibDNS\Records\Types\Char,
-    \LibDNS\Records\Types\CharacterString,
-    \LibDNS\Records\Types\DomainName,
-    \LibDNS\Records\Types\IPv4Address,
-    \LibDNS\Records\Types\IPv6Address,
-    \LibDNS\Records\Types\Long,
-    \LibDNS\Records\Types\Short,
-    \LibDNS\Records\Types\Types;
+use \LibDNS\Packets\PacketFactory;
+use \LibDNS\Messages\Message;
+use \LibDNS\Records\Question;
+use \LibDNS\Records\Resource;
+use \LibDNS\Records\Types\Type;
+use \LibDNS\Records\Types\Anything;
+use \LibDNS\Records\Types\BitMap;
+use \LibDNS\Records\Types\Char;
+use \LibDNS\Records\Types\CharacterString;
+use \LibDNS\Records\Types\DomainName;
+use \LibDNS\Records\Types\IPv4Address;
+use \LibDNS\Records\Types\IPv6Address;
+use \LibDNS\Records\Types\Long;
+use \LibDNS\Records\Types\Short;
 
 /**
  * Encodes Message objects to raw network data
@@ -64,8 +63,8 @@ class Encoder
      * Encode the header section of the message
      *
      * @param \LibDNS\Encoder\EncodingContext $encodingContext
-     * @param \LibDNS\Messages\Message        $message
-     *
+     * @param \LibDNS\Messages\Message $message
+     * @return string
      * @throws \UnexpectedValueException When the header section is invalid
      */
     private function encodeHeader(EncodingContext $encodingContext, Message $message)
@@ -93,12 +92,10 @@ class Encoder
     /**
      * Encode an Anything field
      *
-     * @param \LibDNS\Encoder\EncodingContext $encodingContext
      * @param \LibDNS\Records\Types\Anything  $anything
-     *
      * @return string
      */
-    private function encodeAnything(EncodingContext $encodingContext, Anything $anything)
+    private function encodeAnything(Anything $anything)
     {
         return $anything->getValue();
     }
@@ -106,12 +103,10 @@ class Encoder
     /**
      * Encode a BitMap field
      *
-     * @param \LibDNS\Encoder\EncodingContext $encodingContext
      * @param \LibDNS\Records\Types\BitMap    $bitMap
-     *
      * @return string
      */
-    private function encodeBitMap(EncodingContext $encodingContext, BitMap $bitMap)
+    private function encodeBitMap(BitMap $bitMap)
     {
         return $bitMap->getValue();
     }
@@ -119,12 +114,10 @@ class Encoder
     /**
      * Encode a Char field
      *
-     * @param \LibDNS\Encoder\EncodingContext $encodingContext
      * @param \LibDNS\Records\Types\Char      $char
-     *
      * @return string
      */
-    private function encodeChar(EncodingContext $encodingContext, Char $char)
+    private function encodeChar(Char $char)
     {
         return chr($char->getValue());
     }
@@ -132,12 +125,10 @@ class Encoder
     /**
      * Encode a CharacterString field
      *
-     * @param \LibDNS\Encoder\EncodingContext       $encodingContext
      * @param \LibDNS\Records\Types\CharacterString $characterString
-     *
      * @return string
      */
-    private function encodeCharacterString(EncodingContext $encodingContext, CharacterString $characterString)
+    private function encodeCharacterString(CharacterString $characterString)
     {
         $data = $characterString->getValue();
         return chr(strlen($data)) . $data;
@@ -146,12 +137,11 @@ class Encoder
     /**
      * Encode a DomainName field
      *
-     * @param \LibDNS\Encoder\EncodingContext  $encodingContext
      * @param \LibDNS\Records\Types\DomainName $domainName
-     *
+     * @param \LibDNS\Encoder\EncodingContext $encodingContext
      * @return string
      */
-    private function encodeDomainName(EncodingContext $encodingContext, DomainName $domainName)
+    private function encodeDomainName(DomainName $domainName, EncodingContext $encodingContext)
     {
         $packetIndex = $encodingContext->getPacket()->getLength() + 12;
         $labelRegistry = $encodingContext->getLabelRegistry();
@@ -195,12 +185,10 @@ class Encoder
     /**
      * Encode an IPv4Address field
      *
-     * @param \LibDNS\Encoder\EncodingContext   $encodingContext
      * @param \LibDNS\Records\Types\IPv4Address $ipv4Address
-     *
      * @return string
      */
-    private function encodeIPv4Address(EncodingContext $encodingContext, IPv4Address $ipv4Address)
+    private function encodeIPv4Address(IPv4Address $ipv4Address)
     {
         $octets = $ipv4Address->getOctets();
         return pack('C*', $octets[0], $octets[1], $octets[2], $octets[3]);
@@ -209,12 +197,10 @@ class Encoder
     /**
      * Encode an IPv6Address field
      *
-     * @param \LibDNS\Encoder\EncodingContext   $encodingContext
      * @param \LibDNS\Records\Types\IPv6Address $ipv6Address
-     *
      * @return string
      */
-    private function encodeIPv6Address(EncodingContext $encodingContext, IPv6Address $ipv6Address)
+    private function encodeIPv6Address(IPv6Address $ipv6Address)
     {
         $shorts = $ipv6Address->getShorts();
         return pack('n*', $shorts[0], $shorts[1], $shorts[2], $shorts[3], $shorts[4], $shorts[5], $shorts[6], $shorts[7]);
@@ -223,12 +209,10 @@ class Encoder
     /**
      * Encode a Long field
      *
-     * @param \LibDNS\Encoder\EncodingContext $encodingContext
      * @param \LibDNS\Records\Types\Long      $long
-     *
      * @return string
      */
-    private function encodeLong(EncodingContext $encodingContext, Long $long)
+    private function encodeLong(Long $long)
     {
         return pack('N', $long->getValue());
     }
@@ -236,12 +220,10 @@ class Encoder
     /**
      * Encode a Short field
      *
-     * @param \LibDNS\Encoder\EncodingContext $encodingContext
      * @param \LibDNS\Records\Types\Short     $short
-     *
      * @return string
      */
-    private function encodeShort(EncodingContext $encodingContext, Short $short)
+    private function encodeShort(Short $short)
     {
         return pack('n', $short->getValue());
     }
@@ -251,29 +233,28 @@ class Encoder
      *
      * @param \LibDNS\Encoder\EncodingContext $encodingContext
      * @param \LibDNS\Records\Types\Type      $type
-     *
      * @return string
      */
     private function encodeType(EncodingContext $encodingContext, Type $type)
     {
         if ($type instanceof Anything) {
-            $result = $this->encodeAnything($encodingContext, $type);
+            $result = $this->encodeAnything($type);
         } else if ($type instanceof BitMap) {
-            $result = $this->encodeBitMap($encodingContext, $type);
+            $result = $this->encodeBitMap($type);
         } else if ($type instanceof Char) {
-            $result = $this->encodeChar($encodingContext, $type);
+            $result = $this->encodeChar($type);
         } else if ($type instanceof CharacterString) {
-            $result = $this->encodeCharacterString($encodingContext, $type);
+            $result = $this->encodeCharacterString($type);
         } else if ($type instanceof DomainName) {
-            $result = $this->encodeDomainName($encodingContext, $type);
+            $result = $this->encodeDomainName($type, $encodingContext);
         } else if ($type instanceof IPv4Address) {
-            $result = $this->encodeIPv4Address($encodingContext, $type);
+            $result = $this->encodeIPv4Address($type);
         } else if ($type instanceof IPv6Address) {
-            $result = $this->encodeIPv6Address($encodingContext, $type);
+            $result = $this->encodeIPv6Address($type);
         } else if ($type instanceof Long) {
-            $result = $this->encodeLong($encodingContext, $type);
+            $result = $this->encodeLong($type);
         } else if ($type instanceof Short) {
-            $result = $this->encodeShort($encodingContext, $type);
+            $result = $this->encodeShort($type);
         } else {
             throw new \InvalidArgumentException('Unknown Type ' . get_class($type));
         }
@@ -291,7 +272,7 @@ class Encoder
     {
         if (!$encodingContext->isTruncated()) {
             $packet = $encodingContext->getPacket();
-            $name = $this->encodeDomainName($encodingContext, $record->getName());
+            $name = $this->encodeDomainName($record->getName(), $encodingContext);
             $meta = pack('n*', $record->getType(), $record->getClass());
 
             if (12 + $packet->getLength() + strlen($name) + 4 > 512) {
@@ -313,7 +294,7 @@ class Encoder
     {
         if (!$encodingContext->isTruncated()) {
             $packet = $encodingContext->getPacket();
-            $name = $this->encodeDomainName($encodingContext, $record->getName());
+            $name = $this->encodeDomainName($record->getName(), $encodingContext);
 
             $data = '';
             foreach ($record->getData() as $field) {
@@ -346,15 +327,19 @@ class Encoder
         $encodingContext = $this->encodingContextFactory->create($packet, $compress);
 
         foreach ($message->getQuestionRecords() as $record) {
+            /** @var \LibDNS\Records\Question $record */
             $this->encodeQuestionRecord($encodingContext, $record);
         }
         foreach ($message->getAnswerRecords() as $record) {
+            /** @var \LibDNS\Records\Resource $record */
             $this->encodeResourceRecord($encodingContext, $record);
         }
         foreach ($message->getAuthorityRecords() as $record) {
+            /** @var \LibDNS\Records\Resource $record */
             $this->encodeResourceRecord($encodingContext, $record);
         }
         foreach ($message->getAdditionalRecords() as $record) {
+            /** @var \LibDNS\Records\Resource $record */
             $this->encodeResourceRecord($encodingContext, $record);
         }
 

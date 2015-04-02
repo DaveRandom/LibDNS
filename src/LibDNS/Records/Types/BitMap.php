@@ -40,13 +40,13 @@ class BitMap extends Type
     /**
      * Inspect the value of the bit at the specific index and optionally set a new value
      *
+     * @param int $index
      * @param bool $newValue The new value
-     *
      * @return bool The old value
      */
     public function isBitSet($index, $newValue = null)
     {
-        $charIndex = floor($index / 8);
+        $charIndex = (int)($index / 8);
         $bitMask = 0b10000000 >> ($index % 8);
 
         $result = false;

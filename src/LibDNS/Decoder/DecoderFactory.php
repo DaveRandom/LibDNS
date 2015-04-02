@@ -13,19 +13,19 @@
  */
 namespace LibDNS\Decoder;
 
-use \LibDNS\Packets\PacketFactory,
-    \LibDNS\Messages\MessageFactory,
-    \LibDNS\Records\RecordCollectionFactory,
-    \LibDNS\Records\QuestionFactory,
-    \LibDNS\Records\ResourceBuilder,
-    \LibDNS\Records\ResourceFactory,
-    \LibDNS\Records\RDataBuilder,
-    \LibDNS\Records\RDataFactory,
-    \LibDNS\Records\Types\TypeBuilder,
-    \LibDNS\Records\Types\TypeFactory,
-    \LibDNS\Records\TypeDefinitions\TypeDefinitionManager,
-    \LibDNS\Records\TypeDefinitions\TypeDefinitionFactory,
-    \LibDNS\Records\TypeDefinitions\FieldDefinitionFactory;
+use \LibDNS\Packets\PacketFactory;
+use \LibDNS\Messages\MessageFactory;
+use \LibDNS\Records\RecordCollectionFactory;
+use \LibDNS\Records\QuestionFactory;
+use \LibDNS\Records\ResourceBuilder;
+use \LibDNS\Records\ResourceFactory;
+use \LibDNS\Records\RDataBuilder;
+use \LibDNS\Records\RDataFactory;
+use \LibDNS\Records\Types\TypeBuilder;
+use \LibDNS\Records\Types\TypeFactory;
+use \LibDNS\Records\TypeDefinitions\TypeDefinitionManager;
+use \LibDNS\Records\TypeDefinitions\TypeDefinitionFactory;
+use \LibDNS\Records\TypeDefinitions\FieldDefinitionFactory;
 
 /**
  * Creates Decoder objects
@@ -39,6 +39,7 @@ class DecoderFactory
     /**
      * Create a new Decoder object
      *
+     * @param \LibDNS\Records\TypeDefinitions\TypeDefinitionManager $typeDefinitionManager
      * @return \LibDNS\Decoder\Decoder
      */
     public function create(TypeDefinitionManager $typeDefinitionManager = null)

@@ -19,7 +19,6 @@ use \LibDNS\Packets\PacketFactory,
     \LibDNS\Messages\Message,
     \LibDNS\Records\QuestionFactory,
     \LibDNS\Records\ResourceBuilder,
-    \LibDNS\Records\RData,
     \LibDNS\Records\Types\Type,
     \LibDNS\Records\Types\Anything,
     \LibDNS\Records\Types\BitMap,
@@ -405,6 +404,7 @@ class Decoder
      */
     private function decodeQuestionRecord(DecodingContext $decodingContext)
     {
+        /** @var \LibDNS\Records\Types\DomainName $domainName */
         $domainName = $this->typeBuilder->build(Types::DOMAIN_NAME);
         $this->decodeDomainName($decodingContext, $domainName);
         $meta = unpack('ntype/nclass', $this->readDataFromPacket($decodingContext->getPacket(), 4));
@@ -428,6 +428,7 @@ class Decoder
      */
     private function decodeResourceRecord(DecodingContext $decodingContext)
     {
+        /** @var \LibDNS\Records\Types\DomainName $domainName */
         $domainName = $this->typeBuilder->build(Types::DOMAIN_NAME);
         $this->decodeDomainName($decodingContext, $domainName);
         $meta = unpack('ntype/nclass/Nttl/nlength', $this->readDataFromPacket($decodingContext->getPacket(), 10));
@@ -440,6 +441,7 @@ class Decoder
         $data = $resource->getData();
         $remainingLength = $meta['length'];
 
+        $fieldDef = $index = null;
         foreach ($resource->getData()->getTypeDefinition() as $index => $fieldDef) {
             $field = $this->typeBuilder->build($fieldDef->getType());
             $remainingLength -= $this->decodeType($decodingContext, $field, $remainingLength);
@@ -497,10 +499,10 @@ class Decoder
             $authorityRecords->add($this->decodeResourceRecord($decodingContext));
         }
 
-        $addtionalRecords = $message->getAdditionalRecords();
+        $additionalRecords = $message->getAdditionalRecords();
         $expected = $decodingContext->getExpectedAdditionalRecords();
         for ($i = 0; $i < $expected; $i++) {
-            $addtionalRecords->add($this->decodeResourceRecord($decodingContext));
+            $additionalRecords->add($this->decodeResourceRecord($decodingContext));
         }
 
         if ($packet->getBytesRemaining() !== 0) {

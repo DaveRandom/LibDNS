@@ -13,8 +13,7 @@
  */
 namespace LibDNS\Messages;
 
-use \LibDNS\Records\RecordCollection,
-    \LibDNS\Records\RecordCollectionFactory,
+use \LibDNS\Records\RecordCollectionFactory,
     \LibDNS\Records\RecordTypes;
 
 /**
@@ -242,7 +241,7 @@ class Message
     }
 
     /**
-     * Inspect the value of the recusion available field and optionally set a new value
+     * Inspect the value of the recursion available field and optionally set a new value
      *
      * @param bool $newValue The new value
      *

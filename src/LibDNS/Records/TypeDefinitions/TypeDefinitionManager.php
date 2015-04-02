@@ -242,7 +242,6 @@ class TypeDefinitionManager
      * Get a type definition for a record type if it is known
      *
      * @param int $recordType Resource type, can be indicated using the ResourceTypes enum
-     *
      * @return \LibDNS\Records\TypeDefinitions\TypeDefinition
      */
     public function getTypeDefinition($recordType)
@@ -260,9 +259,8 @@ class TypeDefinitionManager
     /**
      * Register a custom type definition
      *
-     * @param int                                                  $resourceType Resource type, can be indicated using the ResourceTypes enum
+     * @param int $recordType Resource type, can be indicated using the ResourceTypes enum
      * @param int[]|\LibDNS\Records\TypeDefinitions\TypeDefinition $definition
-     *
      * @throws \InvalidArgumentException When the type definition is invalid
      */
     public function registerTypeDefinition($recordType, $definition)
@@ -272,9 +270,9 @@ class TypeDefinitionManager
                 throw new \InvalidArgumentException('Definition must be an array or an instance of ' . __NAMESPACE__ . '\TypeDefinition');
             }
 
-            $typeDef = (int) $this->typeDefFactory->create($this->fieldDefFactory, $definition);
+            $definition = (int) $this->typeDefFactory->create($this->fieldDefFactory, $definition);
         }
 
-        $this->typeDefs[(int) $recordType] = $typeDef;
+        $this->typeDefs[(int) $recordType] = $definition;
     }
 }
