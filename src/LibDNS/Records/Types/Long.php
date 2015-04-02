@@ -4,21 +4,21 @@
  *
  * PHP version 5.4
  *
- * @category   LibDNS
- * @package    Types
- * @author     Chris Wright <https://github.com/DaveRandom>
- * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
- * @version    2.0.0
+ * @category LibDNS
+ * @package Types
+ * @author Chris Wright <https://github.com/DaveRandom>
+ * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license http://www.opensource.org/licenses/mit-license.html MIT License
+ * @version 2.0.0
  */
 namespace LibDNS\Records\Types;
 
 /**
  * Represents a 32-bit unsigned integer
  *
- * @category   LibDNS
- * @package    Types
- * @author     Chris Wright <https://github.com/DaveRandom>
+ * @category LibDNS
+ * @package Types
+ * @author Chris Wright <https://github.com/DaveRandom>
  */
 class Long extends Type
 {
@@ -31,7 +31,6 @@ class Long extends Type
      * Set the internal value
      *
      * @param int $value The new value
-     *
      * @throws \UnderflowException When the supplied value is less than 0
      * @throws \OverflowException When the supplied value is greater than 4294967296
      */

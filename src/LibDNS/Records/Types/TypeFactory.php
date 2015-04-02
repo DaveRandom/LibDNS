@@ -4,21 +4,21 @@
  *
  * PHP version 5.4
  *
- * @category   LibDNS
- * @package    Types
- * @author     Chris Wright <https://github.com/DaveRandom>
- * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
- * @version    2.0.0
+ * @category LibDNS
+ * @package Types
+ * @author Chris Wright <https://github.com/DaveRandom>
+ * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license http://www.opensource.org/licenses/mit-license.html MIT License
+ * @version 2.0.0
  */
 namespace LibDNS\Records\Types;
 
 /**
  * Creates Type objects
  *
- * @category   LibDNS
- * @package    Types
- * @author     Chris Wright <https://github.com/DaveRandom>
+ * @category LibDNS
+ * @package Types
+ * @author Chris Wright <https://github.com/DaveRandom>
  */
 class TypeFactory
 {
@@ -26,7 +26,6 @@ class TypeFactory
      * Create a new Anything object
      *
      * @param string $value
-     *
      * @return \LibDNS\Records\Types\Anything
      */
     public function createAnything($value = null)
@@ -38,7 +37,6 @@ class TypeFactory
      * Create a new BitMap object
      *
      * @param string $value
-     *
      * @return \LibDNS\Records\Types\BitMap
      */
     public function createBitMap($value = null)
@@ -50,7 +48,6 @@ class TypeFactory
      * Create a new Char object
      *
      * @param int $value
-     *
      * @return \LibDNS\Records\Types\Char
      */
     public function createChar($value = null)
@@ -62,7 +59,6 @@ class TypeFactory
      * Create a new CharacterString object
      *
      * @param string $value
-     *
      * @return \LibDNS\Records\Types\CharacterString
      */
     public function createCharacterString($value = null)
@@ -74,7 +70,6 @@ class TypeFactory
      * Create a new DomainName object
      *
      * @param string|string[] $value
-     *
      * @return \LibDNS\Records\Types\DomainName
      */
     public function createDomainName($value = null)
@@ -86,7 +81,6 @@ class TypeFactory
      * Create a new IPv4Address object
      *
      * @param string $value
-     *
      * @return \LibDNS\Records\Types\IPv4Address
      */
     public function createIPv4Address($value = null)
@@ -98,7 +92,6 @@ class TypeFactory
      * Create a new IPv6Address object
      *
      * @param string $value
-     *
      * @return \LibDNS\Records\Types\IPv6Address
      */
     public function createIPv6Address($value = null)
@@ -110,7 +103,6 @@ class TypeFactory
      * Create a new Long object
      *
      * @param int $value
-     *
      * @return \LibDNS\Records\Types\Long
      */
     public function createLong($value = null)
@@ -122,7 +114,6 @@ class TypeFactory
      * Create a new Short object
      *
      * @param int $value
-     *
      * @return \LibDNS\Records\Types\Short
      */
     public function createShort($value = null)

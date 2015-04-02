@@ -4,21 +4,21 @@
  *
  * PHP version 5.4
  *
- * @category   LibDNS
- * @package    Records
- * @author     Chris Wright <https://github.com/DaveRandom>
- * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
- * @version    2.0.0
+ * @category LibDNS
+ * @package Records
+ * @author Chris Wright <https://github.com/DaveRandom>
+ * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license http://www.opensource.org/licenses/mit-license.html MIT License
+ * @version 2.0.0
  */
 namespace LibDNS\Records;
 
 /**
  * Collection of Record objects
  *
- * @category   LibDNS
- * @package    Records
- * @author     Chris Wright <https://github.com/DaveRandom>
+ * @category LibDNS
+ * @package Records
+ * @author Chris Wright <https://github.com/DaveRandom>
  */
 class RecordCollection implements \Iterator, \Countable
 {
@@ -51,7 +51,6 @@ class RecordCollection implements \Iterator, \Countable
      * Constructor
      *
      * @param int $type Can be indicated using the RecordTypes enum
-     *
      * @throws \InvalidArgumentException When the specified record type is invalid
      */
     public function __construct($type)
@@ -102,7 +101,6 @@ class RecordCollection implements \Iterator, \Countable
      * Add a record to the collection
      *
      * @param \LibDNS\Records\Record $record The record to add
-     *
      * @throws \InvalidArgumentException When the wrong record type is supplied
      */
     public function add(Record $record)
@@ -140,8 +138,7 @@ class RecordCollection implements \Iterator, \Countable
      * Test whether the collection contains a specific record
      *
      * @param \LibDNS\Records\Record $record       The record to search for
-     * @param bool                   $sameInstance Whether to perform strict comparisons in search
-     *
+     * @param bool $sameInstance Whether to perform strict comparisons in search
      * @return bool
      */
     public function contains(Record $record, $sameInstance = false)
@@ -153,7 +150,6 @@ class RecordCollection implements \Iterator, \Countable
      * Get all records in the collection that refer to the specified name
      *
      * @param string $name The name to match records against
-     *
      * @return \LibDNS\Records\Record[]
      */
     public function getRecordsByName($name)
@@ -165,9 +161,7 @@ class RecordCollection implements \Iterator, \Countable
      * Get a record from the collection by index
      *
      * @param int $index Record index
-     *
      * @return \LibDNS\Records\Record
-     *
      * @throws \OutOfBoundsException When the supplied index does not refer to a valid record
      */
     public function getRecordByIndex($index)
@@ -183,7 +177,6 @@ class RecordCollection implements \Iterator, \Countable
      * Remove all records in the collection that refer to the specified name
      *
      * @param string $name The name to match records against
-     *
      * @return int The number of records removed
      */
     public function clearRecordsByName($name)
@@ -239,7 +232,6 @@ class RecordCollection implements \Iterator, \Countable
      * Get the record indicated by the iteration pointer (Iterator interface)
      *
      * @return \LibDNS\Records\Record
-     *
      * @throws \OutOfBoundsException When the pointer does not refer to a valid record
      */
     public function current()

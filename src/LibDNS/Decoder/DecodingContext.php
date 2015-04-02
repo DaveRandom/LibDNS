@@ -4,12 +4,12 @@
  *
  * PHP version 5.4
  *
- * @category   LibDNS
- * @package    Decoder
- * @author     Chris Wright <https://github.com/DaveRandom>
- * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
- * @version    2.0.0
+ * @category LibDNS
+ * @package Decoder
+ * @author Chris Wright <https://github.com/DaveRandom>
+ * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license http://www.opensource.org/licenses/mit-license.html MIT License
+ * @version 2.0.0
  */
 namespace LibDNS\Decoder;
 
@@ -19,9 +19,9 @@ use \LibDNS\Packets\LabelRegistry;
 /**
  * Holds data associated with a decode operation
  *
- * @category   LibDNS
- * @package    Decoder
- * @author     Chris Wright <https://github.com/DaveRandom>
+ * @category LibDNS
+ * @package Decoder
+ * @author Chris Wright <https://github.com/DaveRandom>
  */
 class DecodingContext
 {
@@ -58,7 +58,7 @@ class DecodingContext
     /**
      * Constructor
      *
-     * @param \LibDNS\Packets\Packet        $packet
+     * @param \LibDNS\Packets\Packet $packet
      * @param \LibDNS\Packets\LabelRegistry $labelRegistry
      */
     public function __construct(Packet $packet, LabelRegistry $labelRegistry)

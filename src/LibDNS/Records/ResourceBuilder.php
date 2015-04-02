@@ -4,12 +4,12 @@
  *
  * PHP version 5.4
  *
- * @category   LibDNS
- * @package    Records
- * @author     Chris Wright <https://github.com/DaveRandom>
- * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
- * @version    2.0.0
+ * @category LibDNS
+ * @package Records
+ * @author Chris Wright <https://github.com/DaveRandom>
+ * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license http://www.opensource.org/licenses/mit-license.html MIT License
+ * @version 2.0.0
  */
 namespace LibDNS\Records;
 
@@ -18,9 +18,9 @@ use \LibDNS\Records\TypeDefinitions\TypeDefinitionManager;
 /**
  * Builds Resource objects of a specific type
  *
- * @category   LibDNS
- * @package    Records
- * @author     Chris Wright <https://github.com/DaveRandom>
+ * @category LibDNS
+ * @package Records
+ * @author Chris Wright <https://github.com/DaveRandom>
  */
 class ResourceBuilder
 {
@@ -42,8 +42,8 @@ class ResourceBuilder
     /**
      * Constructor
      *
-     * @param \LibDNS\Records\ResourceFactory                       $resourceFactory
-     * @param \LibDNS\Records\RDataBuilder                          $rDataBuilder
+     * @param \LibDNS\Records\ResourceFactory $resourceFactory
+     * @param \LibDNS\Records\RDataBuilder $rDataBuilder
      * @param \LibDNS\Records\TypeDefinitions\TypeDefinitionManager $typeDefinitionManager
      */
     public function __construct(ResourceFactory $resourceFactory, RDataBuilder $rDataBuilder, TypeDefinitionManager $typeDefinitionManager)
@@ -57,7 +57,6 @@ class ResourceBuilder
      * Create a new Resource object
      *
      * @param int $type Type of the resource, can be indicated using the ResourceTypes enum
-     *
      * @return \LibDNS\Records\Resource
      */
     public function build($type)

@@ -4,12 +4,12 @@
  *
  * PHP version 5.4
  *
- * @category   LibDNS
- * @package    TypeDefinitions
- * @author     Chris Wright <https://github.com/DaveRandom>
- * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
- * @version    2.0.0
+ * @category LibDNS
+ * @package TypeDefinitions
+ * @author Chris Wright <https://github.com/DaveRandom>
+ * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license http://www.opensource.org/licenses/mit-license.html MIT License
+ * @version 2.0.0
  */
 namespace LibDNS\Records\TypeDefinitions;
 
@@ -20,9 +20,9 @@ use \LibDNS\Records\Types\DomainName;
 /**
  * Holds data about how the RDATA sections of known resource record types are structured
  *
- * @category   LibDNS
- * @package    TypeDefinitions
- * @author     Chris Wright <https://github.com/DaveRandom>
+ * @category LibDNS
+ * @package TypeDefinitions
+ * @author Chris Wright <https://github.com/DaveRandom>
  */
 class TypeDefinitionManager
 {
@@ -49,7 +49,7 @@ class TypeDefinitionManager
     /**
      * Constructor
      *
-     * @param \LibDNS\Records\TypeDefinitions\TypeDefinitionFactory  $typeDefFactory
+     * @param \LibDNS\Records\TypeDefinitions\TypeDefinitionFactory $typeDefFactory
      * @param \LibDNS\Records\TypeDefinitions\FieldDefinitionFactory $fieldDefFactory
      */
     public function __construct(TypeDefinitionFactory $typeDefFactory, FieldDefinitionFactory $fieldDefFactory)

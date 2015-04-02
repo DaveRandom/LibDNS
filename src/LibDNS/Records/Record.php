@@ -4,12 +4,12 @@
  *
  * PHP version 5.4
  *
- * @category   LibDNS
- * @package    Records
- * @author     Chris Wright <https://github.com/DaveRandom>
- * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
- * @version    2.0.0
+ * @category LibDNS
+ * @package Records
+ * @author Chris Wright <https://github.com/DaveRandom>
+ * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license http://www.opensource.org/licenses/mit-license.html MIT License
+ * @version 2.0.0
  */
 namespace LibDNS\Records;
 
@@ -18,9 +18,9 @@ use \LibDNS\Records\Types\DomainName;
 /**
  * Represents a DNS record
  *
- * @category   LibDNS
- * @package    Records
- * @author     Chris Wright <https://github.com/DaveRandom>
+ * @category LibDNS
+ * @package Records
+ * @author Chris Wright <https://github.com/DaveRandom>
  */
 abstract class Record
 {
@@ -58,7 +58,6 @@ abstract class Record
      * Set the value of the record name field
      *
      * @param string|\LibDNS\Records\Types\DomainName $name
-     *
      * @throws \UnexpectedValueException When the supplied value is not a valid domain name
      */
     public function setName($name)
@@ -94,7 +93,6 @@ abstract class Record
      * Set the value of the record class field
      *
      * @param int $class The new value, can be indicated using the ResourceClasses/ResourceQClasses enums
-     *
      * @throws \RangeException When the supplied value is outside the valid range 0 - 65535
      */
     public function setClass($class)

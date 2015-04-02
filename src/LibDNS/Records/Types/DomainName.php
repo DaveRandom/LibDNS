@@ -4,21 +4,21 @@
  *
  * PHP version 5.4
  *
- * @category   LibDNS
- * @package    Types
- * @author     Chris Wright <https://github.com/DaveRandom>
- * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
- * @version    2.0.0
+ * @category LibDNS
+ * @package Types
+ * @author Chris Wright <https://github.com/DaveRandom>
+ * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license http://www.opensource.org/licenses/mit-license.html MIT License
+ * @version 2.0.0
  */
 namespace LibDNS\Records\Types;
 
 /**
  * Represents a fully qualified domain name
  *
- * @category   LibDNS
- * @package    Types
- * @author     Chris Wright <https://github.com/DaveRandom>
+ * @category LibDNS
+ * @package Types
+ * @author Chris Wright <https://github.com/DaveRandom>
  */
 class DomainName extends Type
 {
@@ -38,7 +38,6 @@ class DomainName extends Type
      * Constructor
      *
      * @param string|string[] $value
-     *
      * @throws \UnexpectedValueException When the supplied value is not a valid domain name
      */
     public function __construct($value = null)
@@ -56,7 +55,6 @@ class DomainName extends Type
      * Set the internal value
      *
      * @param string $value The new value
-     *
      * @throws \UnexpectedValueException When the supplied value is not a valid domain name
      */
     public function setValue($value)
@@ -68,7 +66,6 @@ class DomainName extends Type
      * Get the domain name labels
      *
      * @param bool $tldFirst Whether to return the label list ordered with the TLD label first
-     *
      * @return string[]
      */
     public function getLabels($tldFirst = false)
@@ -80,8 +77,7 @@ class DomainName extends Type
      * Set the domain name labels
      *
      * @param string[] $labels   The new label list
-     * @param bool     $tldFirst Whether the supplied label list is ordered with the TLD label first
-     *
+     * @param bool $tldFirst Whether the supplied label list is ordered with the TLD label first
      * @throws \UnexpectedValueException When the supplied label list is not a valid domain name
      */
     public function setLabels(array $labels, $tldFirst = false)

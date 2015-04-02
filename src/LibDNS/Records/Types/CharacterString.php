@@ -4,21 +4,21 @@
  *
  * PHP version 5.4
  *
- * @category   LibDNS
- * @package    Types
- * @author     Chris Wright <https://github.com/DaveRandom>
- * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
- * @version    2.0.0
+ * @category LibDNS
+ * @package Types
+ * @author Chris Wright <https://github.com/DaveRandom>
+ * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license http://www.opensource.org/licenses/mit-license.html MIT License
+ * @version 2.0.0
  */
 namespace LibDNS\Records\Types;
 
 /**
  * Represents a binary character string
  *
- * @category   LibDNS
- * @package    Types
- * @author     Chris Wright <https://github.com/DaveRandom>
+ * @category LibDNS
+ * @package Types
+ * @author Chris Wright <https://github.com/DaveRandom>
  */
 class CharacterString extends Type
 {
@@ -31,7 +31,6 @@ class CharacterString extends Type
      * Set the internal value
      *
      * @param string $value The new value
-     *
      * @throws \UnexpectedValueException When the supplied value is outside the valid length range 0 - 255
      */
     public function setValue($value)

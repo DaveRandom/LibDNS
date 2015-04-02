@@ -4,12 +4,12 @@
  *
  * PHP version 5.4
  *
- * @category   LibDNS
- * @package    TypeDefinitions
- * @author     Chris Wright <https://github.com/DaveRandom>
- * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
- * @version    2.0.0
+ * @category LibDNS
+ * @package TypeDefinitions
+ * @author Chris Wright <https://github.com/DaveRandom>
+ * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license http://www.opensource.org/licenses/mit-license.html MIT License
+ * @version 2.0.0
  */
 namespace LibDNS\Records\TypeDefinitions;
 
@@ -28,9 +28,9 @@ use \LibDNS\Records\Types\Types;
 /**
  * Defines a field in a type
  *
- * @category   LibDNS
- * @package    TypeDefinitions
- * @author     Chris Wright <https://github.com/DaveRandom>
+ * @category LibDNS
+ * @package TypeDefinitions
+ * @author Chris Wright <https://github.com/DaveRandom>
  */
 class FieldDefinition
 {
@@ -62,11 +62,11 @@ class FieldDefinition
     /**
      * Constructor
      *
-     * @param int    $index
+     * @param int $index
      * @param string $name
-     * @param int    $type
-     * @param bool   $allowsMultiple
-     * @param int    $minimumValues
+     * @param int $type
+     * @param bool $allowsMultiple
+     * @param int $minimumValues
      */
     public function __construct($index, $name, $type, $allowsMultiple, $minimumValues)
     {
@@ -131,7 +131,6 @@ class FieldDefinition
      * Assert that a Type object is valid for this field
      *
      * @param \LibDNS\Records\Types\Type
-     *
      * @return bool
      */
     public function assertDataValid(Type $value)

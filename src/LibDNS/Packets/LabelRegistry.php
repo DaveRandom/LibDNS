@@ -5,21 +5,21 @@
  *
  * PHP version 5.4
  *
- * @category   LibDNS
- * @package    Packets
- * @author     Chris Wright <https://github.com/DaveRandom>
- * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
- * @version    2.0.0
+ * @category LibDNS
+ * @package Packets
+ * @author Chris Wright <https://github.com/DaveRandom>
+ * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license http://www.opensource.org/licenses/mit-license.html MIT License
+ * @version 2.0.0
  */
 namespace LibDNS\Packets;
 
 /**
  * Creates Packet objects
  *
- * @category   LibDNS
- * @package    Packets
- * @author     Chris Wright <https://github.com/DaveRandom>
+ * @category LibDNS
+ * @package Packets
+ * @author Chris Wright <https://github.com/DaveRandom>
  */
 class LabelRegistry
 {
@@ -60,7 +60,6 @@ class LabelRegistry
      * Lookup the index of a label
      *
      * @param string $label
-     *
      * @return int|null
      */
     public function lookupIndex($label)
@@ -72,7 +71,6 @@ class LabelRegistry
      * Lookup the label at an index
      *
      * @param int $index
-     *
      * @return string[]|null
      */
     public function lookupLabel($index)

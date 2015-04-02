@@ -4,21 +4,21 @@
  *
  * PHP version 5.4
  *
- * @category   LibDNS
- * @package    Types
- * @author     Chris Wright <https://github.com/DaveRandom>
- * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
- * @version    2.0.0
+ * @category LibDNS
+ * @package Types
+ * @author Chris Wright <https://github.com/DaveRandom>
+ * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license http://www.opensource.org/licenses/mit-license.html MIT License
+ * @version 2.0.0
  */
 namespace LibDNS\Records\Types;
 
 /**
  * Represents an IPv4 address
  *
- * @category   LibDNS
- * @package    Types
- * @author     Chris Wright <https://github.com/DaveRandom>
+ * @category LibDNS
+ * @package Types
+ * @author Chris Wright <https://github.com/DaveRandom>
  */
 class IPv4Address extends Type
 {
@@ -36,7 +36,6 @@ class IPv4Address extends Type
      * Constructor
      *
      * @param string|int[] $value String representation or octet list
-     *
      * @throws \UnexpectedValueException When the supplied value is not a valid IPv4 address
      */
     public function __construct($value = null)
@@ -54,7 +53,6 @@ class IPv4Address extends Type
      * Set the internal value
      *
      * @param string $value The new value
-     *
      * @throws \UnexpectedValueException When the supplied value is outside the valid length range 0 - 65535
      */
     public function setValue($value)
@@ -76,7 +74,6 @@ class IPv4Address extends Type
      * Set the address octets
      *
      * @param int[] $octets The new address octets
-     *
      * @throws \UnexpectedValueException When the supplied octet list is not a valid IPv4 address
      */
     public function setOctets(array $octets)

@@ -4,21 +4,21 @@
  *
  * PHP version 5.4
  *
- * @category   LibDNS
- * @package    Types
- * @author     Chris Wright <https://github.com/DaveRandom>
- * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
- * @version    2.0.0
+ * @category LibDNS
+ * @package Types
+ * @author Chris Wright <https://github.com/DaveRandom>
+ * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license http://www.opensource.org/licenses/mit-license.html MIT License
+ * @version 2.0.0
  */
 namespace LibDNS\Records\Types;
 
 /**
  * Represents an IPv6 address
  *
- * @category   LibDNS
- * @package    Types
- * @author     Chris Wright <https://github.com/DaveRandom>
+ * @category LibDNS
+ * @package Types
+ * @author Chris Wright <https://github.com/DaveRandom>
  */
 class IPv6Address extends Type
 {
@@ -36,14 +36,13 @@ class IPv6Address extends Type
      * Create a compressed string representation of an IPv6 address
      *
      * @param int[] $shorts Address shorts
-     *
      * @return string
      */
     private function createCompressedString($shorts)
     {
         $compressLen = $compressPos = $currentLen = $currentPos = 0;
         $inBlock = false;
-        
+
         for ($i = 0; $i < 8; $i++) {
             if ($shorts[$i] === 0) {
                 if (!$inBlock) {
@@ -88,7 +87,6 @@ class IPv6Address extends Type
      * Constructor
      *
      * @param string|int[] $value String representation or shorts list
-     *
      * @throws \UnexpectedValueException When the supplied value is not a valid IPv6 address
      */
     public function __construct($value = null)
@@ -106,7 +104,6 @@ class IPv6Address extends Type
      * Set the internal value
      *
      * @param string $value The new value
-     *
      * @throws \UnexpectedValueException When the supplied value is outside the valid length range 0 - 65535
      */
     public function setValue($value)
@@ -141,7 +138,6 @@ class IPv6Address extends Type
      * Set the address shorts
      *
      * @param int[] $shorts The new address shorts
-     *
      * @throws \UnexpectedValueException When the supplied short list is not a valid IPv6 address
      */
     public function setShorts(array $shorts)

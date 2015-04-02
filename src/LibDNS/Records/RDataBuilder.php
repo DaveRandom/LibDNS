@@ -4,12 +4,12 @@
  *
  * PHP version 5.4
  *
- * @category   LibDNS
- * @package    Records
- * @author     Chris Wright <https://github.com/DaveRandom>
- * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
- * @version    2.0.0
+ * @category LibDNS
+ * @package Records
+ * @author Chris Wright <https://github.com/DaveRandom>
+ * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license http://www.opensource.org/licenses/mit-license.html MIT License
+ * @version 2.0.0
  */
 namespace LibDNS\Records;
 
@@ -19,9 +19,9 @@ use \LibDNS\Records\Types\TypeBuilder;
 /**
  * Creates RData objects
  *
- * @category   LibDNS
- * @package    Records
- * @author     Chris Wright <https://github.com/DaveRandom>
+ * @category LibDNS
+ * @package Records
+ * @author Chris Wright <https://github.com/DaveRandom>
  */
 class RDataBuilder
 {
@@ -38,7 +38,7 @@ class RDataBuilder
     /**
      * Constructor
      *
-     * @param \LibDNS\Records\RDataFactory      $rDataFactory
+     * @param \LibDNS\Records\RDataFactory $rDataFactory
      * @param \LibDNS\Records\Types\TypeBuilder $typeBuilder
      */
     public function __construct(RDataFactory $rDataFactory, TypeBuilder $typeBuilder)
@@ -51,7 +51,6 @@ class RDataBuilder
      * Create a new RData object
      *
      * @param \LibDNS\Records\TypeDefinitions\TypeDefinition $typeDefinition
-     *
      * @return \LibDNS\Records\RData
      */
     public function build(TypeDefinition $typeDefinition)

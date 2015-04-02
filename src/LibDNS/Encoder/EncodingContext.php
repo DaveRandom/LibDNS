@@ -4,12 +4,12 @@
  *
  * PHP version 5.4
  *
- * @category   LibDNS
- * @package    Encoder
- * @author     Chris Wright <https://github.com/DaveRandom>
- * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
- * @version    2.0.0
+ * @category LibDNS
+ * @package Encoder
+ * @author Chris Wright <https://github.com/DaveRandom>
+ * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license http://www.opensource.org/licenses/mit-license.html MIT License
+ * @version 2.0.0
  */
 namespace LibDNS\Encoder;
 
@@ -19,9 +19,9 @@ use \LibDNS\Packets\LabelRegistry;
 /**
  * Holds data associated with an encode operation
  *
- * @category   LibDNS
- * @package    Encoder
- * @author     Chris Wright <https://github.com/DaveRandom>
+ * @category LibDNS
+ * @package Encoder
+ * @author Chris Wright <https://github.com/DaveRandom>
  */
 class EncodingContext
 {
@@ -48,9 +48,9 @@ class EncodingContext
     /**
      * Constructor
      *
-     * @param \LibDNS\Packets\Packet        $packet
+     * @param \LibDNS\Packets\Packet $packet
      * @param \LibDNS\Packets\LabelRegistry $labelRegistry
-     * @param bool                          $compress
+     * @param bool $compress
      */
     public function __construct(Packet $packet, LabelRegistry $labelRegistry, $compress)
     {

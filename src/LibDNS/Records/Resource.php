@@ -4,12 +4,12 @@
  *
  * PHP version 5.4
  *
- * @category   LibDNS
- * @package    Records
- * @author     Chris Wright <https://github.com/DaveRandom>
- * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
- * @version    2.0.0
+ * @category LibDNS
+ * @package Records
+ * @author Chris Wright <https://github.com/DaveRandom>
+ * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license http://www.opensource.org/licenses/mit-license.html MIT License
+ * @version 2.0.0
  */
 namespace LibDNS\Records;
 
@@ -18,9 +18,9 @@ use \LibDNS\Records\Types\TypeFactory;
 /**
  * Represents a DNS resource record
  *
- * @category   LibDNS
- * @package    Records
- * @author     Chris Wright <https://github.com/DaveRandom>
+ * @category LibDNS
+ * @package Records
+ * @author Chris Wright <https://github.com/DaveRandom>
  */
 class Resource extends Record
 {
@@ -62,7 +62,6 @@ class Resource extends Record
      * Set the value of the record TTL field
      *
      * @param int $ttl The new value
-     *
      * @throws \RangeException When the supplied value is outside the valid range 0 - 4294967296
      */
     public function setTTL($ttl)

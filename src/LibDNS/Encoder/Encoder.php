@@ -4,12 +4,12 @@
  *
  * PHP version 5.4
  *
- * @category   LibDNS
- * @package    Encoder
- * @author     Chris Wright <https://github.com/DaveRandom>
- * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
- * @version    2.0.0
+ * @category LibDNS
+ * @package Encoder
+ * @author Chris Wright <https://github.com/DaveRandom>
+ * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license http://www.opensource.org/licenses/mit-license.html MIT License
+ * @version 2.0.0
  */
 namespace LibDNS\Encoder;
 
@@ -31,9 +31,9 @@ use \LibDNS\Records\Types\Short;
 /**
  * Encodes Message objects to raw network data
  *
- * @category   LibDNS
- * @package    Encoder
- * @author     Chris Wright <https://github.com/DaveRandom>
+ * @category LibDNS
+ * @package Encoder
+ * @author Chris Wright <https://github.com/DaveRandom>
  */
 class Encoder
 {
@@ -92,7 +92,7 @@ class Encoder
     /**
      * Encode an Anything field
      *
-     * @param \LibDNS\Records\Types\Anything  $anything
+     * @param \LibDNS\Records\Types\Anything $anything
      * @return string
      */
     private function encodeAnything(Anything $anything)
@@ -103,7 +103,7 @@ class Encoder
     /**
      * Encode a BitMap field
      *
-     * @param \LibDNS\Records\Types\BitMap    $bitMap
+     * @param \LibDNS\Records\Types\BitMap $bitMap
      * @return string
      */
     private function encodeBitMap(BitMap $bitMap)
@@ -114,7 +114,7 @@ class Encoder
     /**
      * Encode a Char field
      *
-     * @param \LibDNS\Records\Types\Char      $char
+     * @param \LibDNS\Records\Types\Char $char
      * @return string
      */
     private function encodeChar(Char $char)
@@ -209,7 +209,7 @@ class Encoder
     /**
      * Encode a Long field
      *
-     * @param \LibDNS\Records\Types\Long      $long
+     * @param \LibDNS\Records\Types\Long $long
      * @return string
      */
     private function encodeLong(Long $long)
@@ -220,7 +220,7 @@ class Encoder
     /**
      * Encode a Short field
      *
-     * @param \LibDNS\Records\Types\Short     $short
+     * @param \LibDNS\Records\Types\Short $short
      * @return string
      */
     private function encodeShort(Short $short)
@@ -232,7 +232,7 @@ class Encoder
      * Encode a type object
      *
      * @param \LibDNS\Encoder\EncodingContext $encodingContext
-     * @param \LibDNS\Records\Types\Type      $type
+     * @param \LibDNS\Records\Types\Type $type
      * @return string
      */
     private function encodeType(EncodingContext $encodingContext, Type $type)
@@ -266,7 +266,7 @@ class Encoder
      * Encode a question record
      *
      * @param \LibDNS\Encoder\EncodingContext $encodingContext
-     * @param \LibDNS\Records\Question        $record
+     * @param \LibDNS\Records\Question $record
      */
     private function encodeQuestionRecord(EncodingContext $encodingContext, Question $record)
     {
@@ -288,7 +288,7 @@ class Encoder
      * Encode a resource record
      *
      * @param \LibDNS\Encoder\EncodingContext $encodingContext
-     * @param \LibDNS\Records\Resource        $record
+     * @param \LibDNS\Records\Resource $record
      */
     private function encodeResourceRecord(EncodingContext $encodingContext, Resource $record)
     {
@@ -317,8 +317,7 @@ class Encoder
      * Encode a Message to raw network data
      *
      * @param \LibDNS\Messages\Message $message  The Message to encode
-     * @param bool                     $compress Enable message compression
-     *
+     * @param bool $compress Enable message compression
      * @return string
      */
     public function encode(Message $message, $compress = true)

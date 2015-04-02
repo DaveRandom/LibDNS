@@ -4,21 +4,21 @@
  *
  * PHP version 5.4
  *
- * @category   LibDNS
- * @package    TypeDefinitions
- * @author     Chris Wright <https://github.com/DaveRandom>
- * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
- * @version    2.0.0
+ * @category LibDNS
+ * @package TypeDefinitions
+ * @author Chris Wright <https://github.com/DaveRandom>
+ * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license http://www.opensource.org/licenses/mit-license.html MIT License
+ * @version 2.0.0
  */
 namespace LibDNS\Records\TypeDefinitions;
 
 /**
  * Defines a data type comprising multiple fields
  *
- * @category   LibDNS
- * @package    TypeDefinitions
- * @author     Chris Wright <https://github.com/DaveRandom>
+ * @category LibDNS
+ * @package TypeDefinitions
+ * @author Chris Wright <https://github.com/DaveRandom>
  */
 class TypeDefinition implements \Iterator, \Countable
 {
@@ -87,9 +87,9 @@ class TypeDefinition implements \Iterator, \Countable
     /**
      * Register a field from the type definition
      *
-     * @param int    $index
+     * @param int $index
      * @param string $name
-     * @param int    $type
+     * @param int $type
      * @throws \InvalidArgumentException When the field definition is invalid
      */
     private function registerField($index, $name, $type)

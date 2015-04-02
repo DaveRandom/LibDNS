@@ -4,12 +4,12 @@
  *
  * PHP version 5.4
  *
- * @category   LibDNS
- * @package    Decoder
- * @author     Chris Wright <https://github.com/DaveRandom>
- * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
- * @version    2.0.0
+ * @category LibDNS
+ * @package Decoder
+ * @author Chris Wright <https://github.com/DaveRandom>
+ * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license http://www.opensource.org/licenses/mit-license.html MIT License
+ * @version 2.0.0
  */
 namespace LibDNS\Decoder;
 
@@ -35,9 +35,9 @@ use \LibDNS\Records\Types\TypeBuilder;
 /**
  * Decodes raw network data to Message objects
  *
- * @category   LibDNS
- * @package    Decoder
- * @author     Chris Wright <https://github.com/DaveRandom>
+ * @category LibDNS
+ * @package Decoder
+ * @author Chris Wright <https://github.com/DaveRandom>
  */
 class Decoder
 {
@@ -74,11 +74,11 @@ class Decoder
     /**
      * Constructor
      *
-     * @param \LibDNS\Packets\PacketFactory          $packetFactory
-     * @param \LibDNS\Messages\MessageFactory        $messageFactory
-     * @param \LibDNS\Records\QuestionFactory        $questionFactory
-     * @param \LibDNS\Records\ResourceBuilder        $resourceBuilder
-     * @param \LibDNS\Records\Types\TypeBuilder      $typeBuilder
+     * @param \LibDNS\Packets\PacketFactory $packetFactory
+     * @param \LibDNS\Messages\MessageFactory $messageFactory
+     * @param \LibDNS\Records\QuestionFactory $questionFactory
+     * @param \LibDNS\Records\ResourceBuilder $resourceBuilder
+     * @param \LibDNS\Records\Types\TypeBuilder $typeBuilder
      * @param \LibDNS\Decoder\DecodingContextFactory $decodingContextFactory
      */
     public function __construct(
@@ -101,10 +101,8 @@ class Decoder
      * Read a specified number of bytes of data from a packet
      *
      * @param \LibDNS\Packets\Packet $packet
-     * @param int                    $length
-     *
+     * @param int $length
      * @return string
-     *
      * @throws \UnexpectedValueException When the read operation does not result in the requested number of bytes
      */
     private function readDataFromPacket(Packet $packet, $length)
@@ -120,8 +118,7 @@ class Decoder
      * Decode the header section of the message
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\Messages\Message        $message
-     *
+     * @param \LibDNS\Messages\Message $message
      * @throws \UnexpectedValueException When the header section is invalid
      */
     private function decodeHeader(DecodingContext $decodingContext, Message $message)
@@ -151,11 +148,9 @@ class Decoder
      * Decode an Anything field
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\Records\Types\Anything  $anything        The object to populate with the result
-     * @param int                             $length
-     *
+     * @param \LibDNS\Records\Types\Anything $anything The object to populate with the result
+     * @param int $length
      * @return int The number of packet bytes consumed by the operation
-     *
      * @throws \UnexpectedValueException When the packet data is invalid
      */
     private function decodeAnything(DecodingContext $decodingContext, Anything $anything, $length)
@@ -169,11 +164,9 @@ class Decoder
      * Decode a BitMap field
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\Records\Types\BitMap    $bitMap          The object to populate with the result
-     * @param int                             $length
-     *
+     * @param \LibDNS\Records\Types\BitMap $bitMap The object to populate with the result
+     * @param int $length
      * @return int The number of packet bytes consumed by the operation
-     *
      * @throws \UnexpectedValueException When the packet data is invalid
      */
     private function decodeBitMap(DecodingContext $decodingContext, BitMap $bitMap, $length)
@@ -187,10 +180,8 @@ class Decoder
      * Decode a Char field
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\Records\Types\Char      $char            The object to populate with the result
-     *
+     * @param \LibDNS\Records\Types\Char $char The object to populate with the result
      * @return int The number of packet bytes consumed by the operation
-     *
      * @throws \UnexpectedValueException When the packet data is invalid
      */
     private function decodeChar(DecodingContext $decodingContext, Char $char)
@@ -204,11 +195,9 @@ class Decoder
     /**
      * Decode a CharacterString field
      *
-     * @param \LibDNS\Decoder\DecodingContext       $decodingContext
+     * @param \LibDNS\Decoder\DecodingContext $decodingContext
      * @param \LibDNS\Records\Types\CharacterString $characterString The object to populate with the result
-     *
      * @return int The number of packet bytes consumed by the operation
-     *
      * @throws \UnexpectedValueException When the packet data is invalid
      */
     private function decodeCharacterString(DecodingContext $decodingContext, CharacterString $characterString)
@@ -223,11 +212,9 @@ class Decoder
     /**
      * Decode a DomainName field
      *
-     * @param \LibDNS\Decoder\DecodingContext  $decodingContext
-     * @param \LibDNS\Records\Types\DomainName $domainName      The object to populate with the result
-     *
+     * @param \LibDNS\Decoder\DecodingContext $decodingContext
+     * @param \LibDNS\Records\Types\DomainName $domainName The object to populate with the result
      * @return int The number of packet bytes consumed by the operation
-     *
      * @throws \UnexpectedValueException When the packet data is invalid
      */
     private function decodeDomainName(DecodingContext $decodingContext, DomainName $domainName)
@@ -285,11 +272,9 @@ class Decoder
     /**
      * Decode an IPv4Address field
      *
-     * @param \LibDNS\Decoder\DecodingContext   $decodingContext
-     * @param \LibDNS\Records\Types\IPv4Address $ipv4Address     The object to populate with the result
-     *
+     * @param \LibDNS\Decoder\DecodingContext $decodingContext
+     * @param \LibDNS\Records\Types\IPv4Address $ipv4Address The object to populate with the result
      * @return int The number of packet bytes consumed by the operation
-     *
      * @throws \UnexpectedValueException When the packet data is invalid
      */
     private function decodeIPv4Address(DecodingContext $decodingContext, IPv4Address $ipv4Address)
@@ -303,11 +288,9 @@ class Decoder
     /**
      * Decode an IPv6Address field
      *
-     * @param \LibDNS\Decoder\DecodingContext   $decodingContext
-     * @param \LibDNS\Records\Types\IPv6Address $ipv6Address     The object to populate with the result
-     *
+     * @param \LibDNS\Decoder\DecodingContext $decodingContext
+     * @param \LibDNS\Records\Types\IPv6Address $ipv6Address The object to populate with the result
      * @return int The number of packet bytes consumed by the operation
-     *
      * @throws \UnexpectedValueException When the packet data is invalid
      */
     private function decodeIPv6Address(DecodingContext $decodingContext, IPv6Address $ipv6Address)
@@ -322,10 +305,8 @@ class Decoder
      * Decode a Long field
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\Records\Types\Long      $long            The object to populate with the result
-     *
+     * @param \LibDNS\Records\Types\Long $long The object to populate with the result
      * @return int The number of packet bytes consumed by the operation
-     *
      * @throws \UnexpectedValueException When the packet data is invalid
      */
     private function decodeLong(DecodingContext $decodingContext, Long $long)
@@ -340,10 +321,8 @@ class Decoder
      * Decode a Short field
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\Records\Types\Short     $short           The object to populate with the result
-     *
+     * @param \LibDNS\Records\Types\Short $short The object to populate with the result
      * @return int The number of packet bytes consumed by the operation
-     *
      * @throws \UnexpectedValueException When the packet data is invalid
      */
     private function decodeShort(DecodingContext $decodingContext, Short $short)
@@ -358,11 +337,9 @@ class Decoder
      * Decode a Type field
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\Records\Types\Type      $type            The object to populate with the result
-     * @param int                             $length          Expected data length
-     *
+     * @param \LibDNS\Records\Types\Type $type The object to populate with the result
+     * @param int $length Expected data length
      * @return int The number of packet bytes consumed by the operation
-     *
      * @throws \UnexpectedValueException When the packet data is invalid
      * @throws \InvalidArgumentException When the Type subtype is unknown
      */
@@ -397,9 +374,7 @@ class Decoder
      * Decode a question record
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     *
      * @return \LibDNS\Records\Question
-     *
      * @throws \UnexpectedValueException When the record is invalid
      */
     private function decodeQuestionRecord(DecodingContext $decodingContext)
@@ -420,9 +395,7 @@ class Decoder
      * Decode a resource record
      *
      * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     *
      * @return \LibDNS\Records\Resource
-     *
      * @throws \UnexpectedValueException When the record is invalid
      * @throws \InvalidArgumentException When a type subtype is unknown
      */
@@ -467,9 +440,7 @@ class Decoder
      * Decode a Message from raw network data
      *
      * @param string $data The data string to decode
-     *
      * @return \LibDNS\Messages\Message
-     *
      * @throws \UnexpectedValueException When the packet data is invalid
      * @throws \InvalidArgumentException When a type subtype is unknown
      */

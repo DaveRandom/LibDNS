@@ -4,12 +4,12 @@
  *
  * PHP version 5.4
  *
- * @category   LibDNS
- * @package    Messages
- * @author     Chris Wright <https://github.com/DaveRandom>
- * @copyright  Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license    http://www.opensource.org/licenses/mit-license.html  MIT License
- * @version    2.0.0
+ * @category LibDNS
+ * @package Messages
+ * @author Chris Wright <https://github.com/DaveRandom>
+ * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
+ * @license http://www.opensource.org/licenses/mit-license.html MIT License
+ * @version 2.0.0
  */
 namespace LibDNS\Messages;
 
@@ -19,9 +19,9 @@ use \LibDNS\Records\RecordTypes;
 /**
  * Represents a DNS protocol message
  *
- * @category   LibDNS
- * @package    Messages
- * @author     Chris Wright <https://github.com/DaveRandom>
+ * @category LibDNS
+ * @package Messages
+ * @author Chris Wright <https://github.com/DaveRandom>
  */
 class Message
 {
@@ -89,8 +89,7 @@ class Message
      * Constructor
      *
      * @param \LibDNS\Records\RecordCollectionFactory $recordCollectionFactory Factory which makes RecordCollection objects
-     * @param int                                     $type                    Value of the message type field
-     *
+     * @param int $type Value of the message type field
      * @throws \RangeException When the supplied message type is outside the valid range 0 - 1
      */
     public function __construct(RecordCollectionFactory $recordCollectionFactory, $type = null)
@@ -119,7 +118,6 @@ class Message
      * Set the value of the message ID field
      *
      * @param int $id The new value
-     *
      * @throws \RangeException When the supplied value is outside the valid range 0 - 65535
      */
     public function setID($id)
@@ -146,7 +144,6 @@ class Message
      * Set the value of the message type field
      *
      * @param int $type The new value
-     *
      * @throws \RangeException When the supplied value is outside the valid range 0 - 1
      */
     public function setType($type)
@@ -173,7 +170,6 @@ class Message
      * Set the value of the message opcode field
      *
      * @param int $opCode The new value
-     *
      * @throws \RangeException When the supplied value is outside the valid range 0 - 15
      */
     public function setOpCode($opCode)
@@ -190,7 +186,6 @@ class Message
      * Inspect the value of the authoritative field and optionally set a new value
      *
      * @param bool $newValue The new value
-     *
      * @return bool The old value
      */
     public function isAuthoritative($newValue = null)
@@ -208,7 +203,6 @@ class Message
      * Inspect the value of the truncated field and optionally set a new value
      *
      * @param bool $newValue The new value
-     *
      * @return bool The old value
      */
     public function isTruncated($newValue = null)
@@ -226,7 +220,6 @@ class Message
      * Inspect the value of the recusion desired field and optionally set a new value
      *
      * @param bool $newValue The new value
-     *
      * @return bool The old value
      */
     public function isRecursionDesired($newValue = null)
@@ -244,7 +237,6 @@ class Message
      * Inspect the value of the recursion available field and optionally set a new value
      *
      * @param bool $newValue The new value
-     *
      * @return bool The old value
      */
     public function isRecursionAvailable($newValue = null)
@@ -272,7 +264,6 @@ class Message
      * Set the value of the message response code field
      *
      * @param int $responseCode The new value
-     *
      * @throws \RangeException When the supplied value is outside the valid range 0 - 15
      */
     public function setResponseCode($responseCode)
