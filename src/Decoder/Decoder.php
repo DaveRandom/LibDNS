@@ -72,6 +72,11 @@ class Decoder
     private $decodingContextFactory;
 
     /**
+     * @var bool
+     */
+    private $allowTrailingData;
+
+    /**
      * Constructor
      *
      * @param \LibDNS\Packets\PacketFactory $packetFactory
@@ -80,6 +85,7 @@ class Decoder
      * @param \LibDNS\Records\ResourceBuilder $resourceBuilder
      * @param \LibDNS\Records\Types\TypeBuilder $typeBuilder
      * @param \LibDNS\Decoder\DecodingContextFactory $decodingContextFactory
+     * @param bool $allowTrailingData
      */
     public function __construct(
         PacketFactory $packetFactory,
@@ -87,7 +93,8 @@ class Decoder
         QuestionFactory $questionFactory,
         ResourceBuilder $resourceBuilder,
         TypeBuilder $typeBuilder,
-        DecodingContextFactory $decodingContextFactory
+        DecodingContextFactory $decodingContextFactory,
+        $allowTrailingData = false
     ) {
         $this->packetFactory = $packetFactory;
         $this->messageFactory = $messageFactory;
@@ -95,6 +102,7 @@ class Decoder
         $this->resourceBuilder = $resourceBuilder;
         $this->typeBuilder = $typeBuilder;
         $this->decodingContextFactory = $decodingContextFactory;
+        $this->allowTrailingData = $allowTrailingData;
     }
 
     /**
@@ -476,7 +484,7 @@ class Decoder
             $additionalRecords->add($this->decodeResourceRecord($decodingContext));
         }
 
-        if ($packet->getBytesRemaining() !== 0) {
+        if (!$this->allowTrailingData && $packet->getBytesRemaining() !== 0) {
             throw new \UnexpectedValueException('Decode error: Unexpected data at end of packet');
         }
 

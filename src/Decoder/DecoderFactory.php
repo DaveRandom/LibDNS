@@ -40,9 +40,10 @@ class DecoderFactory
      * Create a new Decoder object
      *
      * @param \LibDNS\Records\TypeDefinitions\TypeDefinitionManager $typeDefinitionManager
-     * @return \LibDNS\Decoder\Decoder
+     * @param bool $allowTrailingData
+     * @return Decoder
      */
-    public function create(TypeDefinitionManager $typeDefinitionManager = null)
+    public function create(TypeDefinitionManager $typeDefinitionManager = null, $allowTrailingData = false)
     {
         $typeBuilder = new TypeBuilder(new TypeFactory);
 
@@ -62,7 +63,8 @@ class DecoderFactory
                 )
             ),
             $typeBuilder,
-            new DecodingContextFactory
+            new DecodingContextFactory,
+            $allowTrailingData
         );
     }
 }
