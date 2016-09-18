@@ -32,6 +32,9 @@ use \LibDNS\Records\Types\Short;
 use \LibDNS\Records\Types\Types;
 use \LibDNS\Records\Types\TypeBuilder;
 
+class ZeroSizeFieldException extends \Exception {}
+class NonexistentTLDException extends \Exception {}
+
 /**
  * Decodes raw network data to Message objects
  *
@@ -234,6 +237,8 @@ class Decoder
         $labels = [];
         $totalLength = 0;
 
+        $initial_package_length = $packet->getBytesRemaining();
+
         while (++$totalLength && $length = ord($this->readDataFromPacket($packet, 1))) {
             $labelType = $length & 0b11000000;
 
@@ -257,6 +262,10 @@ class Decoder
             } else {
                 throw new \UnexpectedValueException('Decode error: Invalid label type ' . $labelType . 'in domain name at position ' . $startIndex);
             }
+        }
+
+        if($initial_package_length - $packet->getBytesRemaining() === 1) {
+            throw new ZeroSizeFieldException('Zero size field detected ... probably tld without authority');                       
         }
 
         if (!$labels) {
@@ -362,7 +371,7 @@ class Decoder
         } else if ($type instanceof CharacterString) {
             $result = $this->decodeCharacterString($decodingContext, $type);
         } else if ($type instanceof DomainName) {
-            $result = $this->decodeDomainName($decodingContext, $type);
+            $result = $this->decodeDomainName($decodingContext, $type);            
         } else if ($type instanceof IPv4Address) {
             $result = $this->decodeIPv4Address($decodingContext, $type);
         } else if ($type instanceof IPv6Address) {
@@ -411,7 +420,12 @@ class Decoder
     {
         /** @var \LibDNS\Records\Types\DomainName $domainName */
         $domainName = $this->typeBuilder->build(Types::DOMAIN_NAME);
-        $this->decodeDomainName($decodingContext, $domainName);
+        try {
+          $this->decodeDomainName($decodingContext, $domainName);
+        } catch (ZeroSizeFieldException $e) {
+            throw new NonexistentTLDException();
+        }
+
         $meta = unpack('ntype/nclass/Nttl/nlength', $this->readDataFromPacket($decodingContext->getPacket(), 10));
 
         $resource = $this->resourceBuilder->build($meta['type']);
@@ -425,8 +439,12 @@ class Decoder
         $fieldDef = $index = null;
         foreach ($resource->getData()->getTypeDefinition() as $index => $fieldDef) {
             $field = $this->typeBuilder->build($fieldDef->getType());
-            $remainingLength -= $this->decodeType($decodingContext, $field, $remainingLength);
-            $data->setField($index, $field);
+            try {
+              $remainingLength -= $this->decodeType($decodingContext, $field, $remainingLength);
+              $data->setField($index, $field);
+            } catch (ZeroSizeFieldException $e) {
+                $remainingLength -=1;
+            }
         }
 
         if ($fieldDef->allowsMultiple()) {
