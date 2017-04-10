@@ -1,5 +1,5 @@
 {
-    "name": "daverandom/libdns",
+    "name": "domraider/libdns",
     "description": "DNS protocol implementation written in pure PHP",
     "license": "MIT",
     "keywords": ["dns"],
