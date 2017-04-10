@@ -13,6 +13,7 @@
  */
 namespace LibDNS\Decoder;
 
+use LibDNS\Packets\LabelRegistry;
 use \LibDNS\Packets\PacketFactory;
 use \LibDNS\Packets\Packet;
 use \LibDNS\Messages\MessageFactory;
@@ -235,27 +236,15 @@ class Decoder
         $totalLength = 0;
 
         while (++$totalLength && $length = ord($this->readDataFromPacket($packet, 1))) {
-            $labelType = $length & 0b11000000;
-
-            if ($labelType === 0b00000000) {
-                $index = $packet->getPointer() - 1;
-                $label = $this->readDataFromPacket($packet, $length);
-
-                array_unshift($labels, [$index, $label]);
-                $totalLength += $length;
-            } else if ($labelType === 0b11000000) {
-                $index = (($length & 0b00111111) << 8) | ord($this->readDataFromPacket($packet, 1));
-                $ref = $labelRegistry->lookupLabel($index);
-                if ($ref === null) {
-                    throw new \UnexpectedValueException('Decode error: Invalid compression pointer reference in domain name at position ' . $startIndex);
-                }
-
-                array_unshift($labels, $ref);
-                $totalLength++;
-
+            if (!$this->parsePacket($packet, $labelRegistry, $length, $totalLength, $labels)) {
                 break;
-            } else {
-                throw new \UnexpectedValueException('Decode error: Invalid label type ' . $labelType . 'in domain name at position ' . $startIndex);
+            }
+        }
+
+        if (isset($length) && !$labels) {
+            // last empty value ?
+            if ($packet->getLength() >= $packet->getPointer()) {
+                $this->parsePacket($packet, $labelRegistry, $length, $totalLength, $labels);
             }
         }
 
@@ -275,6 +264,45 @@ class Decoder
         $domainName->setLabels($result);
 
         return $totalLength;
+    }
+
+    /**
+     * Parse packet
+     *
+     * @param Packet $packet
+     * @param LabelRegistry $labelRegistry
+     * @param $length
+     * @param $totalLength
+     * @param $labels
+     * @return bool
+     */
+    protected function parsePacket(Packet $packet, LabelRegistry $labelRegistry, $length, &$totalLength, &$labels)
+    {
+        $labelType = $length & 0b11000000;
+
+        if ($labelType === 0b00000000) {
+            $index = $packet->getPointer() - 1;
+            $label = $this->readDataFromPacket($packet, $length);
+
+            array_unshift($labels, [$index, $label]);
+            $totalLength += $length;
+        } else if ($labelType === 0b11000000) {
+            $index = (($length & 0b00111111) << 8) | ord($this->readDataFromPacket($packet, 1));
+            $ref = $labelRegistry->lookupLabel($index);
+            if ($ref === null) {
+                throw new \UnexpectedValueException('Decode error: Invalid compression pointer reference in domain name at position ' . $startIndex);
+            }
+
+            array_unshift($labels, $ref);
+            $totalLength++;
+
+            return false;
+
+        } else {
+            throw new \UnexpectedValueException('Decode error: Invalid label type ' . $labelType . 'in domain name at position ' . $startIndex);
+        }
+
+        return true;
     }
 
     /**
