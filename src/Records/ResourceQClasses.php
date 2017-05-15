@@ -20,7 +20,7 @@ namespace LibDNS\Records;
  * @package Records
  * @author Chris Wright <https://github.com/DaveRandom>
  */
-class ResourceQClasses extends ResourceClasses
+final class ResourceQClasses extends ResourceClasses
 {
     const ANY = 255;
 }

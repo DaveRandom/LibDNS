@@ -61,7 +61,7 @@ class IPv6Address extends Type
                 $currentPos = $currentLen = 0;
             }
 
-            $shorts[$i] = dechex($shorts[$i]);
+            $shorts[$i] = \dechex($shorts[$i]);
         }
         if ($inBlock) {
             $compressLen = $currentLen;
@@ -77,10 +77,10 @@ class IPv6Address extends Type
                 $replace = [''];
             }
 
-            array_splice($shorts, $compressPos, $compressLen, $replace);
+            \array_splice($shorts, $compressPos, $compressLen, $replace);
         }
 
-        return implode(':', $shorts);
+        return \implode(':', $shorts);
     }
 
     /**
@@ -91,7 +91,7 @@ class IPv6Address extends Type
      */
     public function __construct($value = null)
     {
-        if (is_array($value)) {
+        if (\is_array($value)) {
             $this->setShorts($value);
         } else {
             parent::__construct($value);
@@ -104,22 +104,22 @@ class IPv6Address extends Type
      * @param string $value The new value
      * @throws \UnexpectedValueException When the supplied value is outside the valid length range 0 - 65535
      */
-    public function setValue($value)
+    public function setValue(string $value)
     {
-        $shorts = explode(':', (string) $value);
+        $shorts = \explode(':', $value);
 
-        $count = count($shorts);
+        $count = \count($shorts);
         if ($count < 3 || $count > 8) {
             throw new \UnexpectedValueException('Value is not a valid IPv6 address: invalid short count');
         } else if ($shorts[0] === '' && $shorts[1] === '') {
-            $shorts = array_pad($shorts, -8, '0');
+            $shorts = \array_pad($shorts, -8, '0');
         } else if ($shorts[$count - 2] === '' && $shorts[$count - 1] === '') {
-            $shorts = array_pad($shorts, 8, '0');
-        } else if (false !== $pos = array_search('', $shorts, true)) {
-            array_splice($shorts, $pos, 1, array_fill(0, 8 - ($count - 1), '0'));
+            $shorts = \array_pad($shorts, 8, '0');
+        } else if (false !== $pos = \array_search('', $shorts, true)) {
+            \array_splice($shorts, $pos, 1, \array_fill(0, 8 - ($count - 1), '0'));
         }
 
-        $this->setShorts(array_map('hexdec', $shorts));
+        $this->setShorts(\array_map('hexdec', $shorts));
     }
 
     /**
@@ -127,7 +127,7 @@ class IPv6Address extends Type
      *
      * @return int[]
      */
-    public function getShorts()
+    public function getShorts(): array
     {
         return $this->shorts;
     }
@@ -140,19 +140,19 @@ class IPv6Address extends Type
      */
     public function setShorts(array $shorts)
     {
-        if (count($shorts) !== 8) {
+        if (\count($shorts) !== 8) {
             throw new \UnexpectedValueException('Short list is not a valid IPv6 address: invalid short count');
         }
 
         foreach ($shorts as &$short) {
-            if (strspn((string)$short, "0123456789") !== strlen($short) || $short < 0x0000 || $short > 0xffff) {
+            if (\strspn((string)$short, "0123456789") !== \strlen($short) || $short < 0x0000 || $short > 0xffff) {
                 throw new \UnexpectedValueException('Short list is not a valid IPv6 address: invalid short value ' . $short);
             }
 
             $short = (int) $short;
         }
 
-        $this->shorts = array_values($shorts);
+        $this->shorts = \array_values($shorts);
         $this->value = $this->createCompressedString($this->shorts);
     }
 }

@@ -29,7 +29,7 @@ class EncoderFactory
      *
      * @return \LibDNS\Encoder\Encoder
      */
-    public function create()
+    public function create(): Encoder
     {
         return new Encoder(new PacketFactory, new EncodingContextFactory);
     }

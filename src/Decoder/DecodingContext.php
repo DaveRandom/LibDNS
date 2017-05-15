@@ -72,7 +72,7 @@ class DecodingContext
      *
      * @return \LibDNS\Packets\Packet
      */
-    public function getPacket()
+    public function getPacket(): Packet
     {
         return $this->packet;
     }
@@ -82,7 +82,7 @@ class DecodingContext
      *
      * @return \LibDNS\Packets\LabelRegistry
      */
-    public function getLabelRegistry()
+    public function getLabelRegistry(): LabelRegistry
     {
         return $this->labelRegistry;
     }
@@ -92,7 +92,7 @@ class DecodingContext
      *
      * @return int
      */
-    public function getExpectedQuestionRecords()
+    public function getExpectedQuestionRecords(): int
     {
         return $this->expectedQuestionRecords;
     }
@@ -102,9 +102,9 @@ class DecodingContext
      *
      * @param int $expectedQuestionRecords
      */
-    public function setExpectedQuestionRecords($expectedQuestionRecords)
+    public function setExpectedQuestionRecords(int $expectedQuestionRecords)
     {
-        $this->expectedQuestionRecords = (int) $expectedQuestionRecords;
+        $this->expectedQuestionRecords = $expectedQuestionRecords;
     }
 
     /**
@@ -112,7 +112,7 @@ class DecodingContext
      *
      * @return int
      */
-    public function getExpectedAnswerRecords()
+    public function getExpectedAnswerRecords(): int
     {
         return $this->expectedAnswerRecords;
     }
@@ -122,9 +122,9 @@ class DecodingContext
      *
      * @param int $expectedAnswerRecords
      */
-    public function setExpectedAnswerRecords($expectedAnswerRecords)
+    public function setExpectedAnswerRecords(int $expectedAnswerRecords)
     {
-        $this->expectedAnswerRecords = (int) $expectedAnswerRecords;
+        $this->expectedAnswerRecords = $expectedAnswerRecords;
     }
 
     /**
@@ -132,7 +132,7 @@ class DecodingContext
      *
      * @return int
      */
-    public function getExpectedAuthorityRecords()
+    public function getExpectedAuthorityRecords(): int
     {
         return $this->expectedAuthorityRecords;
     }
@@ -142,9 +142,9 @@ class DecodingContext
      *
      * @param int $expectedAuthorityRecords
      */
-    public function setExpectedAuthorityRecords($expectedAuthorityRecords)
+    public function setExpectedAuthorityRecords(int $expectedAuthorityRecords)
     {
-        $this->expectedAuthorityRecords = (int) $expectedAuthorityRecords;
+        $this->expectedAuthorityRecords = $expectedAuthorityRecords;
     }
 
     /**
@@ -152,7 +152,7 @@ class DecodingContext
      *
      * @return int
      */
-    public function getExpectedAdditionalRecords()
+    public function getExpectedAdditionalRecords(): int
     {
         return $this->expectedAdditionalRecords;
     }
@@ -162,8 +162,8 @@ class DecodingContext
      *
      * @param int $expectedAdditionalRecords
      */
-    public function setExpectedAdditionalRecords($expectedAdditionalRecords)
+    public function setExpectedAdditionalRecords(int $expectedAdditionalRecords)
     {
-        $this->expectedAdditionalRecords = (int) $expectedAdditionalRecords;
+        $this->expectedAdditionalRecords = $expectedAdditionalRecords;
     }
 }

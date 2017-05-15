@@ -41,7 +41,7 @@ class Resource extends Record
      * @param int $type Can be indicated using the ResourceTypes enum
      * @param \LibDNS\Records\RData $data
      */
-    public function __construct(TypeFactory $typeFactory, $type, $data)
+    public function __construct(TypeFactory $typeFactory, int $type, RData $data)
     {
         $this->typeFactory = $typeFactory;
         $this->type = $type;
@@ -53,7 +53,7 @@ class Resource extends Record
      *
      * @return int
      */
-    public function getTTL()
+    public function getTTL(): int
     {
         return $this->ttl;
     }
@@ -64,9 +64,8 @@ class Resource extends Record
      * @param int $ttl The new value
      * @throws \RangeException When the supplied value is outside the valid range 0 - 4294967296
      */
-    public function setTTL($ttl)
+    public function setTTL(int $ttl)
     {
-        $ttl = (int) $ttl;
         if ($ttl < 0 || $ttl > 4294967296) {
             throw new \RangeException('Record class must be in the range 0 - 4294967296');
         }
@@ -79,7 +78,7 @@ class Resource extends Record
      *
      * @return \LibDNS\Records\RData
      */
-    public function getData()
+    public function getData(): RData
     {
         return $this->data;
     }

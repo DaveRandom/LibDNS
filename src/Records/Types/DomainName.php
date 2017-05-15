@@ -42,7 +42,7 @@ class DomainName extends Type
      */
     public function __construct($value = null)
     {
-        if (is_array($value)) {
+        if (\is_array($value)) {
             $this->setLabels($value);
         } else {
             parent::__construct($value);
@@ -55,9 +55,9 @@ class DomainName extends Type
      * @param string $value The new value
      * @throws \UnexpectedValueException When the supplied value is not a valid domain name
      */
-    public function setValue($value)
+    public function setValue(string $value)
     {
-        $this->setLabels(explode('.', $value));
+        $this->setLabels(\explode('.', $value));
     }
 
     /**
@@ -66,9 +66,9 @@ class DomainName extends Type
      * @param bool $tldFirst Whether to return the label list ordered with the TLD label first
      * @return string[]
      */
-    public function getLabels($tldFirst = false)
+    public function getLabels($tldFirst = false): array
     {
-        return $tldFirst ? array_reverse($this->labels) : $this->labels;
+        return $tldFirst ? \array_reverse($this->labels) : $this->labels;
     }
 
     /**
@@ -92,7 +92,7 @@ class DomainName extends Type
                 throw new \InvalidArgumentException('Label list is not a valid domain name: Label ' . $label . ' length exceeds 63 byte limit');
             }
             $length += $labelLength + 1;
-            $label = strtolower($label);
+            $label = \strtolower($label);
             $count++;
         }
 
@@ -105,7 +105,7 @@ class DomainName extends Type
             throw new \InvalidArgumentException('Label list is not a valid domain name: Total length exceeds 255 byte limit');
         }
 
-        $this->labels = $tldFirst ? array_reverse($labels) : $labels;
-        $this->value = implode('.', $this->labels);
+        $this->labels = $tldFirst ? \array_reverse($labels) : $labels;
+        $this->value = \implode('.', $this->labels);
     }
 }

@@ -58,9 +58,9 @@ class RData implements \Iterator, \Countable
     public function __toString()
     {
         if ($handler = $this->typeDef->getToStringFunction()) {
-            $result = call_user_func_array($handler, $this->fields);
+            $result = \call_user_func_array($handler, $this->fields);
         } else {
-            $result = implode(',', $this->fields);
+            $result = \implode(',', $this->fields);
         }
 
         return $result;
@@ -73,7 +73,7 @@ class RData implements \Iterator, \Countable
      * @return \LibDNS\Records\Types\Type
      * @throws \OutOfBoundsException When the supplied index does not refer to a valid field
      */
-    public function getField($index)
+    public function getField(int $index)
     {
         if (!isset($this->fields[$index])) {
             throw new \OutOfBoundsException('Index ' . $index . ' does not refer to a valid field');
@@ -89,7 +89,7 @@ class RData implements \Iterator, \Countable
      * @param \LibDNS\Records\Types\Type $value
      * @throws \InvalidArgumentException When the supplied index/value pair does not match the type definition
      */
-    public function setField($index, Type $value)
+    public function setField(int $index, Type $value)
     {
         if (!$this->typeDef->getFieldDefinition($index)->assertDataValid($value)) {
             throw new \InvalidArgumentException('The supplied value is not valid for the specified index');
@@ -105,7 +105,7 @@ class RData implements \Iterator, \Countable
      * @return \LibDNS\Records\Types\Type
      * @throws \OutOfBoundsException When the supplied name does not refer to a valid field
      */
-    public function getFieldByName($name)
+    public function getFieldByName(string $name): Type
     {
         return $this->getField($this->typeDef->getFieldIndexByName($name));
     }
@@ -118,7 +118,7 @@ class RData implements \Iterator, \Countable
      * @throws \OutOfBoundsException When the supplied name does not refer to a valid field
      * @throws \InvalidArgumentException When the supplied value does not match the type definition
      */
-    public function setFieldByName($name, Type $value)
+    public function setFieldByName(string $name, Type $value)
     {
         $this->setField($this->typeDef->getFieldIndexByName($name), $value);
     }
@@ -128,7 +128,7 @@ class RData implements \Iterator, \Countable
      *
      * @return \LibDNS\Records\TypeDefinitions\TypeDefinition
      */
-    public function getTypeDefinition()
+    public function getTypeDefinition(): TypeDefinition
     {
         return $this->typeDef;
     }
@@ -138,9 +138,9 @@ class RData implements \Iterator, \Countable
      *
      * @return \LibDNS\Records\Types\Type
      */
-    public function current()
+    public function current(): Type
     {
-        return current($this->fields);
+        return \current($this->fields);
     }
 
     /**
@@ -148,9 +148,9 @@ class RData implements \Iterator, \Countable
      *
      * @return int
      */
-    public function key()
+    public function key(): int
     {
-        return key($this->fields);
+        return \key($this->fields);
     }
 
     /**
@@ -158,7 +158,7 @@ class RData implements \Iterator, \Countable
      */
     public function next()
     {
-        $this->pointerValid = next($this->fields) !== false;
+        $this->pointerValid = \next($this->fields) !== false;
     }
 
     /**
@@ -166,8 +166,8 @@ class RData implements \Iterator, \Countable
      */
     public function rewind()
     {
-        reset($this->fields);
-        $this->pointerValid = count($this->fields) > 0;
+        \reset($this->fields);
+        $this->pointerValid = \count($this->fields) > 0;
     }
 
     /**
@@ -175,7 +175,7 @@ class RData implements \Iterator, \Countable
      *
      * @return bool
      */
-    public function valid()
+    public function valid(): bool
     {
         return $this->pointerValid;
     }
@@ -185,8 +185,8 @@ class RData implements \Iterator, \Countable
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
-        return count($this->fields);
+        return \count($this->fields);
     }
 }

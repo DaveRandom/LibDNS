@@ -20,7 +20,7 @@ namespace LibDNS\Records;
  * @package Records
  * @author Chris Wright <https://github.com/DaveRandom>
  */
-class ResourceQTypes extends ResourceTypes
+final class ResourceQTypes extends ResourceTypes
 {
     const AXFR = 252;
     const MAILB = 253;

@@ -32,7 +32,7 @@ class FieldDefinitionFactory
      * @param int $minimumValues
      * @return \LibDNS\Records\TypeDefinitions\FieldDefinition
      */
-    public function create($index, $name, $type, $allowsMultiple, $minimumValues)
+    public function create(int $index, string $name, int $type, bool $allowsMultiple, int $minimumValues): FieldDefinition
     {
         return new FieldDefinition($index, $name, $type, $allowsMultiple, $minimumValues);
     }

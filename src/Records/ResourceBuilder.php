@@ -59,7 +59,7 @@ class ResourceBuilder
      * @param int $type Type of the resource, can be indicated using the ResourceTypes enum
      * @return \LibDNS\Records\Resource
      */
-    public function build($type)
+    public function build(int $type): Resource
     {
         $typeDefinition = $this->typeDefinitionManager->getTypeDefinition($type);
         $rData = $this->rDataBuilder->build($typeDefinition);

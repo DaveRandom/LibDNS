@@ -29,7 +29,7 @@ class RecordCollectionFactory
      * @return \LibDNS\Records\RecordCollection
      * @throws \InvalidArgumentException When the specified record type is invalid
      */
-    public function create($type)
+    public function create(int $type): RecordCollection
     {
         return new RecordCollection($type);
     }

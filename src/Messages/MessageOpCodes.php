@@ -22,7 +22,7 @@ use \LibDNS\Enumeration;
  * @package Messages
  * @author Chris Wright <https://github.com/DaveRandom>
  */
-class MessageOpCodes extends Enumeration
+final class MessageOpCodes extends Enumeration
 {
     const QUERY = 0;
     const IQUERY = 1;

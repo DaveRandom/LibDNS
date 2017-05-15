@@ -31,7 +31,7 @@ class DecodingContextFactory
      * @param \LibDNS\Packets\Packet $packet The packet to be decoded
      * @return \LibDNS\Decoder\DecodingContext
      */
-    public function create(Packet $packet)
+    public function create(Packet $packet): DecodingContext
     {
         return new DecodingContext($packet, new LabelRegistry);
     }

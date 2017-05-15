@@ -30,7 +30,7 @@ class RDataFactory
      * @param \LibDNS\Records\TypeDefinitions\TypeDefinition $typeDefinition
      * @return \LibDNS\Records\RData
      */
-    public function create(TypeDefinition $typeDefinition)
+    public function create(TypeDefinition $typeDefinition): RData
     {
         return new RData($typeDefinition);
     }

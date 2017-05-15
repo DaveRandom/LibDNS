@@ -30,16 +30,17 @@ class Long extends Type
     /**
      * Set the internal value
      *
-     * @param int $value The new value
+     * @param string $value The new value
      * @throws \UnderflowException When the supplied value is less than 0
      * @throws \OverflowException When the supplied value is greater than 4294967296
      */
-    public function setValue($value)
+    public function setValue(string $value)
     {
         $value = (int) $value;
+
         if ($value < 0) {
             throw new \UnderflowException('Long integer value must be in the range 0 - 4294967296');
-        } else if ($value > 4294967296) {
+        } else if ($value > 0xffffffff) {
             throw new \OverflowException('Long integer value must be in the range 0 - 4294967296');
         }
 

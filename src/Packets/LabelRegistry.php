@@ -39,13 +39,13 @@ class LabelRegistry
      * @param string|string[] $labels
      * @param int $index
      */
-    public function register($labels, $index)
+    public function register($labels, int $index)
     {
-        if (is_array($labels)) {
+        if (\is_array($labels)) {
             $labelsArr = $labels;
-            $labelsStr = implode('.', $labels);
+            $labelsStr = \implode('.', $labels);
         } else {
-            $labelsArr = explode('.', $labels);
+            $labelsArr = \explode('.', $labels);
             $labelsStr = (string) $labels;
         }
 
@@ -62,9 +62,9 @@ class LabelRegistry
      * @param string $label
      * @return int|null
      */
-    public function lookupIndex($label)
+    public function lookupIndex(string $label)
     {
-        return isset($this->labels[$label]) ? $this->labels[$label] : null;
+        return $this->labels[$label] ?? null;
     }
 
     /**
@@ -73,8 +73,8 @@ class LabelRegistry
      * @param int $index
      * @return string[]|null
      */
-    public function lookupLabel($index)
+    public function lookupLabel(int $index)
     {
-        return isset($this->indexes[$index]) ? $this->indexes[$index] : null;
+        return $this->indexes[$index] ?? null;
     }
 }

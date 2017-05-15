@@ -30,16 +30,17 @@ class Short extends Type
     /**
      * Set the internal value
      *
-     * @param int $value The new value
+     * @param string $value The new value
      * @throws \UnderflowException When the supplied value is less than 0
      * @throws \OverflowException When the supplied value is greater than 65535
      */
-    public function setValue($value)
+    public function setValue(string $value)
     {
         $value = (int) $value;
+
         if ($value < 0) {
             throw new \UnderflowException('Short integer value must be in the range 0 - 65535');
-        } else if ($value > 65535) {
+        } else if ($value > 0xffff) {
             throw new \OverflowException('Short integer value must be in the range 0 - 65535');
         }
 

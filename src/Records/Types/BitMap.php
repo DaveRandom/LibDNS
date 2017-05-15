@@ -32,9 +32,9 @@ class BitMap extends Type
      *
      * @param string $value The new value
      */
-    public function setValue($value)
+    public function setValue(string $value)
     {
-        $this->value = (string) $value;
+        $this->value = $value;
     }
 
     /**
@@ -44,22 +44,22 @@ class BitMap extends Type
      * @param bool $newValue The new value
      * @return bool The old value
      */
-    public function isBitSet($index, $newValue = null)
+    public function isBitSet(int $index, bool $newValue = null): bool
     {
         $charIndex = (int)($index / 8);
         $bitMask = 0b10000000 >> ($index % 8);
 
         $result = false;
         if (isset($this->value[$charIndex])) {
-            $result = (bool) (ord($this->value[$charIndex]) & $bitMask);
+            $result = (bool) (\ord($this->value[$charIndex]) & $bitMask);
         }
 
         if (isset($newValue) && $newValue != $result) {
             if (!isset($this->value[$charIndex])) {
-                $this->value = str_pad($this->value, $charIndex + 1, "\x00", STR_PAD_RIGHT);
+                $this->value = \str_pad($this->value, $charIndex + 1, "\x00", STR_PAD_RIGHT);
             }
 
-            $this->value[$charIndex] = chr((ord($this->value[$charIndex]) & ~$bitMask) | ($newValue ? $bitMask : 0));
+            $this->value[$charIndex] = \chr((\ord($this->value[$charIndex]) & ~$bitMask) | ($newValue ? $bitMask : 0));
         }
 
         return $result;

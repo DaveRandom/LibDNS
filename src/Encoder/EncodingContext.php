@@ -52,11 +52,11 @@ class EncodingContext
      * @param \LibDNS\Packets\LabelRegistry $labelRegistry
      * @param bool $compress
      */
-    public function __construct(Packet $packet, LabelRegistry $labelRegistry, $compress)
+    public function __construct(Packet $packet, LabelRegistry $labelRegistry, bool $compress)
     {
         $this->packet = $packet;
         $this->labelRegistry = $labelRegistry;
-        $this->compress = (bool) $compress;
+        $this->compress = $compress;
     }
 
     /**
@@ -64,7 +64,7 @@ class EncodingContext
      *
      * @return \LibDNS\Packets\Packet
      */
-    public function getPacket()
+    public function getPacket(): Packet
     {
         return $this->packet;
     }
@@ -74,7 +74,7 @@ class EncodingContext
      *
      * @return \LibDNS\Packets\LabelRegistry
      */
-    public function getLabelRegistry()
+    public function getLabelRegistry(): LabelRegistry
     {
         return $this->labelRegistry;
     }
@@ -84,7 +84,7 @@ class EncodingContext
      *
      * @return bool
      */
-    public function useCompression()
+    public function useCompression(): bool
     {
         return $this->compress;
     }
@@ -95,12 +95,12 @@ class EncodingContext
      * @param bool $truncate
      * @return bool
      */
-    public function isTruncated($truncate = null)
+    public function isTruncated(bool $truncate = null): bool
     {
         $result = $this->truncate;
 
         if ($truncate !== null) {
-            $this->truncate = (bool) $truncate;
+            $this->truncate = $truncate;
         }
 
         return $result;

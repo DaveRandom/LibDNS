@@ -34,7 +34,7 @@ class ResourceBuilderFactory
      * @param \LibDNS\Records\TypeDefinitions\TypeDefinitionManager $typeDefinitionManager
      * @return \LibDNS\Records\ResourceBuilder
      */
-    public function create(TypeDefinitionManager $typeDefinitionManager = null)
+    public function create(TypeDefinitionManager $typeDefinitionManager = null): ResourceBuilder
     {
         return new ResourceBuilder(
             new ResourceFactory,

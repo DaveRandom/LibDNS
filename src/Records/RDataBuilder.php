@@ -53,7 +53,7 @@ class RDataBuilder
      * @param \LibDNS\Records\TypeDefinitions\TypeDefinition $typeDefinition
      * @return \LibDNS\Records\RData
      */
-    public function build(TypeDefinition $typeDefinition)
+    public function build(TypeDefinition $typeDefinition): RData
     {
         $rData = $this->rDataFactory->create($typeDefinition);
 

@@ -30,7 +30,7 @@ class TypeDefinitionFactory
      * @return \LibDNS\Records\TypeDefinitions\TypeDefinition
      * @throws \InvalidArgumentException When the type definition is invalid
      */
-    public function create(FieldDefinitionFactory $fieldDefinitionFactory, array $definition)
+    public function create(FieldDefinitionFactory $fieldDefinitionFactory, array $definition): TypeDefinition
     {
         return new TypeDefinition($fieldDefinitionFactory, $definition);
     }

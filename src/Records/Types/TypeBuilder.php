@@ -43,7 +43,7 @@ class TypeBuilder
      * @param int $type Data type, can be indicated using the Types enum
      * @return \LibDNS\Records\Types\Type
      */
-    public function build($type)
+    public function build(int $type): Type
     {
         static $typeMap = [
             Types::ANYTHING         => 'createAnything',

@@ -27,7 +27,7 @@ class TypeDefinitionManagerFactory
      *
      * @return \LibDNS\Records\TypeDefinitions\TypeDefinitionManager
      */
-    public function create()
+    public function create(): TypeDefinitionManager
     {
         return new TypeDefinitionManager(new TypeDefinitionFactory, new FieldDefinitionFactory);
     }

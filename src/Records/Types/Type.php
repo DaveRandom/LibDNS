@@ -30,10 +30,10 @@ abstract class Type
     /**
      * Constructor
      *
-     * @param mixed $value Internal value
+     * @param string $value Internal value
      * @throws \RuntimeException When the supplied value is invalid
      */
-    public function __construct($value = null)
+    public function __construct(string $value = null)
     {
         if (isset($value)) {
             $this->setValue($value);
@@ -41,11 +41,11 @@ abstract class Type
     }
 
     /**
-     * Magic method for type coersion to string
+     * Magic method for type coercion to string
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->value;
     }
@@ -63,8 +63,8 @@ abstract class Type
     /**
      * Set the internal value
      *
-     * @param mixed $value The new value
+     * @param string $value The new value
      * @throws \RuntimeException When the supplied value is invalid
      */
-    abstract public function setValue($value);
+    abstract public function setValue(string $value);
 }

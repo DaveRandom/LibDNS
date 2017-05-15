@@ -68,13 +68,13 @@ class FieldDefinition
      * @param bool $allowsMultiple
      * @param int $minimumValues
      */
-    public function __construct($index, $name, $type, $allowsMultiple, $minimumValues)
+    public function __construct(int $index, string $name, int $type, bool $allowsMultiple, int $minimumValues)
     {
-        $this->index = (int) $index;
-        $this->name = (string) $name;
-        $this->type = (int) $type;
-        $this->allowsMultiple = (bool) $allowsMultiple;
-        $this->minimumValues = (int) $minimumValues;
+        $this->index = $index;
+        $this->name = $name;
+        $this->type = $type;
+        $this->allowsMultiple = $allowsMultiple;
+        $this->minimumValues = $minimumValues;
     }
 
     /**
@@ -82,7 +82,7 @@ class FieldDefinition
      *
      * @return int
      */
-    public function getIndex()
+    public function getIndex(): int
     {
         return $this->index;
     }
@@ -92,7 +92,7 @@ class FieldDefinition
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -102,7 +102,7 @@ class FieldDefinition
      *
      * @return int
      */
-    public function getType()
+    public function getType(): int
     {
         return $this->type;
     }
@@ -112,7 +112,7 @@ class FieldDefinition
      *
      * @return bool
      */
-    public function allowsMultiple()
+    public function allowsMultiple(): bool
     {
         return $this->allowsMultiple;
     }
@@ -122,7 +122,7 @@ class FieldDefinition
      *
      * @return int
      */
-    public function getMinimumValues()
+    public function getMinimumValues(): int
     {
         return $this->minimumValues;
     }
@@ -133,7 +133,7 @@ class FieldDefinition
      * @param \LibDNS\Records\Types\Type
      * @return bool
      */
-    public function assertDataValid(Type $value)
+    public function assertDataValid(Type $value): bool
     {
         return (($this->type & Types::ANYTHING)         && $value instanceof Anything)
             || (($this->type & Types::BITMAP)           && $value instanceof BitMap)

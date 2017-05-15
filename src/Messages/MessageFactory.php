@@ -30,7 +30,7 @@ class MessageFactory
      * @param int $type Value of the message type field
      * @return \LibDNS\Messages\Message
      */
-    public function create($type = null)
+    public function create(int $type = null): Message
     {
         return new Message(new RecordCollectionFactory, $type);
     }

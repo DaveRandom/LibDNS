@@ -13,6 +13,7 @@
  */
 namespace LibDNS\Messages;
 
+use LibDNS\Records\RecordCollection;
 use \LibDNS\Records\RecordCollectionFactory;
 use \LibDNS\Records\RecordTypes;
 
@@ -33,7 +34,7 @@ class Message
     /**
      * @var int Indicates the type of the message, can be indicated using the MessageTypes enum
      */
-    private $type;
+    private $type = -1;
 
     /**
      * @var int Message opcode, can be indicated using the MessageOpCodes enum
@@ -48,7 +49,7 @@ class Message
     /**
      * @var bool Whether the message is truncated
      */
-    private $truncated;
+    private $truncated = false;
 
     /**
      * @var bool Whether a query desires the server to recurse the lookup
@@ -92,7 +93,7 @@ class Message
      * @param int $type Value of the message type field
      * @throws \RangeException When the supplied message type is outside the valid range 0 - 1
      */
-    public function __construct(RecordCollectionFactory $recordCollectionFactory, $type = null)
+    public function __construct(RecordCollectionFactory $recordCollectionFactory, int $type = null)
     {
         $this->questionRecords = $recordCollectionFactory->create(RecordTypes::QUESTION);
         $this->answerRecords = $recordCollectionFactory->create(RecordTypes::RESOURCE);
@@ -109,7 +110,7 @@ class Message
      *
      * @return int
      */
-    public function getID()
+    public function getID(): int
     {
         return $this->id;
     }
@@ -120,9 +121,8 @@ class Message
      * @param int $id The new value
      * @throws \RangeException When the supplied value is outside the valid range 0 - 65535
      */
-    public function setID($id)
+    public function setID(int $id)
     {
-        $id = (int) $id;
         if ($id < 0 || $id > 65535) {
             throw new \RangeException('Message ID must be in the range 0 - 65535');
         }
@@ -135,7 +135,7 @@ class Message
      *
      * @return int
      */
-    public function getType()
+    public function getType(): int
     {
         return $this->type;
     }
@@ -146,9 +146,8 @@ class Message
      * @param int $type The new value
      * @throws \RangeException When the supplied value is outside the valid range 0 - 1
      */
-    public function setType($type)
+    public function setType(int $type)
     {
-        $type = (int) $type;
         if ($type < 0 || $type > 1) {
             throw new \RangeException('Message type must be in the range 0 - 1');
         }
@@ -161,7 +160,7 @@ class Message
      *
      * @return int
      */
-    public function getOpCode()
+    public function getOpCode(): int
     {
         return $this->opCode;
     }
@@ -172,9 +171,8 @@ class Message
      * @param int $opCode The new value
      * @throws \RangeException When the supplied value is outside the valid range 0 - 15
      */
-    public function setOpCode($opCode)
+    public function setOpCode(int $opCode)
     {
-        $opCode = (int) $opCode;
         if ($opCode < 0 || $opCode > 15) {
             throw new \RangeException('Message opcode must be in the range 0 - 15');
         }
@@ -188,15 +186,15 @@ class Message
      * @param bool $newValue The new value
      * @return bool The old value
      */
-    public function isAuthoritative($newValue = null)
+    public function isAuthoritative(bool $newValue = null): bool
     {
         $result = $this->authoritative;
 
         if ($newValue !== null) {
-            $this->authoritative = (bool) $newValue;
+            $this->authoritative = $newValue;
         }
 
-        return (bool) $result;
+        return $result;
     }
 
     /**
@@ -205,15 +203,15 @@ class Message
      * @param bool $newValue The new value
      * @return bool The old value
      */
-    public function isTruncated($newValue = null)
+    public function isTruncated(bool $newValue = null): bool
     {
         $result = $this->truncated;
 
         if ($newValue !== null) {
-            $this->truncated = (bool) $newValue;
+            $this->truncated = $newValue;
         }
 
-        return (bool) $result;
+        return $result;
     }
 
     /**
@@ -222,15 +220,15 @@ class Message
      * @param bool $newValue The new value
      * @return bool The old value
      */
-    public function isRecursionDesired($newValue = null)
+    public function isRecursionDesired(bool $newValue = null): bool
     {
         $result = $this->recursionDesired;
 
         if ($newValue !== null) {
-            $this->recursionDesired = (bool) $newValue;
+            $this->recursionDesired = $newValue;
         }
 
-        return (bool) $result;
+        return $result;
     }
 
     /**
@@ -239,15 +237,15 @@ class Message
      * @param bool $newValue The new value
      * @return bool The old value
      */
-    public function isRecursionAvailable($newValue = null)
+    public function isRecursionAvailable(bool $newValue = null): bool
     {
         $result = $this->recursionAvailable;
 
         if ($newValue !== null) {
-            $this->recursionAvailable = (bool) $newValue;
+            $this->recursionAvailable = $newValue;
         }
 
-        return (bool) $result;
+        return $result;
     }
 
     /**
@@ -255,7 +253,7 @@ class Message
      *
      * @return int
      */
-    public function getResponseCode()
+    public function getResponseCode(): int
     {
         return $this->opCode;
     }
@@ -266,9 +264,8 @@ class Message
      * @param int $responseCode The new value
      * @throws \RangeException When the supplied value is outside the valid range 0 - 15
      */
-    public function setResponseCode($responseCode)
+    public function setResponseCode(int $responseCode)
     {
-        $responseCode = (int) $responseCode;
         if ($responseCode < 0 || $responseCode > 15) {
             throw new \RangeException('Message response code must be in the range 0 - 15');
         }
@@ -281,7 +278,7 @@ class Message
      *
      * @return \LibDNS\Records\RecordCollection
      */
-    public function getQuestionRecords()
+    public function getQuestionRecords(): RecordCollection
     {
         return $this->questionRecords;
     }
@@ -291,7 +288,7 @@ class Message
      *
      * @return \LibDNS\Records\RecordCollection
      */
-    public function getAnswerRecords()
+    public function getAnswerRecords(): RecordCollection
     {
         return $this->answerRecords;
     }
@@ -301,7 +298,7 @@ class Message
      *
      * @return \LibDNS\Records\RecordCollection
      */
-    public function getAuthorityRecords()
+    public function getAuthorityRecords(): RecordCollection
     {
         return $this->authorityRecords;
     }
@@ -311,7 +308,7 @@ class Message
      *
      * @return \LibDNS\Records\RecordCollection
      */
-    public function getAdditionalRecords()
+    public function getAdditionalRecords(): RecordCollection
     {
         return $this->additionalRecords;
     }

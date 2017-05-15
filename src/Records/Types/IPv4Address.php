@@ -40,7 +40,7 @@ class IPv4Address extends Type
      */
     public function __construct($value = null)
     {
-        if (is_array($value)) {
+        if (\is_array($value)) {
             $this->setOctets($value);
         } else {
             parent::__construct($value);
@@ -53,9 +53,9 @@ class IPv4Address extends Type
      * @param string $value The new value
      * @throws \UnexpectedValueException When the supplied value is outside the valid length range 0 - 65535
      */
-    public function setValue($value)
+    public function setValue(string $value)
     {
-        $this->setOctets(explode('.', $value));
+        $this->setOctets(\explode('.', $value));
     }
 
     /**
@@ -63,7 +63,7 @@ class IPv4Address extends Type
      *
      * @return int[]
      */
-    public function getOctets()
+    public function getOctets(): array
     {
         return $this->octets;
     }
@@ -76,19 +76,19 @@ class IPv4Address extends Type
      */
     public function setOctets(array $octets)
     {
-        if (count($octets) !== 4) {
+        if (\count($octets) !== 4) {
             throw new \UnexpectedValueException('Octet list is not a valid IPv4 address: invalid octet count');
         }
 
         foreach ($octets as &$octet) {
-            if (strspn((string)$octet, "0123456789") !== strlen($octet) || $octet < 0x00 || $octet > 0xff) {
+            if (\strspn((string)$octet, "0123456789") !== \strlen($octet) || $octet < 0x00 || $octet > 0xff) {
                 throw new \UnexpectedValueException('Octet list is not a valid IPv4 address: invalid octet value ' . $octet);
             }
 
             $octet = (int) $octet;
         }
 
-        $this->octets = array_values($octets);
-        $this->value = implode('.', $this->octets);
+        $this->octets = \array_values($octets);
+        $this->value = \implode('.', $this->octets);
     }
 }

@@ -42,10 +42,10 @@ class Packet
      *
      * @param string $data The initial packet raw data
      */
-    public function __construct($data = '')
+    public function __construct(string $data = '')
     {
-        $this->data = (string) $data;
-        $this->length = strlen($this->data);
+        $this->data = $data;
+        $this->length = \strlen($this->data);
     }
 
     /**
@@ -55,22 +55,21 @@ class Packet
      * @return string
      * @throws \OutOfBoundsException When the pointer position is invalid or the supplied length is negative
      */
-    public function read($length = null)
+    public function read(int $length = null): string
     {
         if ($this->pointer > $this->length) {
             throw new \OutOfBoundsException('Pointer position invalid');
         }
 
         if ($length === null) {
-            $result = substr($this->data, $this->pointer);
+            $result = \substr($this->data, $this->pointer);
             $this->pointer = $this->length;
         } else {
-            $length = (int) $length;
             if ($length < 0) {
                 throw new \OutOfBoundsException('Length must be a positive integer');
             }
 
-            $result = substr($this->data, $this->pointer, (int) $length);
+            $result = \substr($this->data, $this->pointer, $length);
             $this->pointer += $length;
         }
 
@@ -83,9 +82,9 @@ class Packet
      * @param string $data The data to append
      * @return int The number of bytes written
      */
-    public function write($data)
+    public function write(string $data): int
     {
-        $length = strlen($data);
+        $length = \strlen($data);
 
         $this->data .= $data;
         $this->length += $length;
@@ -106,7 +105,7 @@ class Packet
      *
      * @return int
      */
-    public function getPointer()
+    public function getPointer(): int
     {
         return $this->pointer;
     }
@@ -116,7 +115,7 @@ class Packet
      *
      * @return int
      */
-    public function getLength()
+    public function getLength(): int
     {
         return $this->length;
     }
@@ -126,7 +125,7 @@ class Packet
      *
      * @return int
      */
-    public function getBytesRemaining()
+    public function getBytesRemaining(): int
     {
         return $this->length - $this->pointer;
     }

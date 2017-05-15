@@ -244,10 +244,8 @@ class TypeDefinitionManager
      * @param int $recordType Resource type, can be indicated using the ResourceTypes enum
      * @return \LibDNS\Records\TypeDefinitions\TypeDefinition
      */
-    public function getTypeDefinition($recordType)
+    public function getTypeDefinition(int $recordType)
     {
-        $recordType = (int) $recordType;
-
         if (!isset($this->typeDefs[$recordType])) {
             $definition = isset($this->definitions[$recordType]) ? $this->definitions[$recordType] : ['data' => Types::ANYTHING];
             $this->typeDefs[$recordType] = $this->typeDefFactory->create($this->fieldDefFactory, $definition);
@@ -263,16 +261,16 @@ class TypeDefinitionManager
      * @param int[]|\LibDNS\Records\TypeDefinitions\TypeDefinition $definition
      * @throws \InvalidArgumentException When the type definition is invalid
      */
-    public function registerTypeDefinition($recordType, $definition)
+    public function registerTypeDefinition(int $recordType, $definition)
     {
         if (!($definition instanceof TypeDefinition)) {
-            if (!is_array($definition)) {
+            if (!\is_array($definition)) {
                 throw new \InvalidArgumentException('Definition must be an array or an instance of ' . __NAMESPACE__ . '\TypeDefinition');
             }
 
-            $definition = (int) $this->typeDefFactory->create($this->fieldDefFactory, $definition);
+            $definition = $this->typeDefFactory->create($this->fieldDefFactory, $definition);
         }
 
-        $this->typeDefs[(int) $recordType] = $definition;
+        $this->typeDefs[$recordType] = $definition;
     }
 }

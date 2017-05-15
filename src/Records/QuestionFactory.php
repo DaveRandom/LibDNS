@@ -30,7 +30,7 @@ class QuestionFactory
      * @param int $type The resource type
      * @return \LibDNS\Records\Question
      */
-    public function create($type)
+    public function create(int $type): Question
     {
         return new Question(new TypeFactory, $type);
     }

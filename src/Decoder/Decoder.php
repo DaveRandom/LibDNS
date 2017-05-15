@@ -17,6 +17,7 @@ use \LibDNS\Packets\PacketFactory;
 use \LibDNS\Packets\Packet;
 use \LibDNS\Messages\MessageFactory;
 use \LibDNS\Messages\Message;
+use LibDNS\Records\Question;
 use \LibDNS\Records\QuestionFactory;
 use \LibDNS\Records\ResourceBuilder;
 use \LibDNS\Records\Types\Type;
@@ -94,7 +95,7 @@ class Decoder
         ResourceBuilder $resourceBuilder,
         TypeBuilder $typeBuilder,
         DecodingContextFactory $decodingContextFactory,
-        $allowTrailingData = true
+        bool $allowTrailingData = true
     ) {
         $this->packetFactory = $packetFactory;
         $this->messageFactory = $messageFactory;
@@ -113,7 +114,7 @@ class Decoder
      * @return string
      * @throws \UnexpectedValueException When the read operation does not result in the requested number of bytes
      */
-    private function readDataFromPacket(Packet $packet, $length)
+    private function readDataFromPacket(Packet $packet, int $length): string
     {
         if ($packet->getBytesRemaining() < $length) {
             throw new \UnexpectedValueException('Decode error: Incomplete packet (tried to read ' . $length . ' bytes from index ' . $packet->getPointer());
@@ -131,7 +132,7 @@ class Decoder
      */
     private function decodeHeader(DecodingContext $decodingContext, Message $message)
     {
-        $header = unpack('nid/nmeta/nqd/nan/nns/nar', $this->readDataFromPacket($decodingContext->getPacket(), 12));
+        $header = \unpack('nid/nmeta/nqd/nan/nns/nar', $this->readDataFromPacket($decodingContext->getPacket(), 12));
         if (!$header) {
             throw new \UnexpectedValueException('Decode error: Header unpack failed');
         }
@@ -140,10 +141,10 @@ class Decoder
 
         $message->setType(($header['meta'] & 0b1000000000000000) >> 15);
         $message->setOpCode(($header['meta'] & 0b0111100000000000) >> 11);
-        $message->isAuthoritative(($header['meta'] & 0b0000010000000000) >> 10);
-        $message->isTruncated(($header['meta'] & 0b0000001000000000) >> 9);
-        $message->isRecursionDesired(($header['meta'] & 0b0000000100000000) >> 8);
-        $message->isRecursionAvailable(($header['meta'] & 0b0000000010000000) >> 7);
+        $message->isAuthoritative((bool)(($header['meta'] & 0b0000010000000000) >> 10));
+        $message->isTruncated((bool)(($header['meta'] & 0b0000001000000000) >> 9));
+        $message->isRecursionDesired((bool)(($header['meta'] & 0b0000000100000000) >> 8));
+        $message->isRecursionAvailable((bool)(($header['meta'] & 0b0000000010000000) >> 7));
         $message->setResponseCode($header['meta'] & 0b0000000000001111);
 
         $decodingContext->setExpectedQuestionRecords($header['qd']);
@@ -161,7 +162,7 @@ class Decoder
      * @return int The number of packet bytes consumed by the operation
      * @throws \UnexpectedValueException When the packet data is invalid
      */
-    private function decodeAnything(DecodingContext $decodingContext, Anything $anything, $length)
+    private function decodeAnything(DecodingContext $decodingContext, Anything $anything, int $length): int
     {
         $anything->setValue($this->readDataFromPacket($decodingContext->getPacket(), $length));
 
@@ -177,7 +178,7 @@ class Decoder
      * @return int The number of packet bytes consumed by the operation
      * @throws \UnexpectedValueException When the packet data is invalid
      */
-    private function decodeBitMap(DecodingContext $decodingContext, BitMap $bitMap, $length)
+    private function decodeBitMap(DecodingContext $decodingContext, BitMap $bitMap, int $length): int
     {
         $bitMap->setValue($this->readDataFromPacket($decodingContext->getPacket(), $length));
 
@@ -192,9 +193,9 @@ class Decoder
      * @return int The number of packet bytes consumed by the operation
      * @throws \UnexpectedValueException When the packet data is invalid
      */
-    private function decodeChar(DecodingContext $decodingContext, Char $char)
+    private function decodeChar(DecodingContext $decodingContext, Char $char): int
     {
-        $value = unpack('C', $this->readDataFromPacket($decodingContext->getPacket(), 1))[1];
+        $value = \unpack('C', $this->readDataFromPacket($decodingContext->getPacket(), 1))[1];
         $char->setValue($value);
 
         return 1;
@@ -208,10 +209,10 @@ class Decoder
      * @return int The number of packet bytes consumed by the operation
      * @throws \UnexpectedValueException When the packet data is invalid
      */
-    private function decodeCharacterString(DecodingContext $decodingContext, CharacterString $characterString)
+    private function decodeCharacterString(DecodingContext $decodingContext, CharacterString $characterString): int
     {
         $packet = $decodingContext->getPacket();
-        $length = ord($this->readDataFromPacket($packet, 1));
+        $length = \ord($this->readDataFromPacket($packet, 1));
         $characterString->setValue($this->readDataFromPacket($packet, $length));
 
         return $length + 1;
@@ -225,32 +226,32 @@ class Decoder
      * @return int The number of packet bytes consumed by the operation
      * @throws \UnexpectedValueException When the packet data is invalid
      */
-    private function decodeDomainName(DecodingContext $decodingContext, DomainName $domainName)
+    private function decodeDomainName(DecodingContext $decodingContext, DomainName $domainName): int
     {
         $packet = $decodingContext->getPacket();
-        $startIndex = '0x' . dechex($packet->getPointer());
+        $startIndex = '0x' . \dechex($packet->getPointer());
         $labelRegistry = $decodingContext->getLabelRegistry();
 
         $labels = [];
         $totalLength = 0;
 
-        while (++$totalLength && $length = ord($this->readDataFromPacket($packet, 1))) {
+        while (++$totalLength && $length = \ord($this->readDataFromPacket($packet, 1))) {
             $labelType = $length & 0b11000000;
 
             if ($labelType === 0b00000000) {
                 $index = $packet->getPointer() - 1;
                 $label = $this->readDataFromPacket($packet, $length);
 
-                array_unshift($labels, [$index, $label]);
+                \array_unshift($labels, [$index, $label]);
                 $totalLength += $length;
             } else if ($labelType === 0b11000000) {
-                $index = (($length & 0b00111111) << 8) | ord($this->readDataFromPacket($packet, 1));
+                $index = (($length & 0b00111111) << 8) | \ord($this->readDataFromPacket($packet, 1));
                 $ref = $labelRegistry->lookupLabel($index);
                 if ($ref === null) {
                     throw new \UnexpectedValueException('Decode error: Invalid compression pointer reference in domain name at position ' . $startIndex);
                 }
 
-                array_unshift($labels, $ref);
+                \array_unshift($labels, $ref);
                 $totalLength++;
 
                 break;
@@ -265,8 +266,8 @@ class Decoder
 
         $result = [];
         foreach ($labels as $label) {
-            if (is_int($label[0])) {
-                array_unshift($result, $label[1]);
+            if (\is_int($label[0])) {
+                \array_unshift($result, $label[1]);
                 $labelRegistry->register($result, $label[0]);
             } else {
                 $result = $label;
@@ -285,9 +286,9 @@ class Decoder
      * @return int The number of packet bytes consumed by the operation
      * @throws \UnexpectedValueException When the packet data is invalid
      */
-    private function decodeIPv4Address(DecodingContext $decodingContext, IPv4Address $ipv4Address)
+    private function decodeIPv4Address(DecodingContext $decodingContext, IPv4Address $ipv4Address): int
     {
-        $octets = unpack('C4', $this->readDataFromPacket($decodingContext->getPacket(), 4));
+        $octets = \unpack('C4', $this->readDataFromPacket($decodingContext->getPacket(), 4));
         $ipv4Address->setOctets($octets);
 
         return 4;
@@ -301,9 +302,9 @@ class Decoder
      * @return int The number of packet bytes consumed by the operation
      * @throws \UnexpectedValueException When the packet data is invalid
      */
-    private function decodeIPv6Address(DecodingContext $decodingContext, IPv6Address $ipv6Address)
+    private function decodeIPv6Address(DecodingContext $decodingContext, IPv6Address $ipv6Address): int
     {
-        $shorts = unpack('n8', $this->readDataFromPacket($decodingContext->getPacket(), 16));
+        $shorts = \unpack('n8', $this->readDataFromPacket($decodingContext->getPacket(), 16));
         $ipv6Address->setShorts($shorts);
 
         return 16;
@@ -317,9 +318,9 @@ class Decoder
      * @return int The number of packet bytes consumed by the operation
      * @throws \UnexpectedValueException When the packet data is invalid
      */
-    private function decodeLong(DecodingContext $decodingContext, Long $long)
+    private function decodeLong(DecodingContext $decodingContext, Long $long): int
     {
-        $value = unpack('N', $this->readDataFromPacket($decodingContext->getPacket(), 4))[1];
+        $value = \unpack('N', $this->readDataFromPacket($decodingContext->getPacket(), 4))[1];
         $long->setValue($value);
 
         return 4;
@@ -333,9 +334,9 @@ class Decoder
      * @return int The number of packet bytes consumed by the operation
      * @throws \UnexpectedValueException When the packet data is invalid
      */
-    private function decodeShort(DecodingContext $decodingContext, Short $short)
+    private function decodeShort(DecodingContext $decodingContext, Short $short): int
     {
-        $value = unpack('n', $this->readDataFromPacket($decodingContext->getPacket(), 2))[1];
+        $value = \unpack('n', $this->readDataFromPacket($decodingContext->getPacket(), 2))[1];
         $short->setValue($value);
 
         return 2;
@@ -351,7 +352,7 @@ class Decoder
      * @throws \UnexpectedValueException When the packet data is invalid
      * @throws \InvalidArgumentException When the Type subtype is unknown
      */
-    private function decodeType(DecodingContext $decodingContext, Type $type, $length)
+    private function decodeType(DecodingContext $decodingContext, Type $type, int $length): int
     {
         if ($type instanceof Anything) {
             $result = $this->decodeAnything($decodingContext, $type, $length);
@@ -372,7 +373,7 @@ class Decoder
         } else if ($type instanceof Short) {
             $result = $this->decodeShort($decodingContext, $type);
         } else {
-            throw new \InvalidArgumentException('Unknown Type ' . get_class($type));
+            throw new \InvalidArgumentException('Unknown Type ' . \get_class($type));
         }
 
         return $result;
@@ -385,12 +386,12 @@ class Decoder
      * @return \LibDNS\Records\Question
      * @throws \UnexpectedValueException When the record is invalid
      */
-    private function decodeQuestionRecord(DecodingContext $decodingContext)
+    private function decodeQuestionRecord(DecodingContext $decodingContext): Question
     {
         /** @var \LibDNS\Records\Types\DomainName $domainName */
         $domainName = $this->typeBuilder->build(Types::DOMAIN_NAME);
         $this->decodeDomainName($decodingContext, $domainName);
-        $meta = unpack('ntype/nclass', $this->readDataFromPacket($decodingContext->getPacket(), 4));
+        $meta = \unpack('ntype/nclass', $this->readDataFromPacket($decodingContext->getPacket(), 4));
 
         $question = $this->questionFactory->create($meta['type']);
         $question->setName($domainName);
@@ -407,12 +408,12 @@ class Decoder
      * @throws \UnexpectedValueException When the record is invalid
      * @throws \InvalidArgumentException When a type subtype is unknown
      */
-    private function decodeResourceRecord(DecodingContext $decodingContext)
+    private function decodeResourceRecord(DecodingContext $decodingContext): Resource
     {
         /** @var \LibDNS\Records\Types\DomainName $domainName */
         $domainName = $this->typeBuilder->build(Types::DOMAIN_NAME);
         $this->decodeDomainName($decodingContext, $domainName);
-        $meta = unpack('ntype/nclass/Nttl/nlength', $this->readDataFromPacket($decodingContext->getPacket(), 10));
+        $meta = \unpack('ntype/nclass/Nttl/nlength', $this->readDataFromPacket($decodingContext->getPacket(), 10));
 
         $resource = $this->resourceBuilder->build($meta['type']);
         $resource->setName($domainName);
@@ -452,7 +453,7 @@ class Decoder
      * @throws \UnexpectedValueException When the packet data is invalid
      * @throws \InvalidArgumentException When a type subtype is unknown
      */
-    public function decode($data)
+    public function decode(string $data): Message
     {
         $packet = $this->packetFactory->create($data);
         $decodingContext = $this->decodingContextFactory->create($packet);

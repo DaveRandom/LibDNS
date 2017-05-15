@@ -32,7 +32,7 @@ class EncodingContextFactory
      * @param bool $compress Whether message compression is enabled
      * @return \LibDNS\Encoder\EncodingContext
      */
-    public function create(Packet $packet, $compress)
+    public function create(Packet $packet, bool $compress): EncodingContext
     {
         return new EncodingContext($packet, new LabelRegistry, $compress);
     }

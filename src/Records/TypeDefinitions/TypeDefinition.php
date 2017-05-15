@@ -69,7 +69,7 @@ class TypeDefinition implements \Iterator, \Countable
         $this->fieldDefFactory = $fieldDefFactory;
 
         if (isset($definition['__toString'])) {
-            if (!is_callable($definition['__toString'])) {
+            if (!\is_callable($definition['__toString'])) {
                 throw new \InvalidArgumentException('Invalid type definition: __toString() implementation is not callable');
             }
 
@@ -77,7 +77,7 @@ class TypeDefinition implements \Iterator, \Countable
             unset($definition['__toString']);
         }
 
-        $this->fieldCount = count($definition);
+        $this->fieldCount = \count($definition);
         $index = 0;
         foreach ($definition as $name => $type) {
             $this->registerField($index++, $name, $type);
@@ -92,9 +92,9 @@ class TypeDefinition implements \Iterator, \Countable
      * @param int $type
      * @throws \InvalidArgumentException When the field definition is invalid
      */
-    private function registerField($index, $name, $type)
+    private function registerField(int $index, string $name, int $type)
     {
-        if (!preg_match('/^(?P<name>[\w\-]+)(?P<quantifier>\+|\*)?(?P<minimum>(?<=\+)\d+)?$/', strtolower($name), $matches)) {
+        if (!\preg_match('/^(?P<name>[\w\-]+)(?P<quantifier>\+|\*)?(?P<minimum>(?<=\+)\d+)?$/', \strtolower($name), $matches)) {
             throw new \InvalidArgumentException('Invalid field definition ' . $name . ': Syntax error');
         }
 
@@ -129,9 +129,8 @@ class TypeDefinition implements \Iterator, \Countable
      * @return \LibDNS\Records\TypeDefinitions\FieldDefinition
      * @throws \OutOfBoundsException When the supplied index does not refer to a valid field
      */
-    public function getFieldDefinition($index)
+    public function getFieldDefinition(int $index): FieldDefinition
     {
-        $index = (int) $index;
         if (isset($this->fieldDefs[$index])) {
             $fieldDef = $this->fieldDefs[$index];
         } else if ($index >= 0 && $this->lastField->allowsMultiple()) {
@@ -150,9 +149,9 @@ class TypeDefinition implements \Iterator, \Countable
      * @return int
      * @throws \OutOfBoundsException When the supplied name does not refer to a valid field
      */
-    public function getFieldIndexByName($name)
+    public function getFieldIndexByName($name): int
     {
-        $fieldName = strtolower($name);
+        $fieldName = \strtolower($name);
         if (!isset($this->fieldNameMap[$fieldName])) {
             throw new \OutOfBoundsException('Name ' . $name . ' does not refer to a valid field');
         }
@@ -185,7 +184,7 @@ class TypeDefinition implements \Iterator, \Countable
      *
      * @return \LibDNS\Records\TypeDefinitions\FieldDefinition
      */
-    public function current()
+    public function current(): FieldDefinition
     {
         return current($this->fieldDefs);
     }
@@ -195,7 +194,7 @@ class TypeDefinition implements \Iterator, \Countable
      *
      * @return int
      */
-    public function key()
+    public function key(): int
     {
         return key($this->fieldDefs);
     }
@@ -205,7 +204,7 @@ class TypeDefinition implements \Iterator, \Countable
      */
     public function next()
     {
-        $this->pointerValid = next($this->fieldDefs) !== false;
+        $this->pointerValid = \next($this->fieldDefs) !== false;
     }
 
     /**
@@ -213,8 +212,8 @@ class TypeDefinition implements \Iterator, \Countable
      */
     public function rewind()
     {
-        reset($this->fieldDefs);
-        $this->pointerValid = count($this->fieldDefs) > 0;
+        \reset($this->fieldDefs);
+        $this->pointerValid = \count($this->fieldDefs) > 0;
     }
 
     /**
@@ -222,7 +221,7 @@ class TypeDefinition implements \Iterator, \Countable
      *
      * @return bool
      */
-    public function valid()
+    public function valid(): bool
     {
         return $this->pointerValid;
     }
@@ -232,7 +231,7 @@ class TypeDefinition implements \Iterator, \Countable
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return $this->fieldCount;
     }

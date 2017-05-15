@@ -33,10 +33,9 @@ class Anything extends Type
      * @param string $value The new value
      * @throws \UnexpectedValueException When the supplied value is outside the valid length range 0 - 65535
      */
-    public function setValue($value)
+    public function setValue(string $value)
     {
-        $value = (string) $value;
-        if (strlen($value) > 65535) {
+        if (\strlen($value) > 65535) {
             throw new \UnexpectedValueException('Untyped string length must be in the range 0 - 65535');
         }
 

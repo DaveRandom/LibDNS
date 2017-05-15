@@ -67,7 +67,7 @@ class Encoder
      * @return string
      * @throws \UnexpectedValueException When the header section is invalid
      */
-    private function encodeHeader(EncodingContext $encodingContext, Message $message)
+    private function encodeHeader(EncodingContext $encodingContext, Message $message): string
     {
         $header = [
             'id' => $message->getID(),
@@ -86,7 +86,7 @@ class Encoder
         $header['meta'] |= ((int) $message->isRecursionAvailable()) << 7;
         $header['meta'] |= $message->getResponseCode();
 
-        return pack('n*', $header['id'], $header['meta'], $header['qd'], $header['an'], $header['ns'], $header['ar']);
+        return \pack('n*', $header['id'], $header['meta'], $header['qd'], $header['an'], $header['ns'], $header['ar']);
     }
 
     /**
@@ -95,7 +95,7 @@ class Encoder
      * @param \LibDNS\Records\Types\Anything $anything
      * @return string
      */
-    private function encodeAnything(Anything $anything)
+    private function encodeAnything(Anything $anything): string
     {
         return $anything->getValue();
     }
@@ -106,7 +106,7 @@ class Encoder
      * @param \LibDNS\Records\Types\BitMap $bitMap
      * @return string
      */
-    private function encodeBitMap(BitMap $bitMap)
+    private function encodeBitMap(BitMap $bitMap): string
     {
         return $bitMap->getValue();
     }
@@ -117,9 +117,9 @@ class Encoder
      * @param \LibDNS\Records\Types\Char $char
      * @return string
      */
-    private function encodeChar(Char $char)
+    private function encodeChar(Char $char): string
     {
-        return chr($char->getValue());
+        return \chr($char->getValue());
     }
 
     /**
@@ -128,10 +128,10 @@ class Encoder
      * @param \LibDNS\Records\Types\CharacterString $characterString
      * @return string
      */
-    private function encodeCharacterString(CharacterString $characterString)
+    private function encodeCharacterString(CharacterString $characterString): string
     {
         $data = $characterString->getValue();
-        return chr(strlen($data)) . $data;
+        return \chr(\strlen($data)) . $data;
     }
 
     /**
@@ -141,7 +141,7 @@ class Encoder
      * @param \LibDNS\Encoder\EncodingContext $encodingContext
      * @return string
      */
-    private function encodeDomainName(DomainName $domainName, EncodingContext $encodingContext)
+    private function encodeDomainName(DomainName $domainName, EncodingContext $encodingContext): string
     {
         $packetIndex = $encodingContext->getPacket()->getLength() + 12;
         $labelRegistry = $encodingContext->getLabelRegistry();
@@ -151,19 +151,19 @@ class Encoder
 
         if ($encodingContext->useCompression()) {
             do {
-                $part = implode('.', $labels);
+                $part = \implode('.', $labels);
                 $index = $labelRegistry->lookupIndex($part);
 
                 if ($index === null) {
                     $labelRegistry->register($part, $packetIndex);
 
-                    $label = array_shift($labels);
-                    $length = strlen($label);
+                    $label = \array_shift($labels);
+                    $length = \strlen($label);
 
-                    $result .= chr($length) . $label;
+                    $result .= \chr($length) . $label;
                     $packetIndex += $length + 1;
                 } else {
-                    $result .= pack('n', 0b1100000000000000 | $index);
+                    $result .= \pack('n', 0b1100000000000000 | $index);
                     break;
                 }
             } while($labels);
@@ -173,7 +173,7 @@ class Encoder
             }
         } else {
             foreach ($labels as $label) {
-                $result .= chr(strlen($label)) . $label;
+                $result .= \chr(\strlen($label)) . $label;
             }
 
             $result .= "\x00";
@@ -188,10 +188,10 @@ class Encoder
      * @param \LibDNS\Records\Types\IPv4Address $ipv4Address
      * @return string
      */
-    private function encodeIPv4Address(IPv4Address $ipv4Address)
+    private function encodeIPv4Address(IPv4Address $ipv4Address): string
     {
         $octets = $ipv4Address->getOctets();
-        return pack('C*', $octets[0], $octets[1], $octets[2], $octets[3]);
+        return \pack('C*', $octets[0], $octets[1], $octets[2], $octets[3]);
     }
 
     /**
@@ -200,10 +200,10 @@ class Encoder
      * @param \LibDNS\Records\Types\IPv6Address $ipv6Address
      * @return string
      */
-    private function encodeIPv6Address(IPv6Address $ipv6Address)
+    private function encodeIPv6Address(IPv6Address $ipv6Address): string
     {
         $shorts = $ipv6Address->getShorts();
-        return pack('n*', $shorts[0], $shorts[1], $shorts[2], $shorts[3], $shorts[4], $shorts[5], $shorts[6], $shorts[7]);
+        return \pack('n*', $shorts[0], $shorts[1], $shorts[2], $shorts[3], $shorts[4], $shorts[5], $shorts[6], $shorts[7]);
     }
 
     /**
@@ -212,9 +212,9 @@ class Encoder
      * @param \LibDNS\Records\Types\Long $long
      * @return string
      */
-    private function encodeLong(Long $long)
+    private function encodeLong(Long $long): string
     {
-        return pack('N', $long->getValue());
+        return \pack('N', $long->getValue());
     }
 
     /**
@@ -223,9 +223,9 @@ class Encoder
      * @param \LibDNS\Records\Types\Short $short
      * @return string
      */
-    private function encodeShort(Short $short)
+    private function encodeShort(Short $short): string
     {
-        return pack('n', $short->getValue());
+        return \pack('n', $short->getValue());
     }
 
     /**
@@ -235,7 +235,7 @@ class Encoder
      * @param \LibDNS\Records\Types\Type $type
      * @return string
      */
-    private function encodeType(EncodingContext $encodingContext, Type $type)
+    private function encodeType(EncodingContext $encodingContext, Type $type): string
     {
         if ($type instanceof Anything) {
             $result = $this->encodeAnything($type);
@@ -256,7 +256,7 @@ class Encoder
         } else if ($type instanceof Short) {
             $result = $this->encodeShort($type);
         } else {
-            throw new \InvalidArgumentException('Unknown Type ' . get_class($type));
+            throw new \InvalidArgumentException('Unknown Type ' . \get_class($type));
         }
 
         return $result;
@@ -273,9 +273,9 @@ class Encoder
         if (!$encodingContext->isTruncated()) {
             $packet = $encodingContext->getPacket();
             $name = $this->encodeDomainName($record->getName(), $encodingContext);
-            $meta = pack('n*', $record->getType(), $record->getClass());
+            $meta = \pack('n*', $record->getType(), $record->getClass());
 
-            if (12 + $packet->getLength() + strlen($name) + 4 > 512) {
+            if (12 + $packet->getLength() + \strlen($name) + 4 > 512) {
                 $encodingContext->isTruncated(true);
             } else {
                 $packet->write($name);
@@ -301,9 +301,9 @@ class Encoder
                 $data .= $this->encodeType($encodingContext, $field);
             }
 
-            $meta = pack('n2Nn', $record->getType(), $record->getClass(), $record->getTTL(), strlen($data));
+            $meta = \pack('n2Nn', $record->getType(), $record->getClass(), $record->getTTL(), \strlen($data));
 
-            if (12 + $packet->getLength() + strlen($name) + 10 + strlen($data) > 512) {
+            if (12 + $packet->getLength() + \strlen($name) + 10 + \strlen($data) > 512) {
                 $encodingContext->isTruncated(true);
             } else {
                 $packet->write($name);
@@ -320,7 +320,7 @@ class Encoder
      * @param bool $compress Enable message compression
      * @return string
      */
-    public function encode(Message $message, $compress = true)
+    public function encode(Message $message, $compress = true): string
     {
         $packet = $this->packetFactory->create();
         $encodingContext = $this->encodingContextFactory->create($packet, $compress);

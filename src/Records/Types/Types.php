@@ -22,7 +22,7 @@ use \LibDNS\Enumeration;
  * @package Types
  * @author Chris Wright <https://github.com/DaveRandom>
  */
-class Types extends Enumeration
+final class Types extends Enumeration
 {
     const ANYTHING         = 0b000000001;
     const BITMAP           = 0b000000010;

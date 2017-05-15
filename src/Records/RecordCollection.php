@@ -86,7 +86,7 @@ class RecordCollection implements \Iterator, \Countable
         if (!empty($this->nameMap[$name = (string) $record->getName()])) {
             foreach ($this->nameMap[$name] as $key => $item) {
                 if ($item === $record) {
-                    array_splice($this->nameMap[$name], $key, 1);
+                    \array_splice($this->nameMap[$name], $key, 1);
                     break;
                 }
             }
@@ -141,9 +141,9 @@ class RecordCollection implements \Iterator, \Countable
      * @param bool $sameInstance Whether to perform strict comparisons in search
      * @return bool
      */
-    public function contains(Record $record, $sameInstance = false)
+    public function contains(Record $record, bool $sameInstance = false): bool
     {
-        return in_array($record, $this->records, (bool) $sameInstance);
+        return \in_array($record, $this->records, $sameInstance);
     }
 
     /**
@@ -152,9 +152,9 @@ class RecordCollection implements \Iterator, \Countable
      * @param string $name The name to match records against
      * @return \LibDNS\Records\Record[]
      */
-    public function getRecordsByName($name)
+    public function getRecordsByName(string $name): array
     {
-        return isset($this->nameMap[$name = strtolower($name)]) ? $this->nameMap[$name] : [];
+        return $this->nameMap[\strtolower($name)] ?? [];
     }
 
     /**
@@ -164,7 +164,7 @@ class RecordCollection implements \Iterator, \Countable
      * @return \LibDNS\Records\Record
      * @throws \OutOfBoundsException When the supplied index does not refer to a valid record
      */
-    public function getRecordByIndex($index)
+    public function getRecordByIndex(int $index): Record
     {
         if (isset($this->records[$index])) {
             return $this->records[$index];
@@ -179,11 +179,11 @@ class RecordCollection implements \Iterator, \Countable
      * @param string $name The name to match records against
      * @return int The number of records removed
      */
-    public function clearRecordsByName($name)
+    public function clearRecordsByName(string $name): int
     {
         $count = 0;
 
-        if (isset($this->nameMap[$name = strtolower($name)])) {
+        if (isset($this->nameMap[$name = \strtolower($name)])) {
             unset($this->nameMap[$name]);
 
             foreach ($this->records as $index => $record) {
@@ -193,7 +193,7 @@ class RecordCollection implements \Iterator, \Countable
                 }
             }
 
-            $this->records = array_values($this->records);
+            $this->records = \array_values($this->records);
         }
 
         return $count;
@@ -213,9 +213,9 @@ class RecordCollection implements \Iterator, \Countable
      *
      * @return string[]
      */
-    public function getNames()
+    public function getNames(): array
     {
-        return array_keys($this->nameMap);
+        return \array_keys($this->nameMap);
     }
 
     /**
@@ -223,7 +223,7 @@ class RecordCollection implements \Iterator, \Countable
      *
      * @return int
      */
-    public function getType()
+    public function getType(): int
     {
         return $this->type;
     }
@@ -234,7 +234,7 @@ class RecordCollection implements \Iterator, \Countable
      * @return \LibDNS\Records\Record
      * @throws \OutOfBoundsException When the pointer does not refer to a valid record
      */
-    public function current()
+    public function current(): Record
     {
         if (!isset($this->records[$this->position])) {
             throw new \OutOfBoundsException('The current pointer position is invalid');
@@ -248,7 +248,7 @@ class RecordCollection implements \Iterator, \Countable
      *
      * @return int
      */
-    public function key()
+    public function key(): int
     {
         return $this->position;
     }
@@ -274,7 +274,7 @@ class RecordCollection implements \Iterator, \Countable
      *
      * @return bool
      */
-    public function valid()
+    public function valid(): bool
     {
         return isset($this->records[$this->position]);
     }
@@ -284,7 +284,7 @@ class RecordCollection implements \Iterator, \Countable
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return $this->length;
     }

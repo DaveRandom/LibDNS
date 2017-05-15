@@ -49,7 +49,7 @@ abstract class Record
      *
      * @return \LibDNS\Records\Types\DomainName
      */
-    public function getName()
+    public function getName(): DomainName
     {
         return $this->name;
     }
@@ -63,7 +63,7 @@ abstract class Record
     public function setName($name)
     {
         if (!($name instanceof DomainName)) {
-            $name = $this->typeFactory->createDomainName($name);
+            $name = $this->typeFactory->createDomainName((string)$name);
         }
 
         $this->name = $name;
@@ -74,7 +74,7 @@ abstract class Record
      *
      * @return int
      */
-    public function getType()
+    public function getType(): int
     {
         return $this->type;
     }
@@ -84,7 +84,7 @@ abstract class Record
      *
      * @return int
      */
-    public function getClass()
+    public function getClass(): int
     {
         return $this->class;
     }
@@ -95,9 +95,8 @@ abstract class Record
      * @param int $class The new value, can be indicated using the ResourceClasses/ResourceQClasses enums
      * @throws \RangeException When the supplied value is outside the valid range 0 - 65535
      */
-    public function setClass($class)
+    public function setClass(int $class)
     {
-        $class = (int) $class;
         if ($class < 0 || $class > 65535) {
             throw new \RangeException('Record class must be in the range 0 - 65535');
         }

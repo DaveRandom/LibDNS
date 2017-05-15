@@ -22,7 +22,7 @@ use \LibDNS\Enumeration;
  * @package Records
  * @author Chris Wright <https://github.com/DaveRandom>
  */
-class ResourceClasses extends Enumeration
+abstract class ResourceClasses extends Enumeration
 {
     const IN = 1;
     const CS = 2;

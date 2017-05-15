@@ -20,9 +20,9 @@ namespace LibDNS;
  * @package LibDNS
  * @author Chris Wright <https://github.com/DaveRandom>
  */
-class Enumeration
+abstract class Enumeration
 {
-    final public function __construct()
+    final protected function __construct()
     {
         throw new \LogicException('Enumerations cannot be instantiated');
     }

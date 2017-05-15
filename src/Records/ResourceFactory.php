@@ -31,7 +31,7 @@ class ResourceFactory
      * @param \LibDNS\Records\RData $data
      * @return \LibDNS\Records\Resource
      */
-    public function create($type, $data)
+    public function create(int $type, RData $data): Resource
     {
         return new Resource(new TypeFactory, $type, $data);
     }
