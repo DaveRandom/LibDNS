@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Represents an 8-bit unsigned integer
  *

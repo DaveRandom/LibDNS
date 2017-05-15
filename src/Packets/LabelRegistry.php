@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Maintains a list of the relationships between domain name labels and the first point at
  * which they appear in a packet

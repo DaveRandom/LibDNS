@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Holds data associated with an encode operation
  *

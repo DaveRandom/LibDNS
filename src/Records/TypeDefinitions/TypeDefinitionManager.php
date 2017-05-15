@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Holds data about how the RDATA sections of known resource record types are structured
  *

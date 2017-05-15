@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Builds Resource objects of a specific type
  *

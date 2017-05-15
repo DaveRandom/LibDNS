@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Builds RData objects from a type definition
  *

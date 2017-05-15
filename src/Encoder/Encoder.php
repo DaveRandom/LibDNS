@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Encodes Message objects to raw network data
  *
