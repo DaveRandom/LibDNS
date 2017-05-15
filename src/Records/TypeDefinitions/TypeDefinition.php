@@ -20,7 +20,7 @@ namespace LibDNS\Records\TypeDefinitions;
  * @package TypeDefinitions
  * @author Chris Wright <https://github.com/DaveRandom>
  */
-class TypeDefinition implements \Iterator, \Countable
+class TypeDefinition implements \IteratorAggregate, \Countable
 {
     /**
      * @var FieldDefinitionFactory Creates FieldDefinition objects
@@ -51,11 +51,6 @@ class TypeDefinition implements \Iterator, \Countable
      * @var callable Custom implementation for __toString() handling
      */
     private $toStringFunction;
-
-    /**
-     * @var bool Whether the iteration pointer indicates a valid item
-     */
-    private $pointerValid = true;
 
     /**
      * Constructor
@@ -180,50 +175,13 @@ class TypeDefinition implements \Iterator, \Countable
     }
 
     /**
-     * Get the field indicated by the iteration pointer (Iterator interface)
+     * Retrieve an iterator (IteratorAggregate interface)
      *
-     * @return \LibDNS\Records\TypeDefinitions\FieldDefinition
+     * @return \Iterator
      */
-    public function current(): FieldDefinition
+    public function getIterator(): \Iterator
     {
-        return current($this->fieldDefs);
-    }
-
-    /**
-     * Get the key indicated by the iteration pointer
-     *
-     * @return int
-     */
-    public function key(): int
-    {
-        return key($this->fieldDefs);
-    }
-
-    /**
-     * Increment the iteration pointer (Iterator interface)
-     */
-    public function next()
-    {
-        $this->pointerValid = \next($this->fieldDefs) !== false;
-    }
-
-    /**
-     * Reset the iteration pointer to the beginning (Iterator interface)
-     */
-    public function rewind()
-    {
-        \reset($this->fieldDefs);
-        $this->pointerValid = \count($this->fieldDefs) > 0;
-    }
-
-    /**
-     * Test whether the iteration pointer indicates a valid field (Iterator interface)
-     *
-     * @return bool
-     */
-    public function valid(): bool
-    {
-        return $this->pointerValid;
+        return new \ArrayIterator($this->fieldDefs);
     }
 
     /**

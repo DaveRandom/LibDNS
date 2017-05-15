@@ -20,7 +20,7 @@ namespace LibDNS\Records;
  * @package Records
  * @author Chris Wright <https://github.com/DaveRandom>
  */
-class RecordCollection implements \Iterator, \Countable
+class RecordCollection implements \IteratorAggregate, \Countable
 {
     /**
      * @var \LibDNS\Records\Record[] List of records held in the collection
@@ -41,11 +41,6 @@ class RecordCollection implements \Iterator, \Countable
      * @var int Whether the collection holds question or resource records
      */
     private $type;
-
-    /**
-     * @var int Iteration pointer
-     */
-    private $position = 0;
 
     /**
      * Constructor
@@ -205,7 +200,7 @@ class RecordCollection implements \Iterator, \Countable
     public function clear()
     {
         $this->records = $this->nameMap = [];
-        $this->length = $this->position = 0;
+        $this->length = 0;
     }
 
     /**
@@ -229,54 +224,13 @@ class RecordCollection implements \Iterator, \Countable
     }
 
     /**
-     * Get the record indicated by the iteration pointer (Iterator interface)
+     * Retrieve an iterator (IteratorAggregate interface)
      *
-     * @return \LibDNS\Records\Record
-     * @throws \OutOfBoundsException When the pointer does not refer to a valid record
+     * @return \Iterator
      */
-    public function current(): Record
+    public function getIterator(): \Iterator
     {
-        if (!isset($this->records[$this->position])) {
-            throw new \OutOfBoundsException('The current pointer position is invalid');
-        }
-
-        return $this->records[$this->position];
-    }
-
-    /**
-     * Get the value of the iteration pointer (Iterator interface)
-     *
-     * @return int
-     */
-    public function key(): int
-    {
-        return $this->position;
-    }
-
-    /**
-     * Increment the iteration pointer (Iterator interface)
-     */
-    public function next()
-    {
-        $this->position++;
-    }
-
-    /**
-     * Reset the iteration pointer to the beginning (Iterator interface)
-     */
-    public function rewind()
-    {
-        $this->position = 0;
-    }
-
-    /**
-     * Test whether the iteration pointer indicates a valid record (Iterator interface)
-     *
-     * @return bool
-     */
-    public function valid(): bool
-    {
-        return isset($this->records[$this->position]);
+        return new \ArrayIterator($this->records);
     }
 
     /**

@@ -23,7 +23,7 @@ use \LibDNS\Records\TypeDefinitions\TypeDefinition;
  * @package Records
  * @author Chris Wright <https://github.com/DaveRandom>
  */
-class RData implements \Iterator, \Countable
+class RData implements \IteratorAggregate, \Countable
 {
     /**
      * @var \LibDNS\Records\Types\Type[] The items that make up the complex type
@@ -34,11 +34,6 @@ class RData implements \Iterator, \Countable
      * @var \LibDNS\Records\TypeDefinitions\TypeDefinition Structural definition of the fields
      */
     private $typeDef;
-
-    /**
-     * @var bool Whether the iteration pointer has more elements to yield
-     */
-    private $pointerValid = 0;
 
     /**
      * Constructor
@@ -134,50 +129,13 @@ class RData implements \Iterator, \Countable
     }
 
     /**
-     * Get the field indicated by the iteration pointer (Iterator interface)
+     * Retrieve an iterator (IteratorAggregate interface)
      *
-     * @return \LibDNS\Records\Types\Type
+     * @return \Iterator
      */
-    public function current(): Type
+    public function getIterator(): \Iterator
     {
-        return \current($this->fields);
-    }
-
-    /**
-     * Get the value of the iteration pointer (Iterator interface)
-     *
-     * @return int
-     */
-    public function key(): int
-    {
-        return \key($this->fields);
-    }
-
-    /**
-     * Increment the iteration pointer (Iterator interface)
-     */
-    public function next()
-    {
-        $this->pointerValid = \next($this->fields) !== false;
-    }
-
-    /**
-     * Reset the iteration pointer to the beginning (Iterator interface)
-     */
-    public function rewind()
-    {
-        \reset($this->fields);
-        $this->pointerValid = \count($this->fields) > 0;
-    }
-
-    /**
-     * Test whether the iteration pointer indicates a valid field (Iterator interface)
-     *
-     * @return bool
-     */
-    public function valid(): bool
-    {
-        return $this->pointerValid;
+        return new \ArrayIterator($this->fields);
     }
 
     /**
