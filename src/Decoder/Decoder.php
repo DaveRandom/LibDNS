@@ -13,25 +13,26 @@
  */
 namespace LibDNS\Decoder;
 
-use \LibDNS\Packets\PacketFactory;
-use \LibDNS\Packets\Packet;
-use \LibDNS\Messages\MessageFactory;
-use \LibDNS\Messages\Message;
+use LibDNS\Messages\Message;
+use LibDNS\Messages\MessageFactory;
+use LibDNS\Packets\Packet;
+use LibDNS\Packets\PacketFactory;
 use LibDNS\Records\Question;
-use \LibDNS\Records\QuestionFactory;
-use \LibDNS\Records\ResourceBuilder;
-use \LibDNS\Records\Types\Type;
-use \LibDNS\Records\Types\Anything;
-use \LibDNS\Records\Types\BitMap;
-use \LibDNS\Records\Types\Char;
-use \LibDNS\Records\Types\CharacterString;
-use \LibDNS\Records\Types\DomainName;
-use \LibDNS\Records\Types\IPv4Address;
-use \LibDNS\Records\Types\IPv6Address;
-use \LibDNS\Records\Types\Long;
-use \LibDNS\Records\Types\Short;
-use \LibDNS\Records\Types\Types;
-use \LibDNS\Records\Types\TypeBuilder;
+use LibDNS\Records\QuestionFactory;
+use LibDNS\Records\Resource;
+use LibDNS\Records\ResourceBuilder;
+use LibDNS\Records\Types\Anything;
+use LibDNS\Records\Types\BitMap;
+use LibDNS\Records\Types\Char;
+use LibDNS\Records\Types\CharacterString;
+use LibDNS\Records\Types\DomainName;
+use LibDNS\Records\Types\IPv4Address;
+use LibDNS\Records\Types\IPv6Address;
+use LibDNS\Records\Types\Long;
+use LibDNS\Records\Types\Short;
+use LibDNS\Records\Types\Type;
+use LibDNS\Records\Types\TypeBuilder;
+use LibDNS\Records\Types\Types;
 
 /**
  * Decodes raw network data to Message objects

@@ -21,7 +21,7 @@ use \LibDNS\Encoder\EncoderFactory;
 use \LibDNS\Decoder\DecoderFactory;
 
 // Config
-$queryName      = 'google.com';
+$queryName      = 'faß.de';
 $serverIP       = '8.8.8.8';
 $requestTimeout = 3;
 
