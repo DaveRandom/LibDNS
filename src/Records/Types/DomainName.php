@@ -42,12 +42,10 @@ class DomainName extends Type
      */
     public function __construct($value = null)
     {
-        if (isset($value)) {
-            if (is_array($value)) {
-                $this->setLabels($value);
-            } else {
-                $this->setValue($value);
-            }
+        if (is_array($value)) {
+            $this->setLabels($value);
+        } else {
+            parent::__construct($value);
         }
     }
 

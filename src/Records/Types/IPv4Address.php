@@ -40,12 +40,10 @@ class IPv4Address extends Type
      */
     public function __construct($value = null)
     {
-        if (isset($value)) {
-            if (is_array($value)) {
-                $this->setOctets($value);
-            } else {
-                $this->setValue($value);
-            }
+        if (is_array($value)) {
+            $this->setOctets($value);
+        } else {
+            parent::__construct($value);
         }
     }
 
