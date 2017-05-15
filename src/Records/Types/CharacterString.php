@@ -33,8 +33,10 @@ class CharacterString extends Type
      * @param string $value The new value
      * @throws \UnexpectedValueException When the supplied value is outside the valid length range 0 - 255
      */
-    public function setValue(string $value)
+    public function setValue($value)
     {
+        $value = (string)$value;
+
         if (\strlen($value) > 255) {
             throw new \UnexpectedValueException('Character string length must be in the range 0 - 255');
         }

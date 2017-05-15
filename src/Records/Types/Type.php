@@ -66,5 +66,5 @@ abstract class Type
      * @param string $value The new value
      * @throws \RuntimeException When the supplied value is invalid
      */
-    abstract public function setValue(string $value);
+    abstract public function setValue($value);
 }

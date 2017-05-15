@@ -53,9 +53,9 @@ class IPv4Address extends Type
      * @param string $value The new value
      * @throws \UnexpectedValueException When the supplied value is outside the valid length range 0 - 65535
      */
-    public function setValue(string $value)
+    public function setValue($value)
     {
-        $this->setOctets(\explode('.', $value));
+        $this->setOctets(\explode('.', (string)$value));
     }
 
     /**

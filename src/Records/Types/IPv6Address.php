@@ -104,9 +104,9 @@ class IPv6Address extends Type
      * @param string $value The new value
      * @throws \UnexpectedValueException When the supplied value is outside the valid length range 0 - 65535
      */
-    public function setValue(string $value)
+    public function setValue($value)
     {
-        $shorts = \explode(':', $value);
+        $shorts = \explode(':', (string)$value);
 
         $count = \count($shorts);
         if ($count < 3 || $count > 8) {

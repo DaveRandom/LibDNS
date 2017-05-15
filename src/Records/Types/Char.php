@@ -34,7 +34,7 @@ class Char extends Type
      * @throws \UnderflowException When the supplied value is less than 0
      * @throws \OverflowException When the supplied value is greater than 255
      */
-    public function setValue(string $value)
+    public function setValue($value)
     {
         $value = (int) $value;
 

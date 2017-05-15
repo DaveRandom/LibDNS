@@ -51,12 +51,21 @@ class DomainName extends Type
             self::$labelPreProcessor = \function_exists('idn_to_ascii')
                 ? static function($label) {
                       if (false === $result = \idn_to_ascii($label, 0, INTL_IDNA_VARIANT_UTS46)) {
-                          throw new \InvalidArgumentException('Label ' . $label . ' could not be processed for IDN');
+                          throw new \InvalidArgumentException("Label '{$label}' could not be processed for IDN");
                       }
 
                       return $result;
                   }
-                : 'strtolower';
+                : static function($label) {
+                      if (\preg_match('/[\x80-\xff]/', $label)) {
+                          throw new \RuntimeException(
+                              "Label '{$label}' contains non-ASCII characters and IDN support is not available."
+                              . " Verify that ext/intl is installed for IDN support."
+                          );
+                      }
+
+                      return \strtolower($label);
+                  };
         }
 
         if (\is_array($value)) {
@@ -72,9 +81,9 @@ class DomainName extends Type
      * @param string $value The new value
      * @throws \UnexpectedValueException When the supplied value is not a valid domain name
      */
-    public function setValue(string $value)
+    public function setValue($value)
     {
-        $this->setLabels(\explode('.', $value));
+        $this->setLabels(\explode('.', (string)$value));
     }
 
     /**

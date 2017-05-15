@@ -32,9 +32,9 @@ class BitMap extends Type
      *
      * @param string $value The new value
      */
-    public function setValue(string $value)
+    public function setValue($value)
     {
-        $this->value = $value;
+        $this->value = (string)$value;
     }
 
     /**

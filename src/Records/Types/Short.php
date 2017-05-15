@@ -34,9 +34,9 @@ class Short extends Type
      * @throws \UnderflowException When the supplied value is less than 0
      * @throws \OverflowException When the supplied value is greater than 65535
      */
-    public function setValue(string $value)
+    public function setValue($value)
     {
-        $value = (int) $value;
+        $value = (int)$value;
 
         if ($value < 0) {
             throw new \UnderflowException('Short integer value must be in the range 0 - 65535');
