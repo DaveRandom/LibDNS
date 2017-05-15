@@ -94,7 +94,7 @@ class Decoder
         ResourceBuilder $resourceBuilder,
         TypeBuilder $typeBuilder,
         DecodingContextFactory $decodingContextFactory,
-        $allowTrailingData = false
+        $allowTrailingData = true
     ) {
         $this->packetFactory = $packetFactory;
         $this->messageFactory = $messageFactory;

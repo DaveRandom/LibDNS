@@ -43,7 +43,7 @@ class DecoderFactory
      * @param bool $allowTrailingData
      * @return Decoder
      */
-    public function create(TypeDefinitionManager $typeDefinitionManager = null, $allowTrailingData = false)
+    public function create(TypeDefinitionManager $typeDefinitionManager = null, $allowTrailingData = true)
     {
         $typeBuilder = new TypeBuilder(new TypeFactory);
 
