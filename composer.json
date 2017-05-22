@@ -9,7 +9,8 @@
     "autoload": {
         "psr-4": {
             "LibDNS\\": "src/"
-        }
+        },
+        "files": ["src/functions.php"]
     },
     "support": {
         "issues": "https://github.com/DaveRandom/LibDNS/issues"
