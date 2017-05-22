@@ -14,5 +14,8 @@
     },
     "support": {
         "issues": "https://github.com/DaveRandom/LibDNS/issues"
+    },
+    "suggest": {
+        "ext-intl": "Required for IDN support"
     }
 }
