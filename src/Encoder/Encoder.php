@@ -78,7 +78,7 @@ class Encoder
             'ar' => $message->getAdditionalRecords()->count()
         ];
 
-        $header['meta'] |= $message->getType() << 16;
+        $header['meta'] |= $message->getType() << 15;
         $header['meta'] |= $message->getOpCode() << 11;
         $header['meta'] |= ((int) $message->isAuthoritative()) << 10;
         $header['meta'] |= ((int) $encodingContext->isTruncated()) << 9;
