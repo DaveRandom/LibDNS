@@ -13,6 +13,8 @@
  */
 namespace LibDNS\Records\Types;
 
+use LibDNS\NormalizedLabel;
+
 /**
  * Represents a fully qualified domain name
  *
@@ -87,12 +89,8 @@ class DomainName extends Type
         $length = $count = 0;
 
         foreach ($labels as &$label) {
-            $label = \LibDNS\normalize_name($label);
-            $labelLength = \strlen($label);
-            if ($labelLength > 63) {
-                throw new \InvalidArgumentException('Label list is not a valid domain name: Label ' . $label . ' length exceeds 63 byte limit');
-            }
-            $length += $labelLength + 1;
+            $label = (string)new NormalizedLabel($label);
+            $length += \strlen($label) + 1;
             $count++;
         }
 
