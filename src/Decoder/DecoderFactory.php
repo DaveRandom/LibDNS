@@ -13,7 +13,6 @@
  */
 namespace LibDNS\Decoder;
 
-use \LibDNS\Packets\PacketFactory;
 use \LibDNS\Messages\MessageFactory;
 use \LibDNS\Records\RecordCollectionFactory;
 use \LibDNS\Records\QuestionFactory;
@@ -48,7 +47,6 @@ class DecoderFactory
         $typeBuilder = new TypeBuilder(new TypeFactory);
 
         return new Decoder(
-            new PacketFactory,
             new MessageFactory(new RecordCollectionFactory),
             new QuestionFactory,
             new ResourceBuilder(

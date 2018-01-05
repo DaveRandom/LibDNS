@@ -25,7 +25,6 @@ spl_autoload_register(function($className) {
             'libdns\messages\messagetypes'                                => __DIR__ . '/../src/Messages/MessageTypes.php',
             'libdns\packets\labelregistry'                                => __DIR__ . '/../src/Packets/LabelRegistry.php',
             'libdns\packets\packet'                                       => __DIR__ . '/../src/Packets/Packet.php',
-            'libdns\packets\packetfactory'                                => __DIR__ . '/../src/Packets/PacketFactory.php',
             'libdns\records\question'                                     => __DIR__ . '/../src/Records/Question.php',
             'libdns\records\questionfactory'                              => __DIR__ . '/../src/Records/QuestionFactory.php',
             'libdns\records\rdata'                                        => __DIR__ . '/../src/Records/RData.php',
