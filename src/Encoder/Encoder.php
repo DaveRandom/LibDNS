@@ -14,19 +14,19 @@
 namespace LibDNS\Encoder;
 
 use LibDNS\Packets\Packet;
-use \LibDNS\Messages\Message;
-use \LibDNS\Records\Question;
-use \LibDNS\Records\Resource;
-use \LibDNS\Records\Types\Type;
-use \LibDNS\Records\Types\Anything;
-use \LibDNS\Records\Types\BitMap;
-use \LibDNS\Records\Types\Char;
-use \LibDNS\Records\Types\CharacterString;
-use \LibDNS\Records\Types\DomainName;
-use \LibDNS\Records\Types\IPv4Address;
-use \LibDNS\Records\Types\IPv6Address;
-use \LibDNS\Records\Types\Long;
-use \LibDNS\Records\Types\Short;
+use LibDNS\Messages\Message;
+use LibDNS\Records\Question;
+use LibDNS\Records\Resource;
+use LibDNS\Records\Types\Type;
+use LibDNS\Records\Types\Anything;
+use LibDNS\Records\Types\BitMap;
+use LibDNS\Records\Types\Char;
+use LibDNS\Records\Types\CharacterString;
+use LibDNS\Records\Types\DomainName;
+use LibDNS\Records\Types\IPv4Address;
+use LibDNS\Records\Types\IPv6Address;
+use LibDNS\Records\Types\Long;
+use LibDNS\Records\Types\Short;
 
 /**
  * Encodes Message objects to raw network data
