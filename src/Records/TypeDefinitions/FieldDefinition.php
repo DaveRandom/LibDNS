@@ -130,7 +130,7 @@ class FieldDefinition
     /**
      * Assert that a Type object is valid for this field
      *
-     * @param \DaveRandom\LibDNS\Records\Types\Type
+     * @param Type
      * @return bool
      */
     public function assertDataValid(Type $value): bool

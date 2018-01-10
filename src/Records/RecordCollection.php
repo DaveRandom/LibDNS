@@ -23,12 +23,12 @@ namespace DaveRandom\LibDNS\Records;
 class RecordCollection implements \IteratorAggregate, \Countable
 {
     /**
-     * @var \DaveRandom\LibDNS\Records\Record[] List of records held in the collection
+     * @var Record[] List of records held in the collection
      */
     private $records = [];
 
     /**
-     * @var \DaveRandom\LibDNS\Records\Record[][] Map of Records in the collection grouped by record name
+     * @var Record[][] Map of Records in the collection grouped by record name
      */
     private $nameMap = [];
 
@@ -60,7 +60,7 @@ class RecordCollection implements \IteratorAggregate, \Countable
     /**
      * Add a record to the correct bucket in the name map
      *
-     * @param \DaveRandom\LibDNS\Records\Record $record The record to add
+     * @param Record $record The record to add
      */
     private function addToNameMap(Record $record)
     {
@@ -74,7 +74,7 @@ class RecordCollection implements \IteratorAggregate, \Countable
     /**
      * Remove a record from the name map
      *
-     * @param \DaveRandom\LibDNS\Records\Record $record The record to remove
+     * @param Record $record The record to remove
      */
     private function removeFromNameMap(Record $record)
     {
@@ -95,7 +95,7 @@ class RecordCollection implements \IteratorAggregate, \Countable
     /**
      * Add a record to the collection
      *
-     * @param \DaveRandom\LibDNS\Records\Record $record The record to add
+     * @param Record $record The record to add
      * @throws \InvalidArgumentException When the wrong record type is supplied
      */
     public function add(Record $record)
@@ -113,7 +113,7 @@ class RecordCollection implements \IteratorAggregate, \Countable
     /**
      * Remove a record from the collection
      *
-     * @param \DaveRandom\LibDNS\Records\Record $record The record to remove
+     * @param Record $record The record to remove
      */
     public function remove(Record $record)
     {
@@ -132,7 +132,7 @@ class RecordCollection implements \IteratorAggregate, \Countable
     /**
      * Test whether the collection contains a specific record
      *
-     * @param \DaveRandom\LibDNS\Records\Record $record       The record to search for
+     * @param Record $record       The record to search for
      * @param bool $sameInstance Whether to perform strict comparisons in search
      * @return bool
      */

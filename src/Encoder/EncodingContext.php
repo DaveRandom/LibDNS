@@ -26,12 +26,12 @@ use DaveRandom\LibDNS\Packets\LabelRegistry;
 class EncodingContext
 {
     /**
-     * @var \DaveRandom\LibDNS\Packets\Packet
+     * @var Packet
      */
     private $packet;
 
     /**
-     * @var \DaveRandom\LibDNS\Packets\LabelRegistry
+     * @var LabelRegistry
      */
     private $labelRegistry;
 
@@ -48,7 +48,7 @@ class EncodingContext
     /**
      * Constructor
      *
-     * @param \DaveRandom\LibDNS\Packets\Packet $packet
+     * @param Packet $packet
      * @param bool $compress
      */
     public function __construct(Packet $packet, bool $compress)

@@ -30,7 +30,7 @@ class DecoderFactory
     /**
      * Create a new Decoder object
      *
-     * @param \DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionManager $typeDefinitionManager
+     * @param TypeDefinitionManager $typeDefinitionManager
      * @param bool $allowTrailingData
      * @return Decoder
      */

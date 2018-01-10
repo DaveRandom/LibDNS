@@ -28,7 +28,7 @@ class Resource extends Record
     private $ttl;
 
     /**
-     * @var \DaveRandom\LibDNS\Records\RData
+     * @var RData
      */
     private $data;
 
@@ -36,7 +36,7 @@ class Resource extends Record
      * Constructor
      *
      * @param int $type Can be indicated using the ResourceTypes enum
-     * @param \DaveRandom\LibDNS\Records\RData $data
+     * @param RData $data
      */
     public function __construct(int $type, RData $data)
     {

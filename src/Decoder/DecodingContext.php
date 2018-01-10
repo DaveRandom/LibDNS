@@ -26,12 +26,12 @@ use DaveRandom\LibDNS\Packets\LabelRegistry;
 class DecodingContext
 {
     /**
-     * @var \DaveRandom\LibDNS\Packets\Packet
+     * @var Packet
      */
     private $packet;
 
     /**
-     * @var \DaveRandom\LibDNS\Packets\LabelRegistry
+     * @var LabelRegistry
      */
     private $labelRegistry;
 
@@ -58,7 +58,7 @@ class DecodingContext
     /**
      * Constructor
      *
-     * @param \DaveRandom\LibDNS\Packets\Packet $packet
+     * @param Packet $packet
      */
     public function __construct(Packet $packet)
     {
@@ -70,7 +70,7 @@ class DecodingContext
     /**
      * Get the packet
      *
-     * @return \DaveRandom\LibDNS\Packets\Packet
+     * @return Packet
      */
     public function getPacket(): Packet
     {
@@ -80,7 +80,7 @@ class DecodingContext
     /**
      * Get the label registry
      *
-     * @return \DaveRandom\LibDNS\Packets\LabelRegistry
+     * @return LabelRegistry
      */
     public function getLabelRegistry(): LabelRegistry
     {

@@ -66,22 +66,22 @@ class Message
     private $responseCode = MessageResponseCodes::NO_ERROR;
 
     /**
-     * @var \DaveRandom\LibDNS\Records\RecordCollection Collection of question records
+     * @var RecordCollection Collection of question records
      */
     private $questionRecords;
 
     /**
-     * @var \DaveRandom\LibDNS\Records\RecordCollection Collection of question records
+     * @var RecordCollection Collection of question records
      */
     private $answerRecords;
 
     /**
-     * @var \DaveRandom\LibDNS\Records\RecordCollection Collection of authority records
+     * @var RecordCollection Collection of authority records
      */
     private $authorityRecords;
 
     /**
-     * @var \DaveRandom\LibDNS\Records\RecordCollection Collection of authority records
+     * @var RecordCollection Collection of authority records
      */
     private $additionalRecords;
 

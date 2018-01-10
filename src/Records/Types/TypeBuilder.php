@@ -23,14 +23,14 @@ namespace DaveRandom\LibDNS\Records\Types;
 class TypeBuilder
 {
     /**
-     * @var \DaveRandom\LibDNS\Records\Types\TypeFactory
+     * @var TypeFactory
      */
     private $typeFactory;
 
     /**
      * Constructor
      *
-     * @param \DaveRandom\LibDNS\Records\Types\TypeFactory $typeFactory
+     * @param TypeFactory $typeFactory
      */
     public function __construct(TypeFactory $typeFactory)
     {

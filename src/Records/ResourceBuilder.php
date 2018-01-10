@@ -27,20 +27,20 @@ use DaveRandom\LibDNS\Records\Types\TypeBuilder;
 class ResourceBuilder
 {
     /**
-     * @var \DaveRandom\LibDNS\Records\Types\TypeBuilder
+     * @var TypeBuilder
      */
     private $typeBuilder;
 
     /**
-     * @var \DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionManager
+     * @var TypeDefinitionManager
      */
     private $typeDefinitionManager;
 
     /**
      * Constructor
      *
-     * @param \DaveRandom\LibDNS\Records\Types\TypeBuilder $typeBuilder
-     * @param \DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionManager $typeDefinitionManager
+     * @param TypeBuilder $typeBuilder
+     * @param TypeDefinitionManager $typeDefinitionManager
      */
     public function __construct(TypeBuilder $typeBuilder, TypeDefinitionManager $typeDefinitionManager)
     {

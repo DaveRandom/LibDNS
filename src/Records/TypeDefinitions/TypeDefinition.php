@@ -28,7 +28,7 @@ class TypeDefinition implements \IteratorAggregate, \Countable
     private $fieldCount;
 
     /**
-     * @var \DaveRandom\LibDNS\Records\TypeDefinitions\FieldDefinition The last field defined by the type
+     * @var FieldDefinition The last field defined by the type
      */
     private $lastField;
 

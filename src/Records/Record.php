@@ -25,7 +25,7 @@ use DaveRandom\LibDNS\Records\Types\DomainName;
 abstract class Record
 {
     /**
-     * @var \DaveRandom\LibDNS\Records\Types\DomainName
+     * @var DomainName
      */
     protected $name;
 

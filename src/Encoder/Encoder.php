@@ -40,8 +40,8 @@ class Encoder
     /**
      * Encode the header section of the message
      *
-     * @param \DaveRandom\LibDNS\Encoder\EncodingContext $encodingContext
-     * @param \DaveRandom\LibDNS\Messages\Message $message
+     * @param EncodingContext $encodingContext
+     * @param Message $message
      * @return string
      * @throws \UnexpectedValueException When the header section is invalid
      */
@@ -70,7 +70,7 @@ class Encoder
     /**
      * Encode an Anything field
      *
-     * @param \DaveRandom\LibDNS\Records\Types\Anything $anything
+     * @param Anything $anything
      * @return string
      */
     private function encodeAnything(Anything $anything): string
@@ -81,7 +81,7 @@ class Encoder
     /**
      * Encode a BitMap field
      *
-     * @param \DaveRandom\LibDNS\Records\Types\BitMap $bitMap
+     * @param BitMap $bitMap
      * @return string
      */
     private function encodeBitMap(BitMap $bitMap): string
@@ -92,7 +92,7 @@ class Encoder
     /**
      * Encode a Char field
      *
-     * @param \DaveRandom\LibDNS\Records\Types\Char $char
+     * @param Char $char
      * @return string
      */
     private function encodeChar(Char $char): string
@@ -103,7 +103,7 @@ class Encoder
     /**
      * Encode a CharacterString field
      *
-     * @param \DaveRandom\LibDNS\Records\Types\CharacterString $characterString
+     * @param CharacterString $characterString
      * @return string
      */
     private function encodeCharacterString(CharacterString $characterString): string
@@ -115,8 +115,8 @@ class Encoder
     /**
      * Encode a DomainName field
      *
-     * @param \DaveRandom\LibDNS\Records\Types\DomainName $domainName
-     * @param \DaveRandom\LibDNS\Encoder\EncodingContext $encodingContext
+     * @param DomainName $domainName
+     * @param EncodingContext $encodingContext
      * @return string
      */
     private function encodeDomainName(DomainName $domainName, EncodingContext $encodingContext): string
@@ -163,7 +163,7 @@ class Encoder
     /**
      * Encode an IPv4Address field
      *
-     * @param \DaveRandom\LibDNS\Records\Types\IPv4Address $ipv4Address
+     * @param IPv4Address $ipv4Address
      * @return string
      */
     private function encodeIPv4Address(IPv4Address $ipv4Address): string
@@ -175,7 +175,7 @@ class Encoder
     /**
      * Encode an IPv6Address field
      *
-     * @param \DaveRandom\LibDNS\Records\Types\IPv6Address $ipv6Address
+     * @param IPv6Address $ipv6Address
      * @return string
      */
     private function encodeIPv6Address(IPv6Address $ipv6Address): string
@@ -187,7 +187,7 @@ class Encoder
     /**
      * Encode a Long field
      *
-     * @param \DaveRandom\LibDNS\Records\Types\Long $long
+     * @param Long $long
      * @return string
      */
     private function encodeLong(Long $long): string
@@ -198,7 +198,7 @@ class Encoder
     /**
      * Encode a Short field
      *
-     * @param \DaveRandom\LibDNS\Records\Types\Short $short
+     * @param Short $short
      * @return string
      */
     private function encodeShort(Short $short): string
@@ -209,8 +209,8 @@ class Encoder
     /**
      * Encode a type object
      *
-     * @param \DaveRandom\LibDNS\Encoder\EncodingContext $encodingContext
-     * @param \DaveRandom\LibDNS\Records\Types\Type $type
+     * @param EncodingContext $encodingContext
+     * @param Type $type
      * @return string
      */
     private function encodeType(EncodingContext $encodingContext, Type $type): string
@@ -243,8 +243,8 @@ class Encoder
     /**
      * Encode a question record
      *
-     * @param \DaveRandom\LibDNS\Encoder\EncodingContext $encodingContext
-     * @param \DaveRandom\LibDNS\Records\Question $record
+     * @param EncodingContext $encodingContext
+     * @param Question $record
      */
     private function encodeQuestionRecord(EncodingContext $encodingContext, Question $record)
     {
@@ -265,8 +265,9 @@ class Encoder
     /**
      * Encode a resource record
      *
-     * @param \DaveRandom\LibDNS\Encoder\EncodingContext $encodingContext
-     * @param \DaveRandom\LibDNS\Records\Resource $record
+     * @param EncodingContext $encodingContext
+     * @param ResourceRecord $record
+     * @return void
      */
     private function encodeResourceRecord(EncodingContext $encodingContext, ResourceRecord $record)
     {
@@ -294,7 +295,7 @@ class Encoder
     /**
      * Encode a Message to raw network data
      *
-     * @param \DaveRandom\LibDNS\Messages\Message $message  The Message to encode
+     * @param Message $message  The Message to encode
      * @param bool $compress Enable message compression
      * @return string
      */
@@ -304,19 +305,18 @@ class Encoder
         $encodingContext = new EncodingContext($packet, $compress);
 
         foreach ($message->getQuestionRecords() as $record) {
-            /** @var \DaveRandom\LibDNS\Records\Question $record */
             $this->encodeQuestionRecord($encodingContext, $record);
         }
+
         foreach ($message->getAnswerRecords() as $record) {
-            /** @var \DaveRandom\LibDNS\Records\Resource $record */
             $this->encodeResourceRecord($encodingContext, $record);
         }
+
         foreach ($message->getAuthorityRecords() as $record) {
-            /** @var \DaveRandom\LibDNS\Records\Resource $record */
             $this->encodeResourceRecord($encodingContext, $record);
         }
+
         foreach ($message->getAdditionalRecords() as $record) {
-            /** @var \DaveRandom\LibDNS\Records\Resource $record */
             $this->encodeResourceRecord($encodingContext, $record);
         }
 

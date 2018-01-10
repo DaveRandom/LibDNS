@@ -26,19 +26,19 @@ use DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinition;
 class RData implements \IteratorAggregate, \Countable
 {
     /**
-     * @var \DaveRandom\LibDNS\Records\Types\Type[] The items that make up the complex type
+     * @var Type[] The items that make up the complex type
      */
     private $fields = [];
 
     /**
-     * @var \DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinition Structural definition of the fields
+     * @var TypeDefinition Structural definition of the fields
      */
     private $typeDef;
 
     /**
      * Constructor
      *
-     * @param \DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinition $typeDef
+     * @param TypeDefinition $typeDef
      */
     public function __construct(TypeDefinition $typeDef)
     {
@@ -81,7 +81,7 @@ class RData implements \IteratorAggregate, \Countable
      * Set the field indicated by the supplied index
      *
      * @param int $index
-     * @param \DaveRandom\LibDNS\Records\Types\Type $value
+     * @param Type $value
      * @throws \InvalidArgumentException When the supplied index/value pair does not match the type definition
      */
     public function setField(int $index, Type $value)
@@ -109,7 +109,7 @@ class RData implements \IteratorAggregate, \Countable
      * Set the field indicated by the supplied name
      *
      * @param string $name
-     * @param \DaveRandom\LibDNS\Records\Types\Type $value
+     * @param Type $value
      * @throws \OutOfBoundsException When the supplied name does not refer to a valid field
      * @throws \InvalidArgumentException When the supplied value does not match the type definition
      */
