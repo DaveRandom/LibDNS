@@ -28,22 +28,22 @@ class EncodingContext
     /**
      * @var Packet
      */
-    private $packet;
+    public $packet;
 
     /**
      * @var LabelRegistry
      */
-    private $labelRegistry;
+    public $labelRegistry;
 
     /**
      * @var bool
      */
-    private $compress;
+    public $compress;
 
     /**
      * @var bool
      */
-    private $truncate = false;
+    public $isTruncated = false;
 
     /**
      * Constructor
@@ -57,52 +57,5 @@ class EncodingContext
         $this->compress = $compress;
 
         $this->labelRegistry = new LabelRegistry();
-    }
-
-    /**
-     * Get the packet
-     *
-     * @return \DaveRandom\LibDNS\Packets\Packet
-     */
-    public function getPacket(): Packet
-    {
-        return $this->packet;
-    }
-
-    /**
-     * Get the label registry
-     *
-     * @return \DaveRandom\LibDNS\Packets\LabelRegistry
-     */
-    public function getLabelRegistry(): LabelRegistry
-    {
-        return $this->labelRegistry;
-    }
-
-    /**
-     * Determine whether compression is enabled
-     *
-     * @return bool
-     */
-    public function useCompression(): bool
-    {
-        return $this->compress;
-    }
-
-    /**
-     * Determine or set whether the message is truncated
-     *
-     * @param bool $truncate
-     * @return bool
-     */
-    public function isTruncated(bool $truncate = null): bool
-    {
-        $result = $this->truncate;
-
-        if ($truncate !== null) {
-            $this->truncate = $truncate;
-        }
-
-        return $result;
     }
 }

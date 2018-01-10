@@ -59,7 +59,7 @@ class Encoder
         $header['meta'] |= $message->getType() << 15;
         $header['meta'] |= $message->getOpCode() << 11;
         $header['meta'] |= ((int) $message->isAuthoritative()) << 10;
-        $header['meta'] |= ((int) $encodingContext->isTruncated()) << 9;
+        $header['meta'] |= ((int) $encodingContext->isTruncated) << 9;
         $header['meta'] |= ((int) $message->isRecursionDesired()) << 8;
         $header['meta'] |= ((int) $message->isRecursionAvailable()) << 7;
         $header['meta'] |= $message->getResponseCode();
@@ -121,39 +121,38 @@ class Encoder
      */
     private function encodeDomainName(DomainName $domainName, EncodingContext $encodingContext): string
     {
-        $packetIndex = $encodingContext->getPacket()->getLength() + 12;
-        $labelRegistry = $encodingContext->getLabelRegistry();
+        $packetIndex = $encodingContext->packet->getLength() + 12;
 
         $result = '';
         $labels = $domainName->getLabels();
 
-        if ($encodingContext->useCompression()) {
-            do {
-                $part = \implode('.', $labels);
-                $index = $labelRegistry->lookupIndex($part);
-
-                if ($index === null) {
-                    $labelRegistry->register($part, $packetIndex);
-
-                    $label = \array_shift($labels);
-                    $length = \strlen($label);
-
-                    $result .= \chr($length) . $label;
-                    $packetIndex += $length + 1;
-                } else {
-                    $result .= \pack('n', 0b1100000000000000 | $index);
-                    break;
-                }
-            } while($labels);
-
-            if (!$labels) {
-                $result .= "\x00";
-            }
-        } else {
+        if (!$encodingContext->compress) {
             foreach ($labels as $label) {
                 $result .= \chr(\strlen($label)) . $label;
             }
 
+            return $result . "\x00";
+        }
+
+        do {
+            $part = \implode('.', $labels);
+            $index = $encodingContext->labelRegistry->lookupIndex($part);
+
+            if ($index !== null) {
+                $result .= \pack('n', 0b1100000000000000 | $index);
+                break;
+            }
+
+            $encodingContext->labelRegistry->register($part, $packetIndex);
+
+            $label = \array_shift($labels);
+            $length = \strlen($label);
+
+            $result .= \chr($length) . $label;
+            $packetIndex += $length + 1;
+        } while($labels);
+
+        if (!$labels) {
             $result .= "\x00";
         }
 
@@ -248,18 +247,22 @@ class Encoder
      */
     private function encodeQuestionRecord(EncodingContext $encodingContext, Question $record)
     {
-        if (!$encodingContext->isTruncated()) {
-            $packet = $encodingContext->getPacket();
-            $name = $this->encodeDomainName($record->getName(), $encodingContext);
-            $meta = \pack('n*', $record->getType(), $record->getClass());
-
-            if (12 + $packet->getLength() + \strlen($name) + 4 > 512) {
-                $encodingContext->isTruncated(true);
-            } else {
-                $packet->write($name);
-                $packet->write($meta);
-            }
+        if ($encodingContext->isTruncated) {
+            return;
         }
+
+        $name = $this->encodeDomainName($record->getName(), $encodingContext);
+
+        // todo: wtf are these magic numbers???
+        if (12 + $encodingContext->packet->getLength() + \strlen($name) + 4 > 512) {
+            $encodingContext->isTruncated = true;
+            return;
+        }
+
+        $meta = \pack('n*', $record->getType(), $record->getClass());
+
+        $encodingContext->packet->write($name);
+        $encodingContext->packet->write($meta);
     }
 
     /**
@@ -271,25 +274,29 @@ class Encoder
      */
     private function encodeResourceRecord(EncodingContext $encodingContext, ResourceRecord $record)
     {
-        if (!$encodingContext->isTruncated()) {
-            $packet = $encodingContext->getPacket();
-            $name = $this->encodeDomainName($record->getName(), $encodingContext);
-
-            $data = '';
-            foreach ($record->getData() as $field) {
-                $data .= $this->encodeType($encodingContext, $field);
-            }
-
-            $meta = \pack('n2Nn', $record->getType(), $record->getClass(), $record->getTTL(), \strlen($data));
-
-            if (12 + $packet->getLength() + \strlen($name) + 10 + \strlen($data) > 512) {
-                $encodingContext->isTruncated(true);
-            } else {
-                $packet->write($name);
-                $packet->write($meta);
-                $packet->write($data);
-            }
+        if ($encodingContext->isTruncated) {
+            return;
         }
+
+        $name = $this->encodeDomainName($record->getName(), $encodingContext);
+
+        $data = '';
+
+        foreach ($record->getData() as $field) {
+            $data .= $this->encodeType($encodingContext, $field);
+        }
+
+        // todo: wtf are these magic numbers???
+        if (12 + $encodingContext->packet->getLength() + \strlen($name) + 10 + \strlen($data) > 512) {
+            $encodingContext->isTruncated = true;
+            return;
+        }
+
+        $meta = \pack('n2Nn', $record->getType(), $record->getClass(), $record->getTTL(), \strlen($data));
+
+        $encodingContext->packet->write($name);
+        $encodingContext->packet->write($meta);
+        $encodingContext->packet->write($data);
     }
 
     /**

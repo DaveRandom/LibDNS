@@ -61,11 +61,8 @@ class Decoder
      * @param TypeBuilder $typeBuilder
      * @param bool $allowTrailingData
      */
-    public function __construct(
-        ResourceBuilder $resourceBuilder,
-        TypeBuilder $typeBuilder,
-        bool $allowTrailingData = true
-    ) {
+    public function __construct(ResourceBuilder $resourceBuilder, TypeBuilder $typeBuilder, bool $allowTrailingData = true)
+    {
         $this->resourceBuilder = $resourceBuilder;
         $this->typeBuilder = $typeBuilder;
         $this->allowTrailingData = $allowTrailingData;
@@ -97,7 +94,8 @@ class Decoder
      */
     private function decodeHeader(DecodingContext $decodingContext, Message $message)
     {
-        $header = \unpack('nid/nmeta/nqd/nan/nns/nar', $this->readDataFromPacket($decodingContext->getPacket(), 12));
+        $header = \unpack('nid/nmeta/nqd/nan/nns/nar', $this->readDataFromPacket($decodingContext->packet, 12));
+
         if (!$header) {
             throw new \UnexpectedValueException('Decode error: Header unpack failed');
         }
@@ -112,10 +110,10 @@ class Decoder
         $message->isRecursionAvailable((bool)(($header['meta'] & 0b0000000010000000) >> 7));
         $message->setResponseCode($header['meta'] & 0b0000000000001111);
 
-        $decodingContext->setExpectedQuestionRecords($header['qd']);
-        $decodingContext->setExpectedAnswerRecords($header['an']);
-        $decodingContext->setExpectedAuthorityRecords($header['ns']);
-        $decodingContext->setExpectedAdditionalRecords($header['ar']);
+        $decodingContext->expectedQuestionRecords = $header['qd'];
+        $decodingContext->expectedAnswerRecords = $header['an'];
+        $decodingContext->expectedAuthorityRecords = $header['ns'];
+        $decodingContext->expectedAdditionalRecords = $header['ar'];
     }
 
     /**
@@ -129,7 +127,7 @@ class Decoder
      */
     private function decodeAnything(DecodingContext $decodingContext, Anything $anything, int $length): int
     {
-        $anything->setValue($this->readDataFromPacket($decodingContext->getPacket(), $length));
+        $anything->setValue($this->readDataFromPacket($decodingContext->packet, $length));
 
         return $length;
     }
@@ -145,7 +143,7 @@ class Decoder
      */
     private function decodeBitMap(DecodingContext $decodingContext, BitMap $bitMap, int $length): int
     {
-        $bitMap->setValue($this->readDataFromPacket($decodingContext->getPacket(), $length));
+        $bitMap->setValue($this->readDataFromPacket($decodingContext->packet, $length));
 
         return $length;
     }
@@ -160,7 +158,7 @@ class Decoder
      */
     private function decodeChar(DecodingContext $decodingContext, Char $char): int
     {
-        $value = \unpack('C', $this->readDataFromPacket($decodingContext->getPacket(), 1))[1];
+        $value = \unpack('C', $this->readDataFromPacket($decodingContext->packet, 1))[1];
         $char->setValue($value);
 
         return 1;
@@ -176,9 +174,8 @@ class Decoder
      */
     private function decodeCharacterString(DecodingContext $decodingContext, CharacterString $characterString): int
     {
-        $packet = $decodingContext->getPacket();
-        $length = \ord($this->readDataFromPacket($packet, 1));
-        $characterString->setValue($this->readDataFromPacket($packet, $length));
+        $length = \ord($this->readDataFromPacket($decodingContext->packet, 1));
+        $characterString->setValue($this->readDataFromPacket($decodingContext->packet, $length));
 
         return $length + 1;
     }
@@ -193,25 +190,23 @@ class Decoder
      */
     private function decodeDomainName(DecodingContext $decodingContext, DomainName $domainName): int
     {
-        $packet = $decodingContext->getPacket();
-        $startIndex = '0x' . \dechex($packet->getPointer());
-        $labelRegistry = $decodingContext->getLabelRegistry();
+        $startIndex = '0x' . \dechex($decodingContext->packet->getPointer());
 
         $labels = [];
         $totalLength = 0;
 
-        while (++$totalLength && $length = \ord($this->readDataFromPacket($packet, 1))) {
+        while (++$totalLength && $length = \ord($this->readDataFromPacket($decodingContext->packet, 1))) {
             $labelType = $length & 0b11000000;
 
             if ($labelType === 0b00000000) {
-                $index = $packet->getPointer() - 1;
-                $label = $this->readDataFromPacket($packet, $length);
+                $index = $decodingContext->packet->getPointer() - 1;
+                $label = $this->readDataFromPacket($decodingContext->packet, $length);
 
                 \array_unshift($labels, [$index, $label]);
                 $totalLength += $length;
             } else if ($labelType === 0b11000000) {
-                $index = (($length & 0b00111111) << 8) | \ord($this->readDataFromPacket($packet, 1));
-                $ref = $labelRegistry->lookupLabel($index);
+                $index = (($length & 0b00111111) << 8) | \ord($this->readDataFromPacket($decodingContext->packet, 1));
+                $ref = $decodingContext->labelRegistry->lookupLabel($index);
                 if ($ref === null) {
                     throw new \UnexpectedValueException('Decode error: Invalid compression pointer reference in domain name at position ' . $startIndex);
                 }
@@ -229,7 +224,7 @@ class Decoder
         foreach ($labels as $label) {
             if (\is_int($label[0])) {
                 \array_unshift($result, $label[1]);
-                $labelRegistry->register($result, $label[0]);
+                $decodingContext->labelRegistry->register($result, $label[0]);
             } else {
                 $result = $label;
             }
@@ -249,7 +244,7 @@ class Decoder
      */
     private function decodeIPv4Address(DecodingContext $decodingContext, IPv4Address $ipv4Address): int
     {
-        $octets = \unpack('C4', $this->readDataFromPacket($decodingContext->getPacket(), 4));
+        $octets = \unpack('C4', $this->readDataFromPacket($decodingContext->packet, 4));
         $ipv4Address->setOctets($octets);
 
         return 4;
@@ -265,7 +260,7 @@ class Decoder
      */
     private function decodeIPv6Address(DecodingContext $decodingContext, IPv6Address $ipv6Address): int
     {
-        $shorts = \unpack('n8', $this->readDataFromPacket($decodingContext->getPacket(), 16));
+        $shorts = \unpack('n8', $this->readDataFromPacket($decodingContext->packet, 16));
         $ipv6Address->setShorts($shorts);
 
         return 16;
@@ -281,7 +276,7 @@ class Decoder
      */
     private function decodeLong(DecodingContext $decodingContext, Long $long): int
     {
-        $value = \unpack('N', $this->readDataFromPacket($decodingContext->getPacket(), 4))[1];
+        $value = \unpack('N', $this->readDataFromPacket($decodingContext->packet, 4))[1];
         $long->setValue($value);
 
         return 4;
@@ -297,7 +292,7 @@ class Decoder
      */
     private function decodeShort(DecodingContext $decodingContext, Short $short): int
     {
-        $value = \unpack('n', $this->readDataFromPacket($decodingContext->getPacket(), 2))[1];
+        $value = \unpack('n', $this->readDataFromPacket($decodingContext->packet, 2))[1];
         $short->setValue($value);
 
         return 2;
@@ -351,7 +346,7 @@ class Decoder
     {
         $domainName = new DomainName();
         $this->decodeDomainName($decodingContext, $domainName);
-        $meta = \unpack('ntype/nclass', $this->readDataFromPacket($decodingContext->getPacket(), 4));
+        $meta = \unpack('ntype/nclass', $this->readDataFromPacket($decodingContext->packet, 4));
 
         $question = new Question($meta['type']);
         $question->setName($domainName);
@@ -372,7 +367,7 @@ class Decoder
     {
         $domainName = new DomainName();
         $this->decodeDomainName($decodingContext, $domainName);
-        $meta = \unpack('ntype/nclass/Nttl/nlength', $this->readDataFromPacket($decodingContext->getPacket(), 10));
+        $meta = \unpack('ntype/nclass/Nttl/nlength', $this->readDataFromPacket($decodingContext->packet, 10));
 
         $resource = $this->resourceBuilder->build($meta['type']);
         $resource->setName($domainName);
@@ -421,26 +416,22 @@ class Decoder
         $this->decodeHeader($decodingContext, $message);
 
         $questionRecords = $message->getQuestionRecords();
-        $expected = $decodingContext->getExpectedQuestionRecords();
-        for ($i = 0; $i < $expected; $i++) {
+        for ($i = 0; $i < $decodingContext->expectedQuestionRecords; $i++) {
             $questionRecords->add($this->decodeQuestionRecord($decodingContext));
         }
 
         $answerRecords = $message->getAnswerRecords();
-        $expected = $decodingContext->getExpectedAnswerRecords();
-        for ($i = 0; $i < $expected; $i++) {
+        for ($i = 0; $i < $decodingContext->expectedAnswerRecords; $i++) {
             $answerRecords->add($this->decodeResourceRecord($decodingContext));
         }
 
         $authorityRecords = $message->getAuthorityRecords();
-        $expected = $decodingContext->getExpectedAuthorityRecords();
-        for ($i = 0; $i < $expected; $i++) {
+        for ($i = 0; $i < $decodingContext->expectedAuthorityRecords; $i++) {
             $authorityRecords->add($this->decodeResourceRecord($decodingContext));
         }
 
         $additionalRecords = $message->getAdditionalRecords();
-        $expected = $decodingContext->getExpectedAdditionalRecords();
-        for ($i = 0; $i < $expected; $i++) {
+        for ($i = 0; $i < $decodingContext->expectedAdditionalRecords; $i++) {
             $additionalRecords->add($this->decodeResourceRecord($decodingContext));
         }
 
