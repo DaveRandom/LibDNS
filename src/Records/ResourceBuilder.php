@@ -64,6 +64,6 @@ class ResourceBuilder
             $rData->setField($index, $this->typeBuilder->build($type->getType()));
         }
 
-        return new Resource($type, $rData);
+        return new Resource($type->getType(), $rData);
     }
 }
