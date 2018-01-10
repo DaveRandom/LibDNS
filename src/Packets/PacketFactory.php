@@ -11,7 +11,7 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Packets;
+namespace DaveRandom\LibDNS\Packets;
 
 /**
  * Creates Packet objects
@@ -26,7 +26,7 @@ class PacketFactory
      * Create a new Packet object
      *
      * @param string $data
-     * @return \LibDNS\Packets\Packet
+     * @return \DaveRandom\LibDNS\Packets\Packet
      */
     public function create(string $data = ''): Packet
     {

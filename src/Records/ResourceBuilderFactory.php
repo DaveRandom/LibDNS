@@ -11,13 +11,13 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Records;
+namespace DaveRandom\LibDNS\Records;
 
-use \LibDNS\Records\Types\TypeBuilder;
-use \LibDNS\Records\Types\TypeFactory;
-use \LibDNS\Records\TypeDefinitions\TypeDefinitionManager;
-use \LibDNS\Records\TypeDefinitions\TypeDefinitionFactory;
-use \LibDNS\Records\TypeDefinitions\FieldDefinitionFactory;
+use DaveRandom\LibDNS\Records\Types\TypeBuilder;
+use DaveRandom\LibDNS\Records\Types\TypeFactory;
+use DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionManager;
+use DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionFactory;
+use DaveRandom\LibDNS\Records\TypeDefinitions\FieldDefinitionFactory;
 
 /**
  * Creates ResourceBuilder objects
@@ -31,8 +31,8 @@ class ResourceBuilderFactory
     /**
      * Create a new ResourceBuilder object
      *
-     * @param \LibDNS\Records\TypeDefinitions\TypeDefinitionManager $typeDefinitionManager
-     * @return \LibDNS\Records\ResourceBuilder
+     * @param \DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionManager $typeDefinitionManager
+     * @return \DaveRandom\LibDNS\Records\ResourceBuilder
      */
     public function create(TypeDefinitionManager $typeDefinitionManager = null): ResourceBuilder
     {

@@ -11,7 +11,7 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Records;
+namespace DaveRandom\LibDNS\Records;
 
 /**
  * Creates RecordCollection objects
@@ -26,7 +26,7 @@ class RecordCollectionFactory
      * Create a new RecordCollection object
      *
      * @param int $type Can be indicated using the RecordTypes enum
-     * @return \LibDNS\Records\RecordCollection
+     * @return \DaveRandom\LibDNS\Records\RecordCollection
      * @throws \InvalidArgumentException When the specified record type is invalid
      */
     public function create(int $type): RecordCollection

@@ -11,9 +11,9 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Messages;
+namespace DaveRandom\LibDNS\Messages;
 
-use \LibDNS\Records\RecordCollectionFactory;
+use DaveRandom\LibDNS\Records\RecordCollectionFactory;
 
 /**
  * Factory which creates Message objects
@@ -28,7 +28,7 @@ class MessageFactory
      * Create a new Message object
      *
      * @param int $type Value of the message type field
-     * @return \LibDNS\Messages\Message
+     * @return \DaveRandom\LibDNS\Messages\Message
      */
     public function create(int $type = null): Message
     {

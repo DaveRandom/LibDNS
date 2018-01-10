@@ -11,7 +11,7 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Records\TypeDefinitions;
+namespace DaveRandom\LibDNS\Records\TypeDefinitions;
 
 /**
  * Creates FieldDefinition objects
@@ -30,7 +30,7 @@ class FieldDefinitionFactory
      * @param int $type
      * @param bool $allowsMultiple
      * @param int $minimumValues
-     * @return \LibDNS\Records\TypeDefinitions\FieldDefinition
+     * @return \DaveRandom\LibDNS\Records\TypeDefinitions\FieldDefinition
      */
     public function create(int $index, string $name, int $type, bool $allowsMultiple, int $minimumValues): FieldDefinition
     {

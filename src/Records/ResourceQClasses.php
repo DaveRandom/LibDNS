@@ -11,7 +11,7 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Records;
+namespace DaveRandom\LibDNS\Records;
 
 /**
  * Enumeration of possible resource QCLASS values

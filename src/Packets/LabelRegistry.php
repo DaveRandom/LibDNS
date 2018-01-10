@@ -12,7 +12,7 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Packets;
+namespace DaveRandom\LibDNS\Packets;
 
 /**
  * Creates Packet objects

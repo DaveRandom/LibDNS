@@ -11,9 +11,9 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Records;
+namespace DaveRandom\LibDNS\Records;
 
-use \LibDNS\Records\Types\DomainName;
+use DaveRandom\LibDNS\Records\Types\DomainName;
 
 /**
  * Represents a DNS record
@@ -25,12 +25,12 @@ use \LibDNS\Records\Types\DomainName;
 abstract class Record
 {
     /**
-     * @var \LibDNS\Records\Types\TypeFactory
+     * @var \DaveRandom\LibDNS\Records\Types\TypeFactory
      */
     protected $typeFactory;
 
     /**
-     * @var \LibDNS\Records\Types\DomainName
+     * @var \DaveRandom\LibDNS\Records\Types\DomainName
      */
     protected $name;
 
@@ -47,7 +47,7 @@ abstract class Record
     /**
      * Get the value of the record name field
      *
-     * @return \LibDNS\Records\Types\DomainName
+     * @return \DaveRandom\LibDNS\Records\Types\DomainName
      */
     public function getName(): DomainName
     {
@@ -57,7 +57,7 @@ abstract class Record
     /**
      * Set the value of the record name field
      *
-     * @param string|\LibDNS\Records\Types\DomainName $name
+     * @param string|\DaveRandom\LibDNS\Records\Types\DomainName $name
      * @throws \UnexpectedValueException When the supplied value is not a valid domain name
      */
     public function setName($name)

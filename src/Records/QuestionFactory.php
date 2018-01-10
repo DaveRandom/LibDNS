@@ -11,9 +11,9 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Records;
+namespace DaveRandom\LibDNS\Records;
 
-use \LibDNS\Records\Types\TypeFactory;
+use DaveRandom\LibDNS\Records\Types\TypeFactory;
 
 /**
  * Creates Question objects
@@ -28,7 +28,7 @@ class QuestionFactory
      * Create a new Question object
      *
      * @param int $type The resource type
-     * @return \LibDNS\Records\Question
+     * @return \DaveRandom\LibDNS\Records\Question
      */
     public function create(int $type): Question
     {

@@ -11,9 +11,9 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Messages;
+namespace DaveRandom\LibDNS\Messages;
 
-use \LibDNS\Enumeration;
+use DaveRandom\LibDNS\Enumeration;
 
 /**
  * Enumeration of possible message types

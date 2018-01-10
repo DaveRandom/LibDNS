@@ -11,9 +11,9 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Encoder;
+namespace DaveRandom\LibDNS\Encoder;
 
-use \LibDNS\Packets\PacketFactory;
+use DaveRandom\LibDNS\Packets\PacketFactory;
 
 /**
  * Creates Encoder objects
@@ -27,7 +27,7 @@ class EncoderFactory
     /**
      * Create a new Encoder object
      *
-     * @return \LibDNS\Encoder\Encoder
+     * @return \DaveRandom\LibDNS\Encoder\Encoder
      */
     public function create(): Encoder
     {

@@ -11,10 +11,10 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Records;
+namespace DaveRandom\LibDNS\Records;
 
-use \LibDNS\Records\Types\Type;
-use \LibDNS\Records\TypeDefinitions\TypeDefinition;
+use DaveRandom\LibDNS\Records\Types\Type;
+use DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinition;
 
 /**
  * Represents a data type comprising multiple simple types
@@ -26,19 +26,19 @@ use \LibDNS\Records\TypeDefinitions\TypeDefinition;
 class RData implements \IteratorAggregate, \Countable
 {
     /**
-     * @var \LibDNS\Records\Types\Type[] The items that make up the complex type
+     * @var \DaveRandom\LibDNS\Records\Types\Type[] The items that make up the complex type
      */
     private $fields = [];
 
     /**
-     * @var \LibDNS\Records\TypeDefinitions\TypeDefinition Structural definition of the fields
+     * @var \DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinition Structural definition of the fields
      */
     private $typeDef;
 
     /**
      * Constructor
      *
-     * @param \LibDNS\Records\TypeDefinitions\TypeDefinition $typeDef
+     * @param \DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinition $typeDef
      */
     public function __construct(TypeDefinition $typeDef)
     {
@@ -65,7 +65,7 @@ class RData implements \IteratorAggregate, \Countable
      * Get the field indicated by the supplied index
      *
      * @param int $index
-     * @return \LibDNS\Records\Types\Type
+     * @return \DaveRandom\LibDNS\Records\Types\Type
      * @throws \OutOfBoundsException When the supplied index does not refer to a valid field
      */
     public function getField(int $index)
@@ -81,7 +81,7 @@ class RData implements \IteratorAggregate, \Countable
      * Set the field indicated by the supplied index
      *
      * @param int $index
-     * @param \LibDNS\Records\Types\Type $value
+     * @param \DaveRandom\LibDNS\Records\Types\Type $value
      * @throws \InvalidArgumentException When the supplied index/value pair does not match the type definition
      */
     public function setField(int $index, Type $value)
@@ -97,7 +97,7 @@ class RData implements \IteratorAggregate, \Countable
      * Get the field indicated by the supplied name
      *
      * @param string $name
-     * @return \LibDNS\Records\Types\Type
+     * @return \DaveRandom\LibDNS\Records\Types\Type
      * @throws \OutOfBoundsException When the supplied name does not refer to a valid field
      */
     public function getFieldByName(string $name): Type
@@ -109,7 +109,7 @@ class RData implements \IteratorAggregate, \Countable
      * Set the field indicated by the supplied name
      *
      * @param string $name
-     * @param \LibDNS\Records\Types\Type $value
+     * @param \DaveRandom\LibDNS\Records\Types\Type $value
      * @throws \OutOfBoundsException When the supplied name does not refer to a valid field
      * @throws \InvalidArgumentException When the supplied value does not match the type definition
      */
@@ -121,7 +121,7 @@ class RData implements \IteratorAggregate, \Countable
     /**
      * Get the structural definition of the fields
      *
-     * @return \LibDNS\Records\TypeDefinitions\TypeDefinition
+     * @return \DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinition
      */
     public function getTypeDefinition(): TypeDefinition
     {

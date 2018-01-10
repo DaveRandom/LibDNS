@@ -11,7 +11,7 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Records\TypeDefinitions;
+namespace DaveRandom\LibDNS\Records\TypeDefinitions;
 
 /**
  * Defines a data type comprising multiple fields
@@ -33,7 +33,7 @@ class TypeDefinition implements \IteratorAggregate, \Countable
     private $fieldCount;
 
     /**
-     * @var \LibDNS\Records\TypeDefinitions\FieldDefinition The last field defined by the type
+     * @var \DaveRandom\LibDNS\Records\TypeDefinitions\FieldDefinition The last field defined by the type
      */
     private $lastField;
 
@@ -121,7 +121,7 @@ class TypeDefinition implements \IteratorAggregate, \Countable
      * Get the field definition indicated by the supplied index
      *
      * @param int $index
-     * @return \LibDNS\Records\TypeDefinitions\FieldDefinition
+     * @return \DaveRandom\LibDNS\Records\TypeDefinitions\FieldDefinition
      * @throws \OutOfBoundsException When the supplied index does not refer to a valid field
      */
     public function getFieldDefinition(int $index): FieldDefinition

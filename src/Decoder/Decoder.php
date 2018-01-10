@@ -11,28 +11,28 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Decoder;
+namespace DaveRandom\LibDNS\Decoder;
 
-use LibDNS\Messages\Message;
-use LibDNS\Messages\MessageFactory;
-use LibDNS\Packets\Packet;
-use LibDNS\Packets\PacketFactory;
-use LibDNS\Records\Question;
-use LibDNS\Records\QuestionFactory;
-use LibDNS\Records\Resource;
-use LibDNS\Records\ResourceBuilder;
-use LibDNS\Records\Types\Anything;
-use LibDNS\Records\Types\BitMap;
-use LibDNS\Records\Types\Char;
-use LibDNS\Records\Types\CharacterString;
-use LibDNS\Records\Types\DomainName;
-use LibDNS\Records\Types\IPv4Address;
-use LibDNS\Records\Types\IPv6Address;
-use LibDNS\Records\Types\Long;
-use LibDNS\Records\Types\Short;
-use LibDNS\Records\Types\Type;
-use LibDNS\Records\Types\TypeBuilder;
-use LibDNS\Records\Types\Types;
+use DaveRandom\LibDNS\Messages\Message;
+use DaveRandom\LibDNS\Messages\MessageFactory;
+use DaveRandom\LibDNS\Packets\Packet;
+use DaveRandom\LibDNS\Packets\PacketFactory;
+use DaveRandom\LibDNS\Records\Question;
+use DaveRandom\LibDNS\Records\QuestionFactory;
+use DaveRandom\LibDNS\Records\Resource as ResourceRecord;
+use DaveRandom\LibDNS\Records\ResourceBuilder;
+use DaveRandom\LibDNS\Records\Types\Anything;
+use DaveRandom\LibDNS\Records\Types\BitMap;
+use DaveRandom\LibDNS\Records\Types\Char;
+use DaveRandom\LibDNS\Records\Types\CharacterString;
+use DaveRandom\LibDNS\Records\Types\DomainName;
+use DaveRandom\LibDNS\Records\Types\IPv4Address;
+use DaveRandom\LibDNS\Records\Types\IPv6Address;
+use DaveRandom\LibDNS\Records\Types\Long;
+use DaveRandom\LibDNS\Records\Types\Short;
+use DaveRandom\LibDNS\Records\Types\Type;
+use DaveRandom\LibDNS\Records\Types\TypeBuilder;
+use DaveRandom\LibDNS\Records\Types\Types;
 
 /**
  * Decodes raw network data to Message objects
@@ -44,32 +44,32 @@ use LibDNS\Records\Types\Types;
 class Decoder
 {
     /**
-     * @var \LibDNS\Packets\PacketFactory
+     * @var \DaveRandom\LibDNS\Packets\PacketFactory
      */
     private $packetFactory;
 
     /**
-     * @var \LibDNS\Messages\MessageFactory
+     * @var \DaveRandom\LibDNS\Messages\MessageFactory
      */
     private $messageFactory;
 
     /**
-     * @var \LibDNS\Records\QuestionFactory
+     * @var \DaveRandom\LibDNS\Records\QuestionFactory
      */
     private $questionFactory;
 
     /**
-     * @var \LibDNS\Records\ResourceBuilder
+     * @var \DaveRandom\LibDNS\Records\ResourceBuilder
      */
     private $resourceBuilder;
 
     /**
-     * @var \LibDNS\Records\Types\TypeBuilder
+     * @var \DaveRandom\LibDNS\Records\Types\TypeBuilder
      */
     private $typeBuilder;
 
     /**
-     * @var \LibDNS\Decoder\DecodingContextFactory
+     * @var \DaveRandom\LibDNS\Decoder\DecodingContextFactory
      */
     private $decodingContextFactory;
 
@@ -81,12 +81,12 @@ class Decoder
     /**
      * Constructor
      *
-     * @param \LibDNS\Packets\PacketFactory $packetFactory
-     * @param \LibDNS\Messages\MessageFactory $messageFactory
-     * @param \LibDNS\Records\QuestionFactory $questionFactory
-     * @param \LibDNS\Records\ResourceBuilder $resourceBuilder
-     * @param \LibDNS\Records\Types\TypeBuilder $typeBuilder
-     * @param \LibDNS\Decoder\DecodingContextFactory $decodingContextFactory
+     * @param \DaveRandom\LibDNS\Packets\PacketFactory $packetFactory
+     * @param \DaveRandom\LibDNS\Messages\MessageFactory $messageFactory
+     * @param \DaveRandom\LibDNS\Records\QuestionFactory $questionFactory
+     * @param \DaveRandom\LibDNS\Records\ResourceBuilder $resourceBuilder
+     * @param \DaveRandom\LibDNS\Records\Types\TypeBuilder $typeBuilder
+     * @param \DaveRandom\LibDNS\Decoder\DecodingContextFactory $decodingContextFactory
      * @param bool $allowTrailingData
      */
     public function __construct(
@@ -110,7 +110,7 @@ class Decoder
     /**
      * Read a specified number of bytes of data from a packet
      *
-     * @param \LibDNS\Packets\Packet $packet
+     * @param \DaveRandom\LibDNS\Packets\Packet $packet
      * @param int $length
      * @return string
      * @throws \UnexpectedValueException When the read operation does not result in the requested number of bytes
@@ -127,8 +127,8 @@ class Decoder
     /**
      * Decode the header section of the message
      *
-     * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\Messages\Message $message
+     * @param \DaveRandom\LibDNS\Decoder\DecodingContext $decodingContext
+     * @param \DaveRandom\LibDNS\Messages\Message $message
      * @throws \UnexpectedValueException When the header section is invalid
      */
     private function decodeHeader(DecodingContext $decodingContext, Message $message)
@@ -157,8 +157,8 @@ class Decoder
     /**
      * Decode an Anything field
      *
-     * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\Records\Types\Anything $anything The object to populate with the result
+     * @param \DaveRandom\LibDNS\Decoder\DecodingContext $decodingContext
+     * @param \DaveRandom\LibDNS\Records\Types\Anything $anything The object to populate with the result
      * @param int $length
      * @return int The number of packet bytes consumed by the operation
      * @throws \UnexpectedValueException When the packet data is invalid
@@ -173,8 +173,8 @@ class Decoder
     /**
      * Decode a BitMap field
      *
-     * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\Records\Types\BitMap $bitMap The object to populate with the result
+     * @param \DaveRandom\LibDNS\Decoder\DecodingContext $decodingContext
+     * @param \DaveRandom\LibDNS\Records\Types\BitMap $bitMap The object to populate with the result
      * @param int $length
      * @return int The number of packet bytes consumed by the operation
      * @throws \UnexpectedValueException When the packet data is invalid
@@ -189,8 +189,8 @@ class Decoder
     /**
      * Decode a Char field
      *
-     * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\Records\Types\Char $char The object to populate with the result
+     * @param \DaveRandom\LibDNS\Decoder\DecodingContext $decodingContext
+     * @param \DaveRandom\LibDNS\Records\Types\Char $char The object to populate with the result
      * @return int The number of packet bytes consumed by the operation
      * @throws \UnexpectedValueException When the packet data is invalid
      */
@@ -205,8 +205,8 @@ class Decoder
     /**
      * Decode a CharacterString field
      *
-     * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\Records\Types\CharacterString $characterString The object to populate with the result
+     * @param \DaveRandom\LibDNS\Decoder\DecodingContext $decodingContext
+     * @param \DaveRandom\LibDNS\Records\Types\CharacterString $characterString The object to populate with the result
      * @return int The number of packet bytes consumed by the operation
      * @throws \UnexpectedValueException When the packet data is invalid
      */
@@ -222,8 +222,8 @@ class Decoder
     /**
      * Decode a DomainName field
      *
-     * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\Records\Types\DomainName $domainName The object to populate with the result
+     * @param \DaveRandom\LibDNS\Decoder\DecodingContext $decodingContext
+     * @param \DaveRandom\LibDNS\Records\Types\DomainName $domainName The object to populate with the result
      * @return int The number of packet bytes consumed by the operation
      * @throws \UnexpectedValueException When the packet data is invalid
      */
@@ -278,8 +278,8 @@ class Decoder
     /**
      * Decode an IPv4Address field
      *
-     * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\Records\Types\IPv4Address $ipv4Address The object to populate with the result
+     * @param \DaveRandom\LibDNS\Decoder\DecodingContext $decodingContext
+     * @param \DaveRandom\LibDNS\Records\Types\IPv4Address $ipv4Address The object to populate with the result
      * @return int The number of packet bytes consumed by the operation
      * @throws \UnexpectedValueException When the packet data is invalid
      */
@@ -294,8 +294,8 @@ class Decoder
     /**
      * Decode an IPv6Address field
      *
-     * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\Records\Types\IPv6Address $ipv6Address The object to populate with the result
+     * @param \DaveRandom\LibDNS\Decoder\DecodingContext $decodingContext
+     * @param \DaveRandom\LibDNS\Records\Types\IPv6Address $ipv6Address The object to populate with the result
      * @return int The number of packet bytes consumed by the operation
      * @throws \UnexpectedValueException When the packet data is invalid
      */
@@ -310,8 +310,8 @@ class Decoder
     /**
      * Decode a Long field
      *
-     * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\Records\Types\Long $long The object to populate with the result
+     * @param \DaveRandom\LibDNS\Decoder\DecodingContext $decodingContext
+     * @param \DaveRandom\LibDNS\Records\Types\Long $long The object to populate with the result
      * @return int The number of packet bytes consumed by the operation
      * @throws \UnexpectedValueException When the packet data is invalid
      */
@@ -326,8 +326,8 @@ class Decoder
     /**
      * Decode a Short field
      *
-     * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\Records\Types\Short $short The object to populate with the result
+     * @param \DaveRandom\LibDNS\Decoder\DecodingContext $decodingContext
+     * @param \DaveRandom\LibDNS\Records\Types\Short $short The object to populate with the result
      * @return int The number of packet bytes consumed by the operation
      * @throws \UnexpectedValueException When the packet data is invalid
      */
@@ -342,8 +342,8 @@ class Decoder
     /**
      * Decode a Type field
      *
-     * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @param \LibDNS\Records\Types\Type $type The object to populate with the result
+     * @param \DaveRandom\LibDNS\Decoder\DecodingContext $decodingContext
+     * @param \DaveRandom\LibDNS\Records\Types\Type $type The object to populate with the result
      * @param int $length Expected data length
      * @return int The number of packet bytes consumed by the operation
      * @throws \UnexpectedValueException When the packet data is invalid
@@ -379,13 +379,13 @@ class Decoder
     /**
      * Decode a question record
      *
-     * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @return \LibDNS\Records\Question
+     * @param \DaveRandom\LibDNS\Decoder\DecodingContext $decodingContext
+     * @return \DaveRandom\LibDNS\Records\Question
      * @throws \UnexpectedValueException When the record is invalid
      */
     private function decodeQuestionRecord(DecodingContext $decodingContext): Question
     {
-        /** @var \LibDNS\Records\Types\DomainName $domainName */
+        /** @var \DaveRandom\LibDNS\Records\Types\DomainName $domainName */
         $domainName = $this->typeBuilder->build(Types::DOMAIN_NAME);
         $this->decodeDomainName($decodingContext, $domainName);
         $meta = \unpack('ntype/nclass', $this->readDataFromPacket($decodingContext->getPacket(), 4));
@@ -400,14 +400,14 @@ class Decoder
     /**
      * Decode a resource record
      *
-     * @param \LibDNS\Decoder\DecodingContext $decodingContext
-     * @return \LibDNS\Records\Resource
+     * @param \DaveRandom\LibDNS\Decoder\DecodingContext $decodingContext
+     * @return \DaveRandom\LibDNS\Records\Resource
      * @throws \UnexpectedValueException When the record is invalid
      * @throws \InvalidArgumentException When a type subtype is unknown
      */
-    private function decodeResourceRecord(DecodingContext $decodingContext): Resource
+    private function decodeResourceRecord(DecodingContext $decodingContext): ResourceRecord
     {
-        /** @var \LibDNS\Records\Types\DomainName $domainName */
+        /** @var \DaveRandom\LibDNS\Records\Types\DomainName $domainName */
         $domainName = $this->typeBuilder->build(Types::DOMAIN_NAME);
         $this->decodeDomainName($decodingContext, $domainName);
         $meta = \unpack('ntype/nclass/Nttl/nlength', $this->readDataFromPacket($decodingContext->getPacket(), 10));
@@ -446,7 +446,7 @@ class Decoder
      * Decode a Message from raw network data
      *
      * @param string $data The data string to decode
-     * @return \LibDNS\Messages\Message
+     * @return \DaveRandom\LibDNS\Messages\Message
      * @throws \UnexpectedValueException When the packet data is invalid
      * @throws \InvalidArgumentException When a type subtype is unknown
      */

@@ -11,10 +11,10 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Decoder;
+namespace DaveRandom\LibDNS\Decoder;
 
-use \LibDNS\Packets\Packet;
-use \LibDNS\Packets\LabelRegistry;
+use DaveRandom\LibDNS\Packets\Packet;
+use DaveRandom\LibDNS\Packets\LabelRegistry;
 
 /**
  * Creates DecodingContext objects
@@ -28,8 +28,8 @@ class DecodingContextFactory
     /**
      * Create a new DecodingContext object
      *
-     * @param \LibDNS\Packets\Packet $packet The packet to be decoded
-     * @return \LibDNS\Decoder\DecodingContext
+     * @param \DaveRandom\LibDNS\Packets\Packet $packet The packet to be decoded
+     * @return \DaveRandom\LibDNS\Decoder\DecodingContext
      */
     public function create(Packet $packet): DecodingContext
     {

@@ -11,9 +11,10 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Records;
+namespace DaveRandom\LibDNS\Records;
 
-use \LibDNS\Records\TypeDefinitions\TypeDefinitionManager;
+use DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionManager;
+use DaveRandom\LibDNS\Records\Resource as ResourceRecord;
 
 /**
  * Builds Resource objects of a specific type
@@ -25,26 +26,26 @@ use \LibDNS\Records\TypeDefinitions\TypeDefinitionManager;
 class ResourceBuilder
 {
     /**
-     * @var \LibDNS\Records\ResourceFactory
+     * @var \DaveRandom\LibDNS\Records\ResourceFactory
      */
     private $resourceFactory;
 
     /**
-     * @var \LibDNS\Records\RDataBuilder
+     * @var \DaveRandom\LibDNS\Records\RDataBuilder
      */
     private $rDataBuilder;
 
     /**
-     * @var \LibDNS\Records\TypeDefinitions\TypeDefinitionManager
+     * @var \DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionManager
      */
     private $typeDefinitionManager;
 
     /**
      * Constructor
      *
-     * @param \LibDNS\Records\ResourceFactory $resourceFactory
-     * @param \LibDNS\Records\RDataBuilder $rDataBuilder
-     * @param \LibDNS\Records\TypeDefinitions\TypeDefinitionManager $typeDefinitionManager
+     * @param \DaveRandom\LibDNS\Records\ResourceFactory $resourceFactory
+     * @param \DaveRandom\LibDNS\Records\RDataBuilder $rDataBuilder
+     * @param \DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionManager $typeDefinitionManager
      */
     public function __construct(ResourceFactory $resourceFactory, RDataBuilder $rDataBuilder, TypeDefinitionManager $typeDefinitionManager)
     {
@@ -57,9 +58,9 @@ class ResourceBuilder
      * Create a new Resource object
      *
      * @param int $type Type of the resource, can be indicated using the ResourceTypes enum
-     * @return \LibDNS\Records\Resource
+     * @return \DaveRandom\LibDNS\Records\Resource
      */
-    public function build(int $type): Resource
+    public function build(int $type): ResourceRecord
     {
         $typeDefinition = $this->typeDefinitionManager->getTypeDefinition($type);
         $rData = $this->rDataBuilder->build($typeDefinition);

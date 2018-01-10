@@ -11,11 +11,11 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Messages;
+namespace DaveRandom\LibDNS\Messages;
 
-use LibDNS\Records\RecordCollection;
-use \LibDNS\Records\RecordCollectionFactory;
-use \LibDNS\Records\RecordTypes;
+use DaveRandom\LibDNS\Records\RecordCollection;
+use DaveRandom\LibDNS\Records\RecordCollectionFactory;
+use DaveRandom\LibDNS\Records\RecordTypes;
 
 /**
  * Represents a DNS protocol message
@@ -67,29 +67,29 @@ class Message
     private $responseCode = MessageResponseCodes::NO_ERROR;
 
     /**
-     * @var \LibDNS\Records\RecordCollection Collection of question records
+     * @var \DaveRandom\LibDNS\Records\RecordCollection Collection of question records
      */
     private $questionRecords;
 
     /**
-     * @var \LibDNS\Records\RecordCollection Collection of question records
+     * @var \DaveRandom\LibDNS\Records\RecordCollection Collection of question records
      */
     private $answerRecords;
 
     /**
-     * @var \LibDNS\Records\RecordCollection Collection of authority records
+     * @var \DaveRandom\LibDNS\Records\RecordCollection Collection of authority records
      */
     private $authorityRecords;
 
     /**
-     * @var \LibDNS\Records\RecordCollection Collection of authority records
+     * @var \DaveRandom\LibDNS\Records\RecordCollection Collection of authority records
      */
     private $additionalRecords;
 
     /**
      * Constructor
      *
-     * @param \LibDNS\Records\RecordCollectionFactory $recordCollectionFactory Factory which makes RecordCollection objects
+     * @param \DaveRandom\LibDNS\Records\RecordCollectionFactory $recordCollectionFactory Factory which makes RecordCollection objects
      * @param int $type Value of the message type field
      * @throws \RangeException When the supplied message type is outside the valid range 0 - 1
      */
@@ -276,7 +276,7 @@ class Message
     /**
      * Get the question records collection
      *
-     * @return \LibDNS\Records\RecordCollection
+     * @return \DaveRandom\LibDNS\Records\RecordCollection
      */
     public function getQuestionRecords(): RecordCollection
     {
@@ -286,7 +286,7 @@ class Message
     /**
      * Get the answer records collection
      *
-     * @return \LibDNS\Records\RecordCollection
+     * @return \DaveRandom\LibDNS\Records\RecordCollection
      */
     public function getAnswerRecords(): RecordCollection
     {
@@ -296,7 +296,7 @@ class Message
     /**
      * Get the authority records collection
      *
-     * @return \LibDNS\Records\RecordCollection
+     * @return \DaveRandom\LibDNS\Records\RecordCollection
      */
     public function getAuthorityRecords(): RecordCollection
     {
@@ -306,7 +306,7 @@ class Message
     /**
      * Get the additional records collection
      *
-     * @return \LibDNS\Records\RecordCollection
+     * @return \DaveRandom\LibDNS\Records\RecordCollection
      */
     public function getAdditionalRecords(): RecordCollection
     {

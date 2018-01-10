@@ -11,7 +11,7 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Records;
+namespace DaveRandom\LibDNS\Records;
 
 /**
  * Collection of Record objects
@@ -23,12 +23,12 @@ namespace LibDNS\Records;
 class RecordCollection implements \IteratorAggregate, \Countable
 {
     /**
-     * @var \LibDNS\Records\Record[] List of records held in the collection
+     * @var \DaveRandom\LibDNS\Records\Record[] List of records held in the collection
      */
     private $records = [];
 
     /**
-     * @var \LibDNS\Records\Record[][] Map of Records in the collection grouped by record name
+     * @var \DaveRandom\LibDNS\Records\Record[][] Map of Records in the collection grouped by record name
      */
     private $nameMap = [];
 
@@ -60,7 +60,7 @@ class RecordCollection implements \IteratorAggregate, \Countable
     /**
      * Add a record to the correct bucket in the name map
      *
-     * @param \LibDNS\Records\Record $record The record to add
+     * @param \DaveRandom\LibDNS\Records\Record $record The record to add
      */
     private function addToNameMap(Record $record)
     {
@@ -74,7 +74,7 @@ class RecordCollection implements \IteratorAggregate, \Countable
     /**
      * Remove a record from the name map
      *
-     * @param \LibDNS\Records\Record $record The record to remove
+     * @param \DaveRandom\LibDNS\Records\Record $record The record to remove
      */
     private function removeFromNameMap(Record $record)
     {
@@ -95,7 +95,7 @@ class RecordCollection implements \IteratorAggregate, \Countable
     /**
      * Add a record to the collection
      *
-     * @param \LibDNS\Records\Record $record The record to add
+     * @param \DaveRandom\LibDNS\Records\Record $record The record to add
      * @throws \InvalidArgumentException When the wrong record type is supplied
      */
     public function add(Record $record)
@@ -113,7 +113,7 @@ class RecordCollection implements \IteratorAggregate, \Countable
     /**
      * Remove a record from the collection
      *
-     * @param \LibDNS\Records\Record $record The record to remove
+     * @param \DaveRandom\LibDNS\Records\Record $record The record to remove
      */
     public function remove(Record $record)
     {
@@ -132,7 +132,7 @@ class RecordCollection implements \IteratorAggregate, \Countable
     /**
      * Test whether the collection contains a specific record
      *
-     * @param \LibDNS\Records\Record $record       The record to search for
+     * @param \DaveRandom\LibDNS\Records\Record $record       The record to search for
      * @param bool $sameInstance Whether to perform strict comparisons in search
      * @return bool
      */
@@ -145,7 +145,7 @@ class RecordCollection implements \IteratorAggregate, \Countable
      * Get all records in the collection that refer to the specified name
      *
      * @param string $name The name to match records against
-     * @return \LibDNS\Records\Record[]
+     * @return \DaveRandom\LibDNS\Records\Record[]
      */
     public function getRecordsByName(string $name): array
     {
@@ -156,7 +156,7 @@ class RecordCollection implements \IteratorAggregate, \Countable
      * Get a record from the collection by index
      *
      * @param int $index Record index
-     * @return \LibDNS\Records\Record
+     * @return \DaveRandom\LibDNS\Records\Record
      * @throws \OutOfBoundsException When the supplied index does not refer to a valid record
      */
     public function getRecordByIndex(int $index): Record

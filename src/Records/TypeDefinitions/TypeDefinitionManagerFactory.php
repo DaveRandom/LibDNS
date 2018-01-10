@@ -11,7 +11,7 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Records\TypeDefinitions;
+namespace DaveRandom\LibDNS\Records\TypeDefinitions;
 
 /**
  * Creates TypeDefinitionManager objects
@@ -25,7 +25,7 @@ class TypeDefinitionManagerFactory
     /**
      * Create a new TypeDefinitionManager object
      *
-     * @return \LibDNS\Records\TypeDefinitions\TypeDefinitionManager
+     * @return \DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionManager
      */
     public function create(): TypeDefinitionManager
     {

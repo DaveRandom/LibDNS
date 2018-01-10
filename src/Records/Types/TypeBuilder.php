@@ -11,7 +11,7 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Records\Types;
+namespace DaveRandom\LibDNS\Records\Types;
 
 /**
  * Builds Types from type definitions
@@ -23,14 +23,14 @@ namespace LibDNS\Records\Types;
 class TypeBuilder
 {
     /**
-     * @var \LibDNS\Records\Types\TypeFactory
+     * @var \DaveRandom\LibDNS\Records\Types\TypeFactory
      */
     private $typeFactory;
 
     /**
      * Constructor
      *
-     * @param \LibDNS\Records\Types\TypeFactory $typeFactory
+     * @param \DaveRandom\LibDNS\Records\Types\TypeFactory $typeFactory
      */
     public function __construct(TypeFactory $typeFactory)
     {
@@ -41,7 +41,7 @@ class TypeBuilder
      * Build a new Type object corresponding to a resource record type
      *
      * @param int $type Data type, can be indicated using the Types enum
-     * @return \LibDNS\Records\Types\Type
+     * @return \DaveRandom\LibDNS\Records\Types\Type
      */
     public function build(int $type): Type
     {

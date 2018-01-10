@@ -11,21 +11,21 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 1.0.0
  */
-namespace LibDNS\Examples;
+namespace DaveRandom\LibDNS\Examples;
 
-use \LibDNS\Messages\MessageFactory;
-use \LibDNS\Messages\MessageTypes;
-use \LibDNS\Records\QuestionFactory;
-use \LibDNS\Records\ResourceQTypes;
-use \LibDNS\Encoder\EncoderFactory;
-use \LibDNS\Decoder\DecoderFactory;
+use DaveRandom\LibDNS\Messages\MessageFactory;
+use DaveRandom\LibDNS\Messages\MessageTypes;
+use DaveRandom\LibDNS\Records\QuestionFactory;
+use DaveRandom\LibDNS\Records\ResourceQTypes;
+use DaveRandom\LibDNS\Encoder\EncoderFactory;
+use DaveRandom\LibDNS\Decoder\DecoderFactory;
 
 // Config
 $queryName      = 'faß.de';
 $serverIP       = '8.8.8.8';
 $requestTimeout = 3;
 
-require __DIR__ . '/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 // Create question record
 $question = (new QuestionFactory)->create(ResourceQTypes::A);
@@ -66,7 +66,7 @@ if ($response->getResponseCode() !== 0) {
 $answers = $response->getAnswerRecords();
 if (count($answers)) {
     foreach ($response->getAnswerRecords() as $record) {
-        /** @var \LibDNS\Records\Resource $record */
+        /** @var \DaveRandom\LibDNS\Records\Resource $record */
         echo "    " . $record->getData() . "\n";
     }
 } else {

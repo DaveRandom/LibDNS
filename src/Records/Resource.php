@@ -11,9 +11,9 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Records;
+namespace DaveRandom\LibDNS\Records;
 
-use \LibDNS\Records\Types\TypeFactory;
+use DaveRandom\LibDNS\Records\Types\TypeFactory;
 
 /**
  * Represents a DNS resource record
@@ -30,16 +30,16 @@ class Resource extends Record
     private $ttl;
 
     /**
-     * @var \LibDNS\Records\RData
+     * @var \DaveRandom\LibDNS\Records\RData
      */
     private $data;
 
     /**
      * Constructor
      *
-     * @param \LibDNS\Records\Types\TypeFactory $typeFactory
+     * @param \DaveRandom\LibDNS\Records\Types\TypeFactory $typeFactory
      * @param int $type Can be indicated using the ResourceTypes enum
-     * @param \LibDNS\Records\RData $data
+     * @param \DaveRandom\LibDNS\Records\RData $data
      */
     public function __construct(TypeFactory $typeFactory, int $type, RData $data)
     {
@@ -76,7 +76,7 @@ class Resource extends Record
     /**
      * Get the value of the resource data field
      *
-     * @return \LibDNS\Records\RData
+     * @return \DaveRandom\LibDNS\Records\RData
      */
     public function getData(): RData
     {

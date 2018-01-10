@@ -11,21 +11,20 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Decoder;
+namespace DaveRandom\LibDNS\Decoder;
 
-use \LibDNS\Packets\PacketFactory;
-use \LibDNS\Messages\MessageFactory;
-use \LibDNS\Records\RecordCollectionFactory;
-use \LibDNS\Records\QuestionFactory;
-use \LibDNS\Records\ResourceBuilder;
-use \LibDNS\Records\ResourceFactory;
-use \LibDNS\Records\RDataBuilder;
-use \LibDNS\Records\RDataFactory;
-use \LibDNS\Records\Types\TypeBuilder;
-use \LibDNS\Records\Types\TypeFactory;
-use \LibDNS\Records\TypeDefinitions\TypeDefinitionManager;
-use \LibDNS\Records\TypeDefinitions\TypeDefinitionFactory;
-use \LibDNS\Records\TypeDefinitions\FieldDefinitionFactory;
+use DaveRandom\LibDNS\Messages\MessageFactory;
+use DaveRandom\LibDNS\Packets\PacketFactory;
+use DaveRandom\LibDNS\Records\QuestionFactory;
+use DaveRandom\LibDNS\Records\RDataBuilder;
+use DaveRandom\LibDNS\Records\RDataFactory;
+use DaveRandom\LibDNS\Records\ResourceBuilder;
+use DaveRandom\LibDNS\Records\ResourceFactory;
+use DaveRandom\LibDNS\Records\TypeDefinitions\FieldDefinitionFactory;
+use DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionFactory;
+use DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionManager;
+use DaveRandom\LibDNS\Records\Types\TypeBuilder;
+use DaveRandom\LibDNS\Records\Types\TypeFactory;
 
 /**
  * Creates Decoder objects
@@ -39,7 +38,7 @@ class DecoderFactory
     /**
      * Create a new Decoder object
      *
-     * @param \LibDNS\Records\TypeDefinitions\TypeDefinitionManager $typeDefinitionManager
+     * @param \DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionManager $typeDefinitionManager
      * @param bool $allowTrailingData
      * @return Decoder
      */
@@ -49,7 +48,7 @@ class DecoderFactory
 
         return new Decoder(
             new PacketFactory,
-            new MessageFactory(new RecordCollectionFactory),
+            new MessageFactory,
             new QuestionFactory,
             new ResourceBuilder(
                 new ResourceFactory,

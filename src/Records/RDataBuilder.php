@@ -11,10 +11,10 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Records;
+namespace DaveRandom\LibDNS\Records;
 
-use \LibDNS\Records\TypeDefinitions\TypeDefinition;
-use \LibDNS\Records\Types\TypeBuilder;
+use DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinition;
+use DaveRandom\LibDNS\Records\Types\TypeBuilder;
 
 /**
  * Creates RData objects
@@ -26,20 +26,20 @@ use \LibDNS\Records\Types\TypeBuilder;
 class RDataBuilder
 {
     /**
-     * @var \LibDNS\Records\RDataFactory
+     * @var \DaveRandom\LibDNS\Records\RDataFactory
      */
     private $rDataFactory;
 
     /**
-     * @var \LibDNS\Records\Types\TypeBuilder
+     * @var \DaveRandom\LibDNS\Records\Types\TypeBuilder
      */
     private $typeBuilder;
 
     /**
      * Constructor
      *
-     * @param \LibDNS\Records\RDataFactory $rDataFactory
-     * @param \LibDNS\Records\Types\TypeBuilder $typeBuilder
+     * @param \DaveRandom\LibDNS\Records\RDataFactory $rDataFactory
+     * @param \DaveRandom\LibDNS\Records\Types\TypeBuilder $typeBuilder
      */
     public function __construct(RDataFactory $rDataFactory, TypeBuilder $typeBuilder)
     {
@@ -50,8 +50,8 @@ class RDataBuilder
     /**
      * Create a new RData object
      *
-     * @param \LibDNS\Records\TypeDefinitions\TypeDefinition $typeDefinition
-     * @return \LibDNS\Records\RData
+     * @param \DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinition $typeDefinition
+     * @return \DaveRandom\LibDNS\Records\RData
      */
     public function build(TypeDefinition $typeDefinition): RData
     {

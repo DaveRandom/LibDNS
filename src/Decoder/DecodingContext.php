@@ -11,10 +11,10 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Decoder;
+namespace DaveRandom\LibDNS\Decoder;
 
-use \LibDNS\Packets\Packet;
-use \LibDNS\Packets\LabelRegistry;
+use DaveRandom\LibDNS\Packets\Packet;
+use DaveRandom\LibDNS\Packets\LabelRegistry;
 
 /**
  * Holds data associated with a decode operation
@@ -26,12 +26,12 @@ use \LibDNS\Packets\LabelRegistry;
 class DecodingContext
 {
     /**
-     * @var \LibDNS\Packets\Packet
+     * @var \DaveRandom\LibDNS\Packets\Packet
      */
     private $packet;
 
     /**
-     * @var \LibDNS\Packets\LabelRegistry
+     * @var \DaveRandom\LibDNS\Packets\LabelRegistry
      */
     private $labelRegistry;
 
@@ -58,8 +58,8 @@ class DecodingContext
     /**
      * Constructor
      *
-     * @param \LibDNS\Packets\Packet $packet
-     * @param \LibDNS\Packets\LabelRegistry $labelRegistry
+     * @param \DaveRandom\LibDNS\Packets\Packet $packet
+     * @param \DaveRandom\LibDNS\Packets\LabelRegistry $labelRegistry
      */
     public function __construct(Packet $packet, LabelRegistry $labelRegistry)
     {
@@ -70,7 +70,7 @@ class DecodingContext
     /**
      * Get the packet
      *
-     * @return \LibDNS\Packets\Packet
+     * @return \DaveRandom\LibDNS\Packets\Packet
      */
     public function getPacket(): Packet
     {
@@ -80,7 +80,7 @@ class DecodingContext
     /**
      * Get the label registry
      *
-     * @return \LibDNS\Packets\LabelRegistry
+     * @return \DaveRandom\LibDNS\Packets\LabelRegistry
      */
     public function getLabelRegistry(): LabelRegistry
     {

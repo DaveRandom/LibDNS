@@ -11,9 +11,9 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Records;
+namespace DaveRandom\LibDNS\Records;
 
-use \LibDNS\Records\TypeDefinitions\TypeDefinition;
+use DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinition;
 
 /**
  * Creates RData objects
@@ -27,8 +27,8 @@ class RDataFactory
     /**
      * Create a new RData object
      *
-     * @param \LibDNS\Records\TypeDefinitions\TypeDefinition $typeDefinition
-     * @return \LibDNS\Records\RData
+     * @param \DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinition $typeDefinition
+     * @return \DaveRandom\LibDNS\Records\RData
      */
     public function create(TypeDefinition $typeDefinition): RData
     {

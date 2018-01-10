@@ -8,9 +8,7 @@
         "ext-ctype": "*"
     },
     "autoload": {
-        "psr-4": {
-            "LibDNS\\": "src/"
-        },
+        "psr-4": { "DaveRandom\\LibDNS\\": "src/" },
         "files": ["src/functions.php"]
     },
     "support": {

@@ -11,10 +11,10 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Encoder;
+namespace DaveRandom\LibDNS\Encoder;
 
-use \LibDNS\Packets\Packet;
-use \LibDNS\Packets\LabelRegistry;
+use DaveRandom\LibDNS\Packets\Packet;
+use DaveRandom\LibDNS\Packets\LabelRegistry;
 
 /**
  * Creates EncodingContext objects
@@ -28,9 +28,9 @@ class EncodingContextFactory
     /**
      * Create a new EncodingContext object
      *
-     * @param \LibDNS\Packets\Packet $packet   The packet to be decoded
+     * @param \DaveRandom\LibDNS\Packets\Packet $packet   The packet to be decoded
      * @param bool $compress Whether message compression is enabled
-     * @return \LibDNS\Encoder\EncodingContext
+     * @return \DaveRandom\LibDNS\Encoder\EncodingContext
      */
     public function create(Packet $packet, bool $compress): EncodingContext
     {

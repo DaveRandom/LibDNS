@@ -11,9 +11,9 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Records;
+namespace DaveRandom\LibDNS\Records;
 
-use \LibDNS\Records\Types\TypeFactory;
+use DaveRandom\LibDNS\Records\Types\TypeFactory;
 
 /**
  * Represents a DNS question record
@@ -27,7 +27,7 @@ class Question extends Record
     /**
      * Constructor
      *
-     * @param \LibDNS\Records\Types\TypeFactory $typeFactory
+     * @param \DaveRandom\LibDNS\Records\Types\TypeFactory $typeFactory
      * @param int $type Resource type being requested, can be indicated using the ResourceQTypes enum
      */
     public function __construct(TypeFactory $typeFactory, int $type)

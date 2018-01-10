@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace LibDNS;
+namespace DaveRandom\LibDNS;
 
 if (\function_exists('idn_to_ascii')) {
     function normalize_name(string $label): string

@@ -11,19 +11,19 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Records\TypeDefinitions;
+namespace DaveRandom\LibDNS\Records\TypeDefinitions;
 
-use \LibDNS\Records\Types\Type;
-use \LibDNS\Records\Types\Anything;
-use \LibDNS\Records\Types\BitMap;
-use \LibDNS\Records\Types\Char;
-use \LibDNS\Records\Types\CharacterString;
-use \LibDNS\Records\Types\DomainName;
-use \LibDNS\Records\Types\IPv4Address;
-use \LibDNS\Records\Types\IPv6Address;
-use \LibDNS\Records\Types\Long;
-use \LibDNS\Records\Types\Short;
-use \LibDNS\Records\Types\Types;
+use DaveRandom\LibDNS\Records\Types\Type;
+use DaveRandom\LibDNS\Records\Types\Anything;
+use DaveRandom\LibDNS\Records\Types\BitMap;
+use DaveRandom\LibDNS\Records\Types\Char;
+use DaveRandom\LibDNS\Records\Types\CharacterString;
+use DaveRandom\LibDNS\Records\Types\DomainName;
+use DaveRandom\LibDNS\Records\Types\IPv4Address;
+use DaveRandom\LibDNS\Records\Types\IPv6Address;
+use DaveRandom\LibDNS\Records\Types\Long;
+use DaveRandom\LibDNS\Records\Types\Short;
+use DaveRandom\LibDNS\Records\Types\Types;
 
 /**
  * Defines a field in a type
@@ -130,7 +130,7 @@ class FieldDefinition
     /**
      * Assert that a Type object is valid for this field
      *
-     * @param \LibDNS\Records\Types\Type
+     * @param \DaveRandom\LibDNS\Records\Types\Type
      * @return bool
      */
     public function assertDataValid(Type $value): bool

@@ -11,7 +11,7 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Records\TypeDefinitions;
+namespace DaveRandom\LibDNS\Records\TypeDefinitions;
 
 /**
  * Creates TypeDefinition objects
@@ -27,7 +27,7 @@ class TypeDefinitionFactory
      *
      * @param FieldDefinitionFactory $fieldDefinitionFactory
      * @param int[] $definition Structural definition of the fields
-     * @return \LibDNS\Records\TypeDefinitions\TypeDefinition
+     * @return \DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinition
      * @throws \InvalidArgumentException When the type definition is invalid
      */
     public function create(FieldDefinitionFactory $fieldDefinitionFactory, array $definition): TypeDefinition

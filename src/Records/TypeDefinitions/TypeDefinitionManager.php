@@ -11,11 +11,11 @@
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  * @version 2.0.0
  */
-namespace LibDNS\Records\TypeDefinitions;
+namespace DaveRandom\LibDNS\Records\TypeDefinitions;
 
-use \LibDNS\Records\ResourceTypes;
-use \LibDNS\Records\Types\Types;
-use \LibDNS\Records\Types\DomainName;
+use DaveRandom\LibDNS\Records\ResourceTypes;
+use DaveRandom\LibDNS\Records\Types\Types;
+use DaveRandom\LibDNS\Records\Types\DomainName;
 
 /**
  * Holds data about how the RDATA sections of known resource record types are structured
@@ -37,20 +37,20 @@ class TypeDefinitionManager
     private $typeDefs = [];
 
     /**
-     * @var \LibDNS\Records\TypeDefinitions\TypeDefinitionFactory
+     * @var \DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionFactory
      */
     private $typeDefFactory;
 
     /**
-     * @var \LibDNS\Records\TypeDefinitions\FieldDefinitionFactory
+     * @var \DaveRandom\LibDNS\Records\TypeDefinitions\FieldDefinitionFactory
      */
     private $fieldDefFactory;
 
     /**
      * Constructor
      *
-     * @param \LibDNS\Records\TypeDefinitions\TypeDefinitionFactory $typeDefFactory
-     * @param \LibDNS\Records\TypeDefinitions\FieldDefinitionFactory $fieldDefFactory
+     * @param \DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionFactory $typeDefFactory
+     * @param \DaveRandom\LibDNS\Records\TypeDefinitions\FieldDefinitionFactory $fieldDefFactory
      */
     public function __construct(TypeDefinitionFactory $typeDefFactory, FieldDefinitionFactory $fieldDefFactory)
     {
@@ -242,7 +242,7 @@ class TypeDefinitionManager
      * Get a type definition for a record type if it is known
      *
      * @param int $recordType Resource type, can be indicated using the ResourceTypes enum
-     * @return \LibDNS\Records\TypeDefinitions\TypeDefinition
+     * @return \DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinition
      */
     public function getTypeDefinition(int $recordType)
     {
@@ -258,7 +258,7 @@ class TypeDefinitionManager
      * Register a custom type definition
      *
      * @param int $recordType Resource type, can be indicated using the ResourceTypes enum
-     * @param int[]|\LibDNS\Records\TypeDefinitions\TypeDefinition $definition
+     * @param int[]|\DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinition $definition
      * @throws \InvalidArgumentException When the type definition is invalid
      */
     public function registerTypeDefinition(int $recordType, $definition)
