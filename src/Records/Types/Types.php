@@ -13,7 +13,7 @@
  */
 namespace DaveRandom\LibDNS\Records\Types;
 
-use DaveRandom\LibDNS\Enumeration;
+use DaveRandom\Enum\Enum;
 
 /**
  * Enumeration of simple data types
@@ -22,7 +22,7 @@ use DaveRandom\LibDNS\Enumeration;
  * @package Types
  * @author Chris Wright <https://github.com/DaveRandom>
  */
-final class Types extends Enumeration
+final class Types extends Enum
 {
     const ANYTHING         = 0b000000001;
     const BITMAP           = 0b000000010;

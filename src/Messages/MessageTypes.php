@@ -13,7 +13,7 @@
  */
 namespace DaveRandom\LibDNS\Messages;
 
-use DaveRandom\LibDNS\Enumeration;
+use DaveRandom\Enum\Enum;
 
 /**
  * Enumeration of possible message types
@@ -22,7 +22,7 @@ use DaveRandom\LibDNS\Enumeration;
  * @package Messages
  * @author Chris Wright <https://github.com/DaveRandom>
  */
-final class MessageTypes extends Enumeration
+final class MessageTypes extends Enum
 {
     const QUERY = 0;
     const RESPONSE = 1;

@@ -13,7 +13,7 @@
  */
 namespace DaveRandom\LibDNS\Records;
 
-use DaveRandom\LibDNS\Enumeration;
+use DaveRandom\Enum\Enum;
 
 /**
  * Enumeration of possible resource CLASS values
@@ -22,7 +22,7 @@ use DaveRandom\LibDNS\Enumeration;
  * @package Records
  * @author Chris Wright <https://github.com/DaveRandom>
  */
-abstract class ResourceClasses extends Enumeration
+abstract class ResourceClasses extends Enum
 {
     const IN = 1;
     const CS = 2;

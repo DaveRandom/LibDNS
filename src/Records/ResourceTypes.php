@@ -13,7 +13,7 @@
  */
 namespace DaveRandom\LibDNS\Records;
 
-use DaveRandom\LibDNS\Enumeration;
+use DaveRandom\Enum\Enum;
 
 /**
  * Enumeration of possible resource TYPE values
@@ -22,7 +22,7 @@ use DaveRandom\LibDNS\Enumeration;
  * @package Records
  * @author Chris Wright <https://github.com/DaveRandom>
  */
-abstract class ResourceTypes extends Enumeration
+abstract class ResourceTypes extends Enum
 {
     const A          = 1;
     const AAAA       = 28;

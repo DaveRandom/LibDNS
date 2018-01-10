@@ -13,7 +13,7 @@
  */
 namespace DaveRandom\LibDNS\Records;
 
-use DaveRandom\LibDNS\Enumeration;
+use DaveRandom\Enum\Enum;
 
 /**
  * Enumeration of possible record types
@@ -22,7 +22,7 @@ use DaveRandom\LibDNS\Enumeration;
  * @package Records
  * @author Chris Wright <https://github.com/DaveRandom>
  */
-final class RecordTypes extends Enumeration
+final class RecordTypes extends Enum
 {
     const QUESTION = 0;
     const RESOURCE = 1;
