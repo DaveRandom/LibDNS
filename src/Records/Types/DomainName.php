@@ -81,7 +81,9 @@ class DomainName extends Type
     public function setLabels(array $labels, $tldFirst = false)
     {
         if (!$labels) {
-            throw new \InvalidArgumentException('Label list is not a valid domain name: List is empty');
+            $this->labels = [];
+            $this->value = '';
+            return;
         }
 
         $length = $count = 0;

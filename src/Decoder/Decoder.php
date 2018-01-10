@@ -261,10 +261,6 @@ class Decoder
             }
         }
 
-        if (!$labels) {
-            throw new \UnexpectedValueException('Decode error: Empty domain name at position ' . $startIndex);
-        }
-
         $result = [];
         foreach ($labels as $label) {
             if (\is_int($label[0])) {
