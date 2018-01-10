@@ -4,7 +4,8 @@
     "license": "MIT",
     "keywords": ["dns"],
     "require": {
-        "php": ">=7.0"
+        "php": ">=7.0",
+        "ext-ctype": "*"
     },
     "autoload": {
         "psr-4": {
