@@ -49,14 +49,14 @@ class EncodingContext
      * Constructor
      *
      * @param \DaveRandom\LibDNS\Packets\Packet $packet
-     * @param \DaveRandom\LibDNS\Packets\LabelRegistry $labelRegistry
      * @param bool $compress
      */
-    public function __construct(Packet $packet, LabelRegistry $labelRegistry, bool $compress)
+    public function __construct(Packet $packet, bool $compress)
     {
         $this->packet = $packet;
-        $this->labelRegistry = $labelRegistry;
         $this->compress = $compress;
+
+        $this->labelRegistry = new LabelRegistry();
     }
 
     /**

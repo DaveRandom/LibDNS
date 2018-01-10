@@ -14,11 +14,8 @@
 namespace DaveRandom\LibDNS\Decoder;
 
 use DaveRandom\LibDNS\Messages\Message;
-use DaveRandom\LibDNS\Messages\MessageFactory;
 use DaveRandom\LibDNS\Packets\Packet;
-use DaveRandom\LibDNS\Packets\PacketFactory;
 use DaveRandom\LibDNS\Records\Question;
-use DaveRandom\LibDNS\Records\QuestionFactory;
 use DaveRandom\LibDNS\Records\Resource as ResourceRecord;
 use DaveRandom\LibDNS\Records\ResourceBuilder;
 use DaveRandom\LibDNS\Records\Types\Anything;
@@ -32,7 +29,6 @@ use DaveRandom\LibDNS\Records\Types\Long;
 use DaveRandom\LibDNS\Records\Types\Short;
 use DaveRandom\LibDNS\Records\Types\Type;
 use DaveRandom\LibDNS\Records\Types\TypeBuilder;
-use DaveRandom\LibDNS\Records\Types\Types;
 
 /**
  * Decodes raw network data to Message objects
@@ -44,21 +40,6 @@ use DaveRandom\LibDNS\Records\Types\Types;
 class Decoder
 {
     /**
-     * @var \DaveRandom\LibDNS\Packets\PacketFactory
-     */
-    private $packetFactory;
-
-    /**
-     * @var \DaveRandom\LibDNS\Messages\MessageFactory
-     */
-    private $messageFactory;
-
-    /**
-     * @var \DaveRandom\LibDNS\Records\QuestionFactory
-     */
-    private $questionFactory;
-
-    /**
      * @var \DaveRandom\LibDNS\Records\ResourceBuilder
      */
     private $resourceBuilder;
@@ -69,11 +50,6 @@ class Decoder
     private $typeBuilder;
 
     /**
-     * @var \DaveRandom\LibDNS\Decoder\DecodingContextFactory
-     */
-    private $decodingContextFactory;
-
-    /**
      * @var bool
      */
     private $allowTrailingData;
@@ -81,29 +57,17 @@ class Decoder
     /**
      * Constructor
      *
-     * @param \DaveRandom\LibDNS\Packets\PacketFactory $packetFactory
-     * @param \DaveRandom\LibDNS\Messages\MessageFactory $messageFactory
-     * @param \DaveRandom\LibDNS\Records\QuestionFactory $questionFactory
      * @param \DaveRandom\LibDNS\Records\ResourceBuilder $resourceBuilder
      * @param \DaveRandom\LibDNS\Records\Types\TypeBuilder $typeBuilder
-     * @param \DaveRandom\LibDNS\Decoder\DecodingContextFactory $decodingContextFactory
      * @param bool $allowTrailingData
      */
     public function __construct(
-        PacketFactory $packetFactory,
-        MessageFactory $messageFactory,
-        QuestionFactory $questionFactory,
         ResourceBuilder $resourceBuilder,
         TypeBuilder $typeBuilder,
-        DecodingContextFactory $decodingContextFactory,
         bool $allowTrailingData = true
     ) {
-        $this->packetFactory = $packetFactory;
-        $this->messageFactory = $messageFactory;
-        $this->questionFactory = $questionFactory;
         $this->resourceBuilder = $resourceBuilder;
         $this->typeBuilder = $typeBuilder;
-        $this->decodingContextFactory = $decodingContextFactory;
         $this->allowTrailingData = $allowTrailingData;
     }
 
@@ -385,12 +349,11 @@ class Decoder
      */
     private function decodeQuestionRecord(DecodingContext $decodingContext): Question
     {
-        /** @var \DaveRandom\LibDNS\Records\Types\DomainName $domainName */
-        $domainName = $this->typeBuilder->build(Types::DOMAIN_NAME);
+        $domainName = new DomainName();
         $this->decodeDomainName($decodingContext, $domainName);
         $meta = \unpack('ntype/nclass', $this->readDataFromPacket($decodingContext->getPacket(), 4));
 
-        $question = $this->questionFactory->create($meta['type']);
+        $question = new Question($meta['type']);
         $question->setName($domainName);
         $question->setClass($meta['class']);
 
@@ -407,8 +370,7 @@ class Decoder
      */
     private function decodeResourceRecord(DecodingContext $decodingContext): ResourceRecord
     {
-        /** @var \DaveRandom\LibDNS\Records\Types\DomainName $domainName */
-        $domainName = $this->typeBuilder->build(Types::DOMAIN_NAME);
+        $domainName = new DomainName();
         $this->decodeDomainName($decodingContext, $domainName);
         $meta = \unpack('ntype/nclass/Nttl/nlength', $this->readDataFromPacket($decodingContext->getPacket(), 10));
 
@@ -452,9 +414,9 @@ class Decoder
      */
     public function decode(string $data): Message
     {
-        $packet = $this->packetFactory->create($data);
-        $decodingContext = $this->decodingContextFactory->create($packet);
-        $message = $this->messageFactory->create();
+        $packet = new Packet($data);
+        $decodingContext = new DecodingContext($packet);
+        $message = new Message();
 
         $this->decodeHeader($decodingContext, $message);
 

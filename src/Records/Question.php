@@ -13,8 +13,6 @@
  */
 namespace DaveRandom\LibDNS\Records;
 
-use DaveRandom\LibDNS\Records\Types\TypeFactory;
-
 /**
  * Represents a DNS question record
  *
@@ -27,12 +25,10 @@ class Question extends Record
     /**
      * Constructor
      *
-     * @param \DaveRandom\LibDNS\Records\Types\TypeFactory $typeFactory
      * @param int $type Resource type being requested, can be indicated using the ResourceQTypes enum
      */
-    public function __construct(TypeFactory $typeFactory, int $type)
+    public function __construct(int $type)
     {
-        $this->typeFactory = $typeFactory;
         $this->type = $type;
     }
 }

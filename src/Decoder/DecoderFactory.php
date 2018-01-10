@@ -13,15 +13,7 @@
  */
 namespace DaveRandom\LibDNS\Decoder;
 
-use DaveRandom\LibDNS\Messages\MessageFactory;
-use DaveRandom\LibDNS\Packets\PacketFactory;
-use DaveRandom\LibDNS\Records\QuestionFactory;
-use DaveRandom\LibDNS\Records\RDataBuilder;
-use DaveRandom\LibDNS\Records\RDataFactory;
 use DaveRandom\LibDNS\Records\ResourceBuilder;
-use DaveRandom\LibDNS\Records\ResourceFactory;
-use DaveRandom\LibDNS\Records\TypeDefinitions\FieldDefinitionFactory;
-use DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionFactory;
 use DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionManager;
 use DaveRandom\LibDNS\Records\Types\TypeBuilder;
 use DaveRandom\LibDNS\Records\Types\TypeFactory;
@@ -47,22 +39,8 @@ class DecoderFactory
         $typeBuilder = new TypeBuilder(new TypeFactory);
 
         return new Decoder(
-            new PacketFactory,
-            new MessageFactory,
-            new QuestionFactory,
-            new ResourceBuilder(
-                new ResourceFactory,
-                new RDataBuilder(
-                    new RDataFactory,
-                    $typeBuilder
-                ),
-                $typeDefinitionManager ?: new TypeDefinitionManager(
-                    new TypeDefinitionFactory,
-                    new FieldDefinitionFactory
-                )
-            ),
+            new ResourceBuilder($typeBuilder, $typeDefinitionManager ?? new TypeDefinitionManager),
             $typeBuilder,
-            new DecodingContextFactory,
             $allowTrailingData
         );
     }

@@ -59,12 +59,12 @@ class DecodingContext
      * Constructor
      *
      * @param \DaveRandom\LibDNS\Packets\Packet $packet
-     * @param \DaveRandom\LibDNS\Packets\LabelRegistry $labelRegistry
      */
-    public function __construct(Packet $packet, LabelRegistry $labelRegistry)
+    public function __construct(Packet $packet)
     {
         $this->packet = $packet;
-        $this->labelRegistry = $labelRegistry;
+
+        $this->labelRegistry = new LabelRegistry();
     }
 
     /**

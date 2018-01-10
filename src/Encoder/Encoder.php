@@ -13,11 +13,10 @@
  */
 namespace DaveRandom\LibDNS\Encoder;
 
-use DaveRandom\LibDNS\Packets\PacketFactory;
 use DaveRandom\LibDNS\Messages\Message;
+use DaveRandom\LibDNS\Packets\Packet;
 use DaveRandom\LibDNS\Records\Question;
 use DaveRandom\LibDNS\Records\Resource as ResourceRecord;
-use DaveRandom\LibDNS\Records\Types\Type;
 use DaveRandom\LibDNS\Records\Types\Anything;
 use DaveRandom\LibDNS\Records\Types\BitMap;
 use DaveRandom\LibDNS\Records\Types\Char;
@@ -27,6 +26,7 @@ use DaveRandom\LibDNS\Records\Types\IPv4Address;
 use DaveRandom\LibDNS\Records\Types\IPv6Address;
 use DaveRandom\LibDNS\Records\Types\Long;
 use DaveRandom\LibDNS\Records\Types\Short;
+use DaveRandom\LibDNS\Records\Types\Type;
 
 /**
  * Encodes Message objects to raw network data
@@ -37,28 +37,6 @@ use DaveRandom\LibDNS\Records\Types\Short;
  */
 class Encoder
 {
-    /**
-     * @var \DaveRandom\LibDNS\Packets\PacketFactory
-     */
-    private $packetFactory;
-
-    /**
-     * @var \DaveRandom\LibDNS\Encoder\EncodingContextFactory
-     */
-    private $encodingContextFactory;
-
-    /**
-     * Constructor
-     *
-     * @param \DaveRandom\LibDNS\Packets\PacketFactory $packetFactory
-     * @param \DaveRandom\LibDNS\Encoder\EncodingContextFactory $encodingContextFactory
-     */
-    public function __construct(PacketFactory $packetFactory, EncodingContextFactory $encodingContextFactory)
-    {
-        $this->packetFactory = $packetFactory;
-        $this->encodingContextFactory = $encodingContextFactory;
-    }
-
     /**
      * Encode the header section of the message
      *
@@ -322,8 +300,8 @@ class Encoder
      */
     public function encode(Message $message, $compress = true): string
     {
-        $packet = $this->packetFactory->create();
-        $encodingContext = $this->encodingContextFactory->create($packet, $compress);
+        $packet = new Packet();
+        $encodingContext = new EncodingContext($packet, $compress);
 
         foreach ($message->getQuestionRecords() as $record) {
             /** @var \DaveRandom\LibDNS\Records\Question $record */

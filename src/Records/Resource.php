@@ -13,8 +13,6 @@
  */
 namespace DaveRandom\LibDNS\Records;
 
-use DaveRandom\LibDNS\Records\Types\TypeFactory;
-
 /**
  * Represents a DNS resource record
  *
@@ -37,13 +35,11 @@ class Resource extends Record
     /**
      * Constructor
      *
-     * @param \DaveRandom\LibDNS\Records\Types\TypeFactory $typeFactory
      * @param int $type Can be indicated using the ResourceTypes enum
      * @param \DaveRandom\LibDNS\Records\RData $data
      */
-    public function __construct(TypeFactory $typeFactory, int $type, RData $data)
+    public function __construct(int $type, RData $data)
     {
-        $this->typeFactory = $typeFactory;
         $this->type = $type;
         $this->data = $data;
     }

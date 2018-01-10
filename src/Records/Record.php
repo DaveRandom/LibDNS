@@ -25,11 +25,6 @@ use DaveRandom\LibDNS\Records\Types\DomainName;
 abstract class Record
 {
     /**
-     * @var \DaveRandom\LibDNS\Records\Types\TypeFactory
-     */
-    protected $typeFactory;
-
-    /**
      * @var \DaveRandom\LibDNS\Records\Types\DomainName
      */
     protected $name;
@@ -63,7 +58,7 @@ abstract class Record
     public function setName($name)
     {
         if (!($name instanceof DomainName)) {
-            $name = $this->typeFactory->createDomainName((string)$name);
+            $name = new DomainName((string)$name);
         }
 
         $this->name = $name;

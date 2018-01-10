@@ -23,11 +23,6 @@ namespace DaveRandom\LibDNS\Records\TypeDefinitions;
 class TypeDefinition implements \IteratorAggregate, \Countable
 {
     /**
-     * @var FieldDefinitionFactory Creates FieldDefinition objects
-     */
-    private $fieldDefFactory;
-
-    /**
      * @var int Number of fields in the type
      */
     private $fieldCount;
@@ -55,14 +50,11 @@ class TypeDefinition implements \IteratorAggregate, \Countable
     /**
      * Constructor
      *
-     * @param FieldDefinitionFactory $fieldDefFactory
      * @param array $definition Structural definition of the fields
      * @throws \InvalidArgumentException When the type definition is invalid
      */
-    public function __construct(FieldDefinitionFactory $fieldDefFactory, array $definition)
+    public function __construct(array $definition)
     {
-        $this->fieldDefFactory = $fieldDefFactory;
-
         if (isset($definition['__toString'])) {
             if (!\is_callable($definition['__toString'])) {
                 throw new \InvalidArgumentException('Invalid type definition: __toString() implementation is not callable');
@@ -109,7 +101,7 @@ class TypeDefinition implements \IteratorAggregate, \Countable
             $minimumValues = 0;
         }
 
-        $this->fieldDefs[$index] = $this->fieldDefFactory->create($index, $matches['name'], $type, $allowsMultiple, $minimumValues);
+        $this->fieldDefs[$index] = new FieldDefinition($index, $matches['name'], $type, $allowsMultiple, $minimumValues);
         if ($index === $this->fieldCount - 1) {
             $this->lastField = $this->fieldDefs[$index];
         }

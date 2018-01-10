@@ -15,6 +15,7 @@ namespace DaveRandom\LibDNS\Records;
 
 use DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionManager;
 use DaveRandom\LibDNS\Records\Resource as ResourceRecord;
+use DaveRandom\LibDNS\Records\Types\TypeBuilder;
 
 /**
  * Builds Resource objects of a specific type
@@ -26,14 +27,9 @@ use DaveRandom\LibDNS\Records\Resource as ResourceRecord;
 class ResourceBuilder
 {
     /**
-     * @var \DaveRandom\LibDNS\Records\ResourceFactory
+     * @var \DaveRandom\LibDNS\Records\Types\TypeBuilder
      */
-    private $resourceFactory;
-
-    /**
-     * @var \DaveRandom\LibDNS\Records\RDataBuilder
-     */
-    private $rDataBuilder;
+    private $typeBuilder;
 
     /**
      * @var \DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionManager
@@ -43,14 +39,12 @@ class ResourceBuilder
     /**
      * Constructor
      *
-     * @param \DaveRandom\LibDNS\Records\ResourceFactory $resourceFactory
-     * @param \DaveRandom\LibDNS\Records\RDataBuilder $rDataBuilder
+     * @param \DaveRandom\LibDNS\Records\Types\TypeBuilder $typeBuilder
      * @param \DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionManager $typeDefinitionManager
      */
-    public function __construct(ResourceFactory $resourceFactory, RDataBuilder $rDataBuilder, TypeDefinitionManager $typeDefinitionManager)
+    public function __construct(TypeBuilder $typeBuilder, TypeDefinitionManager $typeDefinitionManager)
     {
-        $this->resourceFactory = $resourceFactory;
-        $this->rDataBuilder = $rDataBuilder;
+        $this->typeBuilder = $typeBuilder;
         $this->typeDefinitionManager = $typeDefinitionManager;
     }
 
@@ -63,8 +57,13 @@ class ResourceBuilder
     public function build(int $type): ResourceRecord
     {
         $typeDefinition = $this->typeDefinitionManager->getTypeDefinition($type);
-        $rData = $this->rDataBuilder->build($typeDefinition);
 
-        return $this->resourceFactory->create($type, $rData);
+        $rData = new RData($typeDefinition);
+
+        foreach ($typeDefinition as $index => $type) {
+            $rData->setField($index, $this->typeBuilder->build($type->getType()));
+        }
+
+        return new Resource($type, $rData);
     }
 }

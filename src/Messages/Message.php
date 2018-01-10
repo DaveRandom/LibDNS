@@ -14,7 +14,6 @@
 namespace DaveRandom\LibDNS\Messages;
 
 use DaveRandom\LibDNS\Records\RecordCollection;
-use DaveRandom\LibDNS\Records\RecordCollectionFactory;
 use DaveRandom\LibDNS\Records\RecordTypes;
 
 /**
@@ -89,16 +88,15 @@ class Message
     /**
      * Constructor
      *
-     * @param \DaveRandom\LibDNS\Records\RecordCollectionFactory $recordCollectionFactory Factory which makes RecordCollection objects
      * @param int $type Value of the message type field
      * @throws \RangeException When the supplied message type is outside the valid range 0 - 1
      */
-    public function __construct(RecordCollectionFactory $recordCollectionFactory, int $type = null)
+    public function __construct(int $type = null)
     {
-        $this->questionRecords = $recordCollectionFactory->create(RecordTypes::QUESTION);
-        $this->answerRecords = $recordCollectionFactory->create(RecordTypes::RESOURCE);
-        $this->authorityRecords = $recordCollectionFactory->create(RecordTypes::RESOURCE);
-        $this->additionalRecords = $recordCollectionFactory->create(RecordTypes::RESOURCE);
+        $this->questionRecords = new RecordCollection(RecordTypes::QUESTION);
+        $this->answerRecords = new RecordCollection(RecordTypes::RESOURCE);
+        $this->authorityRecords = new RecordCollection(RecordTypes::RESOURCE);
+        $this->additionalRecords = new RecordCollection(RecordTypes::RESOURCE);
 
         if ($type !== null) {
             $this->setType($type);

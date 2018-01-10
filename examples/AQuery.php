@@ -13,12 +13,12 @@
  */
 namespace DaveRandom\LibDNS\Examples;
 
-use DaveRandom\LibDNS\Messages\MessageFactory;
-use DaveRandom\LibDNS\Messages\MessageTypes;
-use DaveRandom\LibDNS\Records\QuestionFactory;
-use DaveRandom\LibDNS\Records\ResourceQTypes;
-use DaveRandom\LibDNS\Encoder\EncoderFactory;
 use DaveRandom\LibDNS\Decoder\DecoderFactory;
+use DaveRandom\LibDNS\Encoder\Encoder;
+use DaveRandom\LibDNS\Messages\Message;
+use DaveRandom\LibDNS\Messages\MessageTypes;
+use DaveRandom\LibDNS\Records\Question;
+use DaveRandom\LibDNS\Records\ResourceQTypes;
 
 // Config
 $queryName      = 'faß.de';
@@ -28,16 +28,16 @@ $requestTimeout = 3;
 require __DIR__ . '/../vendor/autoload.php';
 
 // Create question record
-$question = (new QuestionFactory)->create(ResourceQTypes::A);
+$question = new Question(ResourceQTypes::A);
 $question->setName($queryName);
 
 // Create request message
-$request = (new MessageFactory)->create(MessageTypes::QUERY);
+$request = new Message(MessageTypes::QUERY);
 $request->getQuestionRecords()->add($question);
 $request->isRecursionDesired(true);
 
 // Encode request message
-$encoder = (new EncoderFactory)->create();
+$encoder = new Encoder();
 $requestPacket = $encoder->encode($request);
 
 echo "\n" . $queryName . ":\n";

@@ -13,14 +13,14 @@
  */
 namespace DaveRandom\LibDNS\Examples;
 
-use DaveRandom\LibDNS\Messages\MessageFactory;
-use DaveRandom\LibDNS\Messages\MessageTypes;
-use DaveRandom\LibDNS\Records\QuestionFactory;
-use DaveRandom\LibDNS\Records\ResourceTypes;
-use DaveRandom\LibDNS\Records\ResourceQTypes;
-use DaveRandom\LibDNS\Encoder\EncoderFactory;
 use DaveRandom\LibDNS\Decoder\DecoderFactory;
-use DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionManagerFactory;
+use DaveRandom\LibDNS\Encoder\Encoder;
+use DaveRandom\LibDNS\Messages\Message;
+use DaveRandom\LibDNS\Messages\MessageTypes;
+use DaveRandom\LibDNS\Records\Question;
+use DaveRandom\LibDNS\Records\ResourceQTypes;
+use DaveRandom\LibDNS\Records\ResourceTypes;
+use DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionManager;
 
 // Config
 $queryName      = 'google.com';
@@ -30,16 +30,16 @@ $requestTimeout = 3;
 require __DIR__ . '/../vendor/autoload.php';
 
 // Create question record
-$question = (new QuestionFactory)->create(ResourceQTypes::SOA);
+$question = new Question(ResourceQTypes::SOA);
 $question->setName($queryName);
 
 // Create request message
-$request = (new MessageFactory)->create(MessageTypes::QUERY);
+$request = new Message(MessageTypes::QUERY);
 $request->getQuestionRecords()->add($question);
 $request->isRecursionDesired(true);
 
 // Encode request message
-$encoder = (new EncoderFactory)->create();
+$encoder = new Encoder();
 $requestPacket = $encoder->encode($request);
 
 echo "\n" . $queryName . ":\n";
@@ -55,7 +55,7 @@ if (!stream_select($r, $w, $e, $requestTimeout)) {
 }
 
 // Create type definition manager for custom manipulation
-$typeDefs = (new TypeDefinitionManagerFactory)->create();
+$typeDefs = new TypeDefinitionManager;
 $typeDefs->getTypeDefinition(ResourceTypes::SOA)->setToStringFunction(function($mname, $rname, $serial, $refresh, $retry, $expire, $minimum) {
     return <<<DATA
 {
