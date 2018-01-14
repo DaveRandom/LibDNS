@@ -13,20 +13,20 @@
  */
 namespace LibDNS\Encoder;
 
-use \LibDNS\Packets\PacketFactory;
-use \LibDNS\Messages\Message;
-use \LibDNS\Records\Question;
-use \LibDNS\Records\Resource;
-use \LibDNS\Records\Types\Type;
-use \LibDNS\Records\Types\Anything;
-use \LibDNS\Records\Types\BitMap;
-use \LibDNS\Records\Types\Char;
-use \LibDNS\Records\Types\CharacterString;
-use \LibDNS\Records\Types\DomainName;
-use \LibDNS\Records\Types\IPv4Address;
-use \LibDNS\Records\Types\IPv6Address;
-use \LibDNS\Records\Types\Long;
-use \LibDNS\Records\Types\Short;
+use LibDNS\Packets\Packet;
+use LibDNS\Messages\Message;
+use LibDNS\Records\Question;
+use LibDNS\Records\Resource;
+use LibDNS\Records\Types\Type;
+use LibDNS\Records\Types\Anything;
+use LibDNS\Records\Types\BitMap;
+use LibDNS\Records\Types\Char;
+use LibDNS\Records\Types\CharacterString;
+use LibDNS\Records\Types\DomainName;
+use LibDNS\Records\Types\IPv4Address;
+use LibDNS\Records\Types\IPv6Address;
+use LibDNS\Records\Types\Long;
+use LibDNS\Records\Types\Short;
 
 /**
  * Encodes Message objects to raw network data
@@ -38,11 +38,6 @@ use \LibDNS\Records\Types\Short;
 class Encoder
 {
     /**
-     * @var \LibDNS\Packets\PacketFactory
-     */
-    private $packetFactory;
-
-    /**
      * @var \LibDNS\Encoder\EncodingContextFactory
      */
     private $encodingContextFactory;
@@ -50,12 +45,10 @@ class Encoder
     /**
      * Constructor
      *
-     * @param \LibDNS\Packets\PacketFactory $packetFactory
      * @param \LibDNS\Encoder\EncodingContextFactory $encodingContextFactory
      */
-    public function __construct(PacketFactory $packetFactory, EncodingContextFactory $encodingContextFactory)
+    public function __construct(EncodingContextFactory $encodingContextFactory)
     {
-        $this->packetFactory = $packetFactory;
         $this->encodingContextFactory = $encodingContextFactory;
     }
 
@@ -322,7 +315,7 @@ class Encoder
      */
     public function encode(Message $message, $compress = true): string
     {
-        $packet = $this->packetFactory->create();
+        $packet = new Packet();
         $encodingContext = $this->encodingContextFactory->create($packet, $compress);
 
         foreach ($message->getQuestionRecords() as $record) {

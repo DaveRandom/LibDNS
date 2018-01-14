@@ -13,19 +13,18 @@
  */
 namespace LibDNS\Decoder;
 
-use \LibDNS\Packets\PacketFactory;
-use \LibDNS\Messages\MessageFactory;
-use \LibDNS\Records\RecordCollectionFactory;
-use \LibDNS\Records\QuestionFactory;
-use \LibDNS\Records\ResourceBuilder;
-use \LibDNS\Records\ResourceFactory;
-use \LibDNS\Records\RDataBuilder;
-use \LibDNS\Records\RDataFactory;
-use \LibDNS\Records\Types\TypeBuilder;
-use \LibDNS\Records\Types\TypeFactory;
-use \LibDNS\Records\TypeDefinitions\TypeDefinitionManager;
-use \LibDNS\Records\TypeDefinitions\TypeDefinitionFactory;
-use \LibDNS\Records\TypeDefinitions\FieldDefinitionFactory;
+use LibDNS\Messages\MessageFactory;
+use LibDNS\Records\RecordCollectionFactory;
+use LibDNS\Records\QuestionFactory;
+use LibDNS\Records\ResourceBuilder;
+use LibDNS\Records\ResourceFactory;
+use LibDNS\Records\RDataBuilder;
+use LibDNS\Records\RDataFactory;
+use LibDNS\Records\Types\TypeBuilder;
+use LibDNS\Records\Types\TypeFactory;
+use LibDNS\Records\TypeDefinitions\TypeDefinitionManager;
+use LibDNS\Records\TypeDefinitions\TypeDefinitionFactory;
+use LibDNS\Records\TypeDefinitions\FieldDefinitionFactory;
 
 /**
  * Creates Decoder objects
@@ -48,7 +47,6 @@ class DecoderFactory
         $typeBuilder = new TypeBuilder(new TypeFactory);
 
         return new Decoder(
-            new PacketFactory,
             new MessageFactory(new RecordCollectionFactory),
             new QuestionFactory,
             new ResourceBuilder(

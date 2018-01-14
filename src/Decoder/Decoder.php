@@ -16,7 +16,6 @@ namespace LibDNS\Decoder;
 use LibDNS\Messages\Message;
 use LibDNS\Messages\MessageFactory;
 use LibDNS\Packets\Packet;
-use LibDNS\Packets\PacketFactory;
 use LibDNS\Records\Question;
 use LibDNS\Records\QuestionFactory;
 use LibDNS\Records\Resource;
@@ -43,11 +42,6 @@ use LibDNS\Records\Types\Types;
  */
 class Decoder
 {
-    /**
-     * @var \LibDNS\Packets\PacketFactory
-     */
-    private $packetFactory;
-
     /**
      * @var \LibDNS\Messages\MessageFactory
      */
@@ -81,7 +75,6 @@ class Decoder
     /**
      * Constructor
      *
-     * @param \LibDNS\Packets\PacketFactory $packetFactory
      * @param \LibDNS\Messages\MessageFactory $messageFactory
      * @param \LibDNS\Records\QuestionFactory $questionFactory
      * @param \LibDNS\Records\ResourceBuilder $resourceBuilder
@@ -90,7 +83,6 @@ class Decoder
      * @param bool $allowTrailingData
      */
     public function __construct(
-        PacketFactory $packetFactory,
         MessageFactory $messageFactory,
         QuestionFactory $questionFactory,
         ResourceBuilder $resourceBuilder,
@@ -98,7 +90,6 @@ class Decoder
         DecodingContextFactory $decodingContextFactory,
         bool $allowTrailingData = true
     ) {
-        $this->packetFactory = $packetFactory;
         $this->messageFactory = $messageFactory;
         $this->questionFactory = $questionFactory;
         $this->resourceBuilder = $resourceBuilder;
@@ -452,7 +443,7 @@ class Decoder
      */
     public function decode(string $data): Message
     {
-        $packet = $this->packetFactory->create($data);
+        $packet = new Packet($data);
         $decodingContext = $this->decodingContextFactory->create($packet);
         $message = $this->messageFactory->create();
 
