@@ -10,6 +10,11 @@ final class ResourceDataEncoder
 {
     const ENCODERS = [
         ResourceData\A::class => 'encodeA', /** @uses encodeA */
+        ResourceData\MB::class => 'encodeMB', /** @uses encodeMB */
+        ResourceData\MD::class => 'encodeMD', /** @uses encodeMD */
+        ResourceData\MF::class => 'encodeMF', /** @uses encodeMF */
+        ResourceData\MG::class => 'encodeMG', /** @uses encodeMG */
+        ResourceData\MR::class => 'encodeMR', /** @uses encodeMR */
         ResourceData\NS::class => 'encodeNS', /** @uses encodeNS */
         ResourceData\SOA::class => 'encodeSOA', /** @uses encodeSOA */
     ];
@@ -17,6 +22,31 @@ final class ResourceDataEncoder
     private function encodeA(EncodingContext $ctx, ResourceData\A $data)
     {
         encode_ipv4address($data->getAddress(), $ctx);
+    }
+
+    private function encodeMB(EncodingContext $ctx, ResourceData\MB $data)
+    {
+        encode_domain_name($data->getMailAgentName(), $ctx);
+    }
+
+    private function encodeMD(EncodingContext $ctx, ResourceData\MD $data)
+    {
+        encode_domain_name($data->getMailAgentName(), $ctx);
+    }
+
+    private function encodeMF(EncodingContext $ctx, ResourceData\MF $data)
+    {
+        encode_domain_name($data->getMailAgentName(), $ctx);
+    }
+
+    private function encodeMG(EncodingContext $ctx, ResourceData\MG $data)
+    {
+        encode_domain_name($data->getMailboxName(), $ctx);
+    }
+
+    private function encodeMR(EncodingContext $ctx, ResourceData\MR $data)
+    {
+        encode_domain_name($data->getMailboxName(), $ctx);
     }
 
     private function encodeNS(EncodingContext $ctx, ResourceData\NS $data)

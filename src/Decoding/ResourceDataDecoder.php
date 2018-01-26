@@ -10,6 +10,11 @@ final class ResourceDataDecoder
 {
     const DECODERS = [
         ResourceData\A::TYPE_ID => 'decodeA', /** @uses decodeA */
+        ResourceData\MB::TYPE_ID => 'decodeMB', /** @uses decodeMB */
+        ResourceData\MD::TYPE_ID => 'decodeMD', /** @uses decodeMD */
+        ResourceData\MF::TYPE_ID => 'decodeMF', /** @uses decodeMF */
+        ResourceData\MG::TYPE_ID => 'decodeMG', /** @uses decodeMG */
+        ResourceData\MR::TYPE_ID => 'decodeMR', /** @uses decodeMR */
         ResourceData\NS::TYPE_ID => 'decodeNS', /** @uses decodeNS */
         ResourceData\SOA::TYPE_ID => 'decodeSOA', /** @uses decodeSOA */
     ];
@@ -17,6 +22,31 @@ final class ResourceDataDecoder
     private function decodeA(DecodingContext $ctx): ResourceData\A
     {
         return new ResourceData\A(decode_ipv4address($ctx));
+    }
+
+    private function decodeMB(DecodingContext $ctx): ResourceData\MB
+    {
+        return new ResourceData\MB(decode_domain_name($ctx));
+    }
+
+    private function decodeMD(DecodingContext $ctx): ResourceData\MD
+    {
+        return new ResourceData\MD(decode_domain_name($ctx));
+    }
+
+    private function decodeMF(DecodingContext $ctx): ResourceData\MF
+    {
+        return new ResourceData\MF(decode_domain_name($ctx));
+    }
+
+    private function decodeMG(DecodingContext $ctx): ResourceData\MG
+    {
+        return new ResourceData\MG(decode_domain_name($ctx));
+    }
+
+    private function decodeMR(DecodingContext $ctx): ResourceData\MR
+    {
+        return new ResourceData\MR(decode_domain_name($ctx));
     }
 
     private function decodeNS(DecodingContext $ctx): ResourceData\NS

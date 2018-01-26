@@ -3,21 +3,18 @@
 namespace DaveRandom\LibDNS\Records;
 
 use DaveRandom\Enum\Enum;
-use DaveRandom\LibDNS\Records\ResourceData\A;
-use DaveRandom\LibDNS\Records\ResourceData\NS;
-use DaveRandom\LibDNS\Records\ResourceData\SOA;
 
 abstract class ResourceTypes extends Enum
 {
-    const A          = A::TYPE_ID;
-    const NS         = NS::TYPE_ID;
-    const MD         = 3;
-    const MF         = 4;
-    const CNAME      = 5;
-    const SOA        = SOA::TYPE_ID;
-    const MB         = 7;
-    const MG         = 8;
-    const MR         = 9;
+    const A          = ResourceData\A::TYPE_ID; // RFC 1035
+    const NS         = ResourceData\NS::TYPE_ID; // RFC 1035
+    const MD         = ResourceData\MD::TYPE_ID; // RFC 1035, obsolete
+    const MF         = ResourceData\MF::TYPE_ID; // RFC 1035, obsolete
+    const CNAME      = 5; // RFC 1035
+    const SOA        = ResourceData\SOA::TYPE_ID; // RFC 1035
+    const MB         = ResourceData\MB::TYPE_ID; // RFC 1035, experimental
+    const MG         = ResourceData\MG::TYPE_ID; // RFC 1035, experimental
+    const MR         = ResourceData\MR::TYPE_ID; // RFC 1035, experimental
     const NULL       = 10;
     const WKS        = 11;
     const PTR        = 12;
