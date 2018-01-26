@@ -4,12 +4,13 @@ namespace DaveRandom\LibDNS\Records;
 
 use DaveRandom\Enum\Enum;
 use DaveRandom\LibDNS\Records\ResourceData\A;
+use DaveRandom\LibDNS\Records\ResourceData\NS;
 use DaveRandom\LibDNS\Records\ResourceData\SOA;
 
 abstract class ResourceTypes extends Enum
 {
     const A          = A::TYPE_ID;
-    const NS         = 2;
+    const NS         = NS::TYPE_ID;
     const MD         = 3;
     const MF         = 4;
     const CNAME      = 5;

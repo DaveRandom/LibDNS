@@ -14,16 +14,16 @@ use DaveRandom\LibDNS\Records\ResourceData\A;
 use DaveRandom\LibDNS\Records\ResourceQTypes;
 use DaveRandom\Network\DomainName;
 
-// Config
-$queryName      = 'github.com';
-$serverIP       = '8.8.8.8';
-$requestTimeout = 3;
-
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/includes/functions.php';
 
+// Config
+const NAME = 'github.com';
+
+echo "\n" . NAME . ":\n";
+
 // Create question record
-$question = new QuestionRecord(DomainName::createFromString($queryName), ResourceQTypes::A);
+$question = new QuestionRecord(DomainName::createFromString(NAME), ResourceQTypes::A);
 
 // Create query message
 $query = new Query([$question]);
@@ -31,11 +31,9 @@ $query = new Query([$question]);
 // Encode query message
 $requestPacket = (new Encoder)->encode($query);
 
-echo "\n{$queryName}:\n";
-
 // Send query and wait for response
 try {
-    $responsePacket = send_query_to_server($requestPacket, $serverIP, $requestTimeout);
+    $responsePacket = send_query_to_server($requestPacket);
 } catch (\RuntimeException $e) {
     exit("  {$e->getMessage()}\n");
 }
@@ -56,9 +54,9 @@ if (count($answers) === 0) {
 }
 
 foreach ($answers as $record) {
-    $responsePacket = $record->getData();
+    $data = $record->getData();
 
-    if ($responsePacket instanceof A) {
-        echo "  {$responsePacket->getAddress()}\n";
+    if ($data instanceof A) {
+        echo "  {$data->getAddress()}\n";
     }
 }

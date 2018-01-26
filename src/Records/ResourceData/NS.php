@@ -2,9 +2,10 @@
 
 namespace DaveRandom\LibDNS\Records\ResourceData;
 
+use DaveRandom\LibDNS\Records\ResourceData;
 use DaveRandom\Network\DomainName;
 
-final class NS
+final class NS implements ResourceData
 {
     const TYPE_ID = 2;
 

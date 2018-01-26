@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-function send_query_to_server(string $packet, string $serverIp, int $timeoutSecs): string
+function send_query_to_server(string $packet, string $serverIp = '8.8.8.8', int $timeoutSecs = 3): string
 {
     $ctx = \stream_context_create(['socket' => ['bindto' => '0:54321']]);
 
