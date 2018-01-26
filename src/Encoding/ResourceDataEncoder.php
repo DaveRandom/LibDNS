@@ -12,16 +12,20 @@ final class ResourceDataEncoder
     const ENCODERS = [
         ResourceData\A::class => 'encodeA', /** @uses encodeA */
         ResourceData\CNAME::class => 'encodeCNAME', /** @uses encodeCNAME */
+        ResourceData\HINFO::class => 'encodeHINFO', /** @uses encodeHINFO */
         ResourceData\MB::class => 'encodeMB', /** @uses encodeMB */
         ResourceData\MD::class => 'encodeMD', /** @uses encodeMD */
         ResourceData\MF::class => 'encodeMF', /** @uses encodeMF */
         ResourceData\MG::class => 'encodeMG', /** @uses encodeMG */
+        ResourceData\MINFO::class => 'encodeMINFO', /** @uses encodeMINFO */
         ResourceData\MR::class => 'encodeMR', /** @uses encodeMR */
+        ResourceData\MX::class => 'encodeMX', /** @uses encodeMX */
         ResourceData\NS::class => 'encodeNS', /** @uses encodeNS */
         ResourceData\NULLRecord::class => 'encodeNULL', /** @uses encodeNULL */
         ResourceData\PTR::class => 'encodePTR', /** @uses encodePTR */
         ResourceData\SOA::class => 'encodeSOA', /** @uses encodeSOA */
         ResourceData\TXT::class => 'encodeTXT', /** @uses encodeTXT */
+        ResourceData\WKS::class => 'encodeWKS', /** @uses encodeWKS */
     ];
 
     private function encodeA(EncodingContext $ctx, ResourceData\A $data)
@@ -32,6 +36,12 @@ final class ResourceDataEncoder
     private function encodeCNAME(EncodingContext $ctx, ResourceData\CNAME $data)
     {
         encode_domain_name($ctx, $data->getCanonicalName());
+    }
+
+    private function encodeHINFO(EncodingContext $ctx, ResourceData\HINFO $data)
+    {
+        encode_character_data($ctx, $data->getCpu());
+        encode_character_data($ctx, $data->getOs());
     }
 
     private function encodeMB(EncodingContext $ctx, ResourceData\MB $data)
@@ -54,9 +64,21 @@ final class ResourceDataEncoder
         encode_domain_name($ctx, $data->getMailboxName());
     }
 
+    private function encodeMINFO(EncodingContext $ctx, ResourceData\MINFO $data)
+    {
+        encode_character_data($ctx, $data->getResponsibleMailbox());
+        encode_character_data($ctx, $data->getErrorMailbox());
+    }
+
     private function encodeMR(EncodingContext $ctx, ResourceData\MR $data)
     {
         encode_domain_name($ctx, $data->getMailboxName());
+    }
+
+    private function encodeMX(EncodingContext $ctx, ResourceData\MX $data)
+    {
+        $ctx->appendData(\pack('n', $data->getPreference()));
+        encode_domain_name($ctx, $data->getExchange());
     }
 
     private function encodeNS(EncodingContext $ctx, ResourceData\NS $data)
@@ -94,6 +116,12 @@ final class ResourceDataEncoder
         foreach ($data->getStrings() as $string) {
             encode_character_data($ctx, $string);
         }
+    }
+
+    private function encodeWKS(EncodingContext $ctx, ResourceData\WKS $data)
+    {
+        encode_ipv4address($ctx, $data->getAddress());
+        $ctx->appendData(\pack('Ca*', $data->getProtocol(), $data->getBitMap()));
     }
 
     public function encode(EncodingContext $ctx, ResourceData $data)

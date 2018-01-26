@@ -12,16 +12,20 @@ final class ResourceDataDecoder
     const DECODERS = [
         ResourceData\A::TYPE_ID => 'decodeA', /** @uses decodeA */
         ResourceData\CNAME::TYPE_ID => 'decodeCNAME', /** @uses decodeCNAME */
+        ResourceData\HINFO::TYPE_ID => 'decodeHINFO', /** @uses decodeHINFO */
         ResourceData\MB::TYPE_ID => 'decodeMB', /** @uses decodeMB */
         ResourceData\MD::TYPE_ID => 'decodeMD', /** @uses decodeMD */
         ResourceData\MF::TYPE_ID => 'decodeMF', /** @uses decodeMF */
         ResourceData\MG::TYPE_ID => 'decodeMG', /** @uses decodeMG */
+        ResourceData\MINFO::TYPE_ID => 'decodeMINFO', /** @uses decodeMINFO */
         ResourceData\MR::TYPE_ID => 'decodeMR', /** @uses decodeMR */
+        ResourceData\MX::TYPE_ID => 'decodeMX', /** @uses decodeMX */
         ResourceData\NS::TYPE_ID => 'decodeNS', /** @uses decodeNS */
         ResourceData\NULLRecord::TYPE_ID => 'decodeNULL', /** @uses decodeNULL */
         ResourceData\PTR::TYPE_ID => 'decodePTR', /** @uses decodePTR */
         ResourceData\SOA::TYPE_ID => 'decodeSOA', /** @uses decodeSOA */
         ResourceData\TXT::TYPE_ID => 'decodeTXT', /** @uses decodeTXT */
+        ResourceData\WKS::TYPE_ID => 'decodeWKS', /** @uses decodeWKS */
     ];
 
     private function decodeA(DecodingContext $ctx): ResourceData\A
@@ -32,6 +36,14 @@ final class ResourceDataDecoder
     private function decodeCNAME(DecodingContext $ctx): ResourceData\CNAME
     {
         return new ResourceData\CNAME(decode_domain_name($ctx));
+    }
+
+    private function decodeHINFO(DecodingContext $ctx): ResourceData\HINFO
+    {
+        $cpu = decode_character_data($ctx);
+        $os = decode_character_data($ctx);
+
+        return new ResourceData\HINFO($cpu, $os);
     }
 
     private function decodeMB(DecodingContext $ctx): ResourceData\MB
@@ -54,9 +66,25 @@ final class ResourceDataDecoder
         return new ResourceData\MG(decode_domain_name($ctx));
     }
 
+    private function decodeMINFO(DecodingContext $ctx): ResourceData\MINFO
+    {
+        $responsibleMailbox = decode_character_data($ctx);
+        $errorMailbox = decode_character_data($ctx);
+
+        return new ResourceData\MINFO($responsibleMailbox, $errorMailbox);
+    }
+
     private function decodeMR(DecodingContext $ctx): ResourceData\MR
     {
         return new ResourceData\MR(decode_domain_name($ctx));
+    }
+
+    private function decodeMX(DecodingContext $ctx): ResourceData\MX
+    {
+        $preference = $ctx->unpack('n', 2)[1];
+        $exchange = decode_domain_name($ctx);
+
+        return new ResourceData\MX($preference, $exchange);
     }
 
     private function decodeNS(DecodingContext $ctx): ResourceData\NS
@@ -100,6 +128,14 @@ final class ResourceDataDecoder
         }
 
         return new ResourceData\TXT($strings);
+    }
+
+    private function decodeWKS(DecodingContext $ctx, int $length): ResourceData\WKS
+    {
+        $address = decode_ipv4address($ctx);
+        $parts = $ctx->unpack('Cprotocol/Zbitmap' . ($length - 5), $length - 4);
+
+        return new ResourceData\WKS($address, $parts['protocol'], $parts['bitmap']);
     }
 
     public function decode(DecodingContext $ctx, int $type, int $length): ResourceData
