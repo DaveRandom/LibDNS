@@ -99,12 +99,6 @@ final class ResourceDataDecoder
             $consumed += \strlen($string) + 1;
         }
 
-        if ($consumed !== $length) {
-            throw new \InvalidArgumentException(
-                "Stated length {$length} does not match decoded data length {$consumed}"
-            );
-        }
-
         return new ResourceData\TXT($strings);
     }
 
@@ -114,6 +108,15 @@ final class ResourceDataDecoder
             throw new \UnexpectedValueException("Unknown resource data type ID: {$type}");
         }
 
-        return ([$this, self::DECODERS[$type]])($ctx, $length);
+        $expectedOffset = $ctx->offset + $length;
+        $result = ([$this, self::DECODERS[$type]])($ctx, $length);
+
+        if ($ctx->offset !== $expectedOffset) {
+            throw new \RuntimeException(
+                "Current offset {$ctx->offset} does not match expected offset {$expectedOffset}"
+            );
+        }
+
+        return $result;
     }
 }
