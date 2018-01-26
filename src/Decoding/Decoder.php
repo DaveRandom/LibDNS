@@ -86,7 +86,7 @@ final class Decoder
         }
 
         if (!($ctx->messageFlags & MessageFlags::IS_RESPONSE)) {
-            return new Query($ctx->messageId, $questionRecords, $ctx->messageFlags, $ctx->messageOpCode);
+            return new Query($questionRecords, $ctx->messageId, $ctx->messageFlags, $ctx->messageOpCode);
         }
 
         $answerRecords = [];
