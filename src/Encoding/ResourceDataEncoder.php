@@ -8,18 +8,20 @@ use DaveRandom\LibDNS\Records\ResourceData;
 
 final class ResourceDataEncoder
 {
-    /**
-     * @uses encodeA
-     * @uses encodeSOA
-     */
-    private static $ENCODERS = [
-        ResourceData\A::class => 'encodeA',
-        ResourceData\SOA::class => 'encodeSOA',
+    const ENCODERS = [
+        ResourceData\A::class => 'encodeA', /** @uses encodeA */
+        ResourceData\NS::class => 'encodeNS', /** @uses encodeNS */
+        ResourceData\SOA::class => 'encodeSOA', /** @uses encodeSOA */
     ];
 
     private function encodeA(EncodingContext $ctx, ResourceData\A $data)
     {
         encode_ipv4address($data->getAddress(), $ctx);
+    }
+
+    private function encodeNS(EncodingContext $ctx, ResourceData\NS $data)
+    {
+        encode_domain_name($data->getAuthoritativeServerName(), $ctx);
     }
 
     private function encodeSOA(EncodingContext $ctx, ResourceData\SOA $data)
@@ -37,14 +39,14 @@ final class ResourceDataEncoder
         ));
     }
 
-    public function encode(EncodingContext $ctx, ResourceData $data): string
+    public function encode(EncodingContext $ctx, ResourceData $data)
     {
         $class = \get_class($data);
 
-        if (!\array_key_exists($class, self::$ENCODERS)) {
+        if (!\array_key_exists($class, self::ENCODERS)) {
             throw new \UnexpectedValueException("Unknown resource data type: {$class}");
         }
 
-        return ([$this, self::$ENCODERS[$class]])($data, $ctx);
+        ([$this, self::ENCODERS[$class]])($ctx, $data);
     }
 }
