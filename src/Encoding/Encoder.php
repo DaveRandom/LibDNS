@@ -26,7 +26,7 @@ final class Encoder
 
     private function encodeQuestionRecord(EncodingContext $ctx, QuestionRecord $record): bool
     {
-        encode_domain_name($record->getName(), $ctx);
+        encode_domain_name($ctx, $record->getName());
         $ctx->appendData(\pack('n2', $record->getType(), $record->getClass()));
 
         if ($ctx->isDataLengthExceeded()) {
@@ -40,7 +40,7 @@ final class Encoder
 
     private function encodeResourceRecord(EncodingContext $ctx, ResourceRecord $record): bool
     {
-        encode_domain_name($record->getName(), $ctx);
+        encode_domain_name($ctx, $record->getName());
         $ctx->appendData(\pack('n2N', $record->getType(), $record->getClass(), $record->getTTL()));
 
         $ctx->beginRecordData();

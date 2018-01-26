@@ -25,7 +25,7 @@ function normalize_name(string $label): string
     return \DaveRandom\Network\normalize_dns_name($label);
 }
 
-function encode_domain_name(DomainName $name, EncodingContext $ctx, bool $neverCompress = false)
+function encode_domain_name(EncodingContext $ctx, DomainName $name, bool $neverCompress = false)
 {
     $labels = $name->getLabels();
     $result = '';
@@ -131,7 +131,7 @@ function decode_domain_name(DecodingContext $ctx): DomainName
     return new DomainName($result, false);
 }
 
-function encode_ipv4address(IPv4Address $address, EncodingContext $ctx)
+function encode_ipv4address(EncodingContext $ctx, IPv4Address $address)
 {
     $ctx->appendData(\pack(
         'C4',

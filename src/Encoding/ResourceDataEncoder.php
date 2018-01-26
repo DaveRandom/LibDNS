@@ -21,43 +21,43 @@ final class ResourceDataEncoder
 
     private function encodeA(EncodingContext $ctx, ResourceData\A $data)
     {
-        encode_ipv4address($data->getAddress(), $ctx);
+        encode_ipv4address($ctx, $data->getAddress());
     }
 
     private function encodeMB(EncodingContext $ctx, ResourceData\MB $data)
     {
-        encode_domain_name($data->getMailAgentName(), $ctx);
+        encode_domain_name($ctx, $data->getMailAgentName());
     }
 
     private function encodeMD(EncodingContext $ctx, ResourceData\MD $data)
     {
-        encode_domain_name($data->getMailAgentName(), $ctx);
+        encode_domain_name($ctx, $data->getMailAgentName());
     }
 
     private function encodeMF(EncodingContext $ctx, ResourceData\MF $data)
     {
-        encode_domain_name($data->getMailAgentName(), $ctx);
+        encode_domain_name($ctx, $data->getMailAgentName());
     }
 
     private function encodeMG(EncodingContext $ctx, ResourceData\MG $data)
     {
-        encode_domain_name($data->getMailboxName(), $ctx);
+        encode_domain_name($ctx, $data->getMailboxName());
     }
 
     private function encodeMR(EncodingContext $ctx, ResourceData\MR $data)
     {
-        encode_domain_name($data->getMailboxName(), $ctx);
+        encode_domain_name($ctx, $data->getMailboxName());
     }
 
     private function encodeNS(EncodingContext $ctx, ResourceData\NS $data)
     {
-        encode_domain_name($data->getAuthoritativeServerName(), $ctx);
+        encode_domain_name($ctx, $data->getAuthoritativeServerName());
     }
 
     private function encodeSOA(EncodingContext $ctx, ResourceData\SOA $data)
     {
-        encode_domain_name($data->getMasterServerName(), $ctx);
-        encode_domain_name($data->getResponsibleMailAddress(), $ctx);
+        encode_domain_name($ctx, $data->getMasterServerName());
+        encode_domain_name($ctx, $data->getResponsibleMailAddress());
 
         $ctx->appendData(\pack(
             'N5',
