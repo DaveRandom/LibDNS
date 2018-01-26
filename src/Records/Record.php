@@ -3,7 +3,6 @@
 namespace DaveRandom\LibDNS\Records;
 
 use DaveRandom\Network\DomainName;
-use const DaveRandom\LibDNS\UINT16_MASK;
 
 abstract class Record
 {
@@ -13,13 +12,9 @@ abstract class Record
 
     protected function __construct(DomainName $name, int $type, int $class)
     {
-        if (($class & UINT16_MASK) !== $class) {
-            throw new \InvalidArgumentException('Record class must be in the range 0 - 65535');
-        }
-
         $this->name = $name;
         $this->type = $type;
-        $this->class = $class;
+        $this->class = \DaveRandom\LibDNS\validate_uint16('Record class', $class);
     }
 
     public function getName(): DomainName

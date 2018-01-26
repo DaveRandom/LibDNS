@@ -1,35 +1,19 @@
 <?php declare(strict_types=1);
-/**
- * Enumeration of possible resource TYPE values
- *
- * PHP version 5.4
- *
- * @category LibDNS
- * @package Records
- * @author Chris Wright <https://github.com/DaveRandom>
- * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license http://www.opensource.org/licenses/mit-license.html MIT License
- * @version 2.0.0
- */
+
 namespace DaveRandom\LibDNS\Records;
 
 use DaveRandom\Enum\Enum;
+use DaveRandom\LibDNS\Records\ResourceData\A;
+use DaveRandom\LibDNS\Records\ResourceData\SOA;
 
-/**
- * Enumeration of possible resource TYPE values
- *
- * @category LibDNS
- * @package Records
- * @author Chris Wright <https://github.com/DaveRandom>
- */
 abstract class ResourceTypes extends Enum
 {
-    const A          = 1;
+    const A          = A::TYPE_ID;
     const NS         = 2;
     const MD         = 3;
     const MF         = 4;
     const CNAME      = 5;
-    const SOA        = 6;
+    const SOA        = SOA::TYPE_ID;
     const MB         = 7;
     const MG         = 8;
     const MR         = 9;

@@ -2,22 +2,39 @@
 
 namespace DaveRandom\LibDNS\Encoding;
 
+use function DaveRandom\LibDNS\encode_domain_name;
 use function DaveRandom\LibDNS\encode_ipv4address;
 use DaveRandom\LibDNS\Records\ResourceData;
-use DaveRandom\LibDNS\Records\ResourceData\A;
 
 final class ResourceDataEncoder
 {
     /**
      * @uses encodeA
+     * @uses encodeSOA
      */
     private static $ENCODERS = [
-        A::class => 'encodeA',
+        ResourceData\A::class => 'encodeA',
+        ResourceData\SOA::class => 'encodeSOA',
     ];
 
-    private function encodeA(A $data): string
+    private function encodeA(EncodingContext $ctx, ResourceData\A $data)
     {
-        return encode_ipv4address($data->getAddress());
+        encode_ipv4address($data->getAddress(), $ctx);
+    }
+
+    private function encodeSOA(EncodingContext $ctx, ResourceData\SOA $data)
+    {
+        encode_domain_name($data->getMasterServerName(), $ctx);
+        encode_domain_name($data->getResponsibleMailAddress(), $ctx);
+
+        $ctx->appendData(\pack(
+            'N5',
+            $data->getSerial(),
+            $data->getRefreshInterval(),
+            $data->getRetryInterval(),
+            $data->getExpireTimeout(),
+            $data->getTtl()
+        ));
     }
 
     public function encode(EncodingContext $ctx, ResourceData $data): string

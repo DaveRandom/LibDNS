@@ -11,62 +11,47 @@ final class Encoder
 {
     private $resourceDataEncoder;
 
-    private function encodeHeader(EncodingContext $ctx, Message $message): string
+    private function encodeHeader(EncodingContext $ctx, Message $message, int $qdCount, int $anCount, int $nsCount, int $arCount): string
     {
         return \pack(
-            'n*',
+            'n6',
             $message->getId(),
             $message->getFlags() | ($message->getOpCode() << 11) | ($ctx->isTruncated << 9) | $message->getResponseCode(),
-            $ctx->questionRecordCount,
-            $ctx->answerRecordCount,
-            $ctx->authorityRecordCount,
-            $ctx->additionalRecordCount
+            $qdCount,
+            $anCount,
+            $nsCount,
+            $arCount
         );
     }
 
     private function encodeQuestionRecord(EncodingContext $ctx, QuestionRecord $record): bool
     {
-        if ($ctx->isTruncated) {
-            return false;
-        }
+        encode_domain_name($record->getName(), $ctx);
+        $ctx->appendData(\pack('n2', $record->getType(), $record->getClass()));
 
-        $name = encode_domain_name($record->getName(), $ctx);
-
-        $newMessageLength = Message::HEADER_SIZE + \strlen($ctx->data) + \strlen($name) + 4;
-
-        if (($ctx->limitTo512Bytes && $newMessageLength > 512) || $newMessageLength > 65535) {
+        if ($ctx->isDataLengthExceeded()) {
             $ctx->isTruncated = true;
             return false;
         }
 
-        $ctx->data .= \pack('a*n2', $name, $record->getType(), $record->getClass());
-
+        $ctx->commitPendingData();
         return true;
     }
 
     private function encodeResourceRecord(EncodingContext $ctx, ResourceRecord $record): bool
     {
-        if ($ctx->isTruncated) {
-            return false;
-        }
+        encode_domain_name($record->getName(), $ctx);
+        $ctx->appendData(\pack('n2N', $record->getType(), $record->getClass(), $record->getTTL()));
 
-        $name = encode_domain_name($record->getName(), $ctx);
-        $data = $this->resourceDataEncoder->encode($ctx, $record->getData());
+        $ctx->beginRecordData();
+        $this->resourceDataEncoder->encode($ctx, $record->getData());
 
-        $newMessageLength = Message::HEADER_SIZE + \strlen($ctx->data) + \strlen($name) + \strlen($data) + 10;
-
-        if (($ctx->limitTo512Bytes && $newMessageLength > 512) || $newMessageLength > 65535) {
+        if ($ctx->isDataLengthExceeded()) {
             $ctx->isTruncated = true;
             return false;
         }
 
-        $ctx->data .= \pack(
-            'a*n2Nna*',
-            $name,
-            $record->getType(), $record->getClass(), $record->getTTL(),
-            \strlen($data), $data
-        );
-
+        $ctx->commitPendingData();
         return true;
     }
 
@@ -85,40 +70,42 @@ final class Encoder
     public function encode(Message $message, int $options = 0): string
     {
         $ctx = new EncodingContext($options);
+        $qdCount = $anCount = $nsCount = $arCount = 0;
 
         foreach ($message->getQuestionRecords() as $record) {
             if (!$this->encodeQuestionRecord($ctx, $record)) {
-                break;
+                goto done;
             }
 
-            $ctx->questionRecordCount++;
+            $qdCount++;
         }
 
         foreach ($message->getAnswerRecords() as $record) {
             if (!$this->encodeResourceRecord($ctx, $record)) {
-                break;
+                goto done;
             }
 
-            $ctx->answerRecordCount++;
+            $anCount++;
         }
 
         foreach ($message->getAuthorityRecords() as $record) {
             if (!$this->encodeResourceRecord($ctx, $record)) {
-                break;
+                goto done;
             }
 
-            $ctx->authorityRecordCount++;
+            $nsCount++;
         }
 
         foreach ($message->getAdditionalRecords() as $record) {
             if (!$this->encodeResourceRecord($ctx, $record)) {
-                break;
+                goto done;
             }
 
-            $ctx->additionalRecordCount++;
+            $arCount++;
         }
 
-        $packet = $this->encodeHeader($ctx, $message) . $ctx->data;
+        done:
+        $packet = $this->encodeHeader($ctx, $message, $qdCount, $anCount, $nsCount, $arCount) . $ctx->data;
 
         if (!($options & EncodingOptions::FORMAT_TCP)) {
             \assert(
@@ -134,6 +121,6 @@ final class Encoder
             new \Error('TCP packet exceeds 65535 byte limit: got ' . \strlen($packet) . ' bytes')
         );
 
-        return \pack('a*n', $packet, \strlen($packet));
+        return $packet . \pack('n', \strlen($packet));
     }
 }

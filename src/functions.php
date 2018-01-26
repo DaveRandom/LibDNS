@@ -4,12 +4,16 @@ namespace DaveRandom\LibDNS;
 
 use DaveRandom\LibDNS\Decoding\DecodingContext;
 use DaveRandom\LibDNS\Encoding\EncodingContext;
-use DaveRandom\LibDNS\Messages\Message;
 use DaveRandom\Network\DomainName;
 use DaveRandom\Network\IPv4Address;
 
-const UINT32_MASK = (0x7fffffff << 1) | 0x01;
+const UINT16_MIN = 0;
+const UINT16_MAX = 0xffff;
 const UINT16_MASK = 0xffff;
+
+const UINT32_MIN = \PHP_INT_SIZE === 8 ? 0 : \PHP_INT_MIN;
+const UINT32_MAX = \PHP_INT_SIZE === 8 ? 0xffffffff : \PHP_INT_MAX;
+const UINT32_MASK = (0x7fffffff << 1) | 0x01;
 
 function normalize_name(string $label): string
 {
@@ -21,9 +25,8 @@ function normalize_name(string $label): string
     return \DaveRandom\Network\normalize_dns_name($label);
 }
 
-function encode_domain_name(DomainName $name, EncodingContext $ctx, bool $neverCompress = false): string
+function encode_domain_name(DomainName $name, EncodingContext $ctx, bool $neverCompress = false)
 {
-    $offset = \strlen($ctx->data) + Message::HEADER_SIZE;
     $labels = $name->getLabels();
     $result = '';
 
@@ -33,7 +36,7 @@ function encode_domain_name(DomainName $name, EncodingContext $ctx, bool $neverC
             $result .= \chr(\strlen($label)) . $label;
         }
 
-        return "{$result}\x00";
+        goto done;
     }
 
     // Loop the labels until there are none left
@@ -42,20 +45,24 @@ function encode_domain_name(DomainName $name, EncodingContext $ctx, bool $neverC
 
         // If the remainder of the name exists in the registry, encode a pointer to it and return
         if (isset($ctx->labelIndexes[$part])) {
-            return \pack('a*n', $result, 0b1100000000000000 | $ctx->labelIndexes[$part]);
+            $ctx->appendData($result . \pack('n', 0b1100000000000000 | $ctx->labelIndexes[$part]));
+            return;
         }
 
-        // Add the remainder of the name to the registry
-        $ctx->labelIndexes[$part] = $offset;
+        // Add the remainder of the name to the registry as long as the offset is small enough to fit in a reference
+        if ($ctx->offset <= 0x3fff) {
+            $ctx->labelIndexes[$part] = $ctx->offset;
+        }
 
         // Encode the current label literally
         $label = \array_shift($labels);
         $length = \strlen($label);
-        $result .= \chr($length) . $label;
-        $offset += $length + 1;
+
+        $ctx->appendData(\chr($length) . $label);
     } while (!empty($labels));
 
-    return "{$result}\x00";
+    done:
+    $ctx->appendData("{$result}\x00");
 }
 
 function decode_domain_name(DecodingContext $ctx): DomainName
@@ -124,9 +131,15 @@ function decode_domain_name(DecodingContext $ctx): DomainName
     return new DomainName($result, false);
 }
 
-function encode_ipv4address(IPv4Address $address): string
+function encode_ipv4address(IPv4Address $address, EncodingContext $ctx)
 {
-    return \pack('C4', $address->getOctet1(), $address->getOctet2(), $address->getOctet3(), $address->getOctet4());
+    $ctx->appendData(\pack(
+        'C4',
+        $address->getOctet1(),
+        $address->getOctet2(),
+        $address->getOctet3(),
+        $address->getOctet4()
+    ));
 }
 
 function decode_ipv4address(DecodingContext $ctx): IPv4Address
@@ -134,4 +147,22 @@ function decode_ipv4address(DecodingContext $ctx): IPv4Address
     $octets = $ctx->unpack('C4', 4);
 
     return new IPv4Address($octets[1], $octets[2], $octets[3], $octets[4]);
+}
+
+function validate_uint16(string $description, int $value): int
+{
+    if (($value & UINT16_MASK) !== $value) {
+        throw new \InvalidArgumentException("{$description} must be in the range " . UINT16_MIN . " - " . UINT16_MAX);
+    }
+
+    return $value;
+}
+
+function validate_uint32(string $description, int $value): int
+{
+    if (($value & UINT32_MASK) !== $value) {
+        throw new \InvalidArgumentException("{$description} must be in the range " . UINT32_MIN . " - " . UINT32_MAX);
+    }
+
+    return $value;
 }
