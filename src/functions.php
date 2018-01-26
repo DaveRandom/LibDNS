@@ -149,6 +149,26 @@ function decode_ipv4address(DecodingContext $ctx): IPv4Address
     return new IPv4Address($octets[1], $octets[2], $octets[3], $octets[4]);
 }
 
+function encode_character_data(EncodingContext $ctx, string $data)
+{
+    $length = \strlen($data);
+
+    if ($length > 255) {
+        throw new \InvalidArgumentException(
+            "Maximum length of character-data string is 255 bytes (got {$length} bytes)"
+        );
+    }
+
+    $ctx->appendData(\chr(\strlen($data)) . $data);
+}
+
+function decode_character_data(DecodingContext $ctx): string
+{
+    $length = \ord($ctx->data[$ctx->offset++]);
+
+    return $ctx->unpack("a{$length}", $length)[1];
+}
+
 function validate_uint16(string $description, int $value): int
 {
     if (($value & UINT16_MASK) !== $value) {

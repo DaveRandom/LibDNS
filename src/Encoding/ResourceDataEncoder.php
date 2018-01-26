@@ -2,6 +2,7 @@
 
 namespace DaveRandom\LibDNS\Encoding;
 
+use function DaveRandom\LibDNS\encode_character_data;
 use function DaveRandom\LibDNS\encode_domain_name;
 use function DaveRandom\LibDNS\encode_ipv4address;
 use DaveRandom\LibDNS\Records\ResourceData;
@@ -17,7 +18,9 @@ final class ResourceDataEncoder
         ResourceData\MG::class => 'encodeMG', /** @uses encodeMG */
         ResourceData\MR::class => 'encodeMR', /** @uses encodeMR */
         ResourceData\NS::class => 'encodeNS', /** @uses encodeNS */
+        ResourceData\NULLRecord::class => 'encodeNULL', /** @uses encodeNULL */
         ResourceData\SOA::class => 'encodeSOA', /** @uses encodeSOA */
+        ResourceData\TXT::class => 'encodeTXT', /** @uses encodeTXT */
     ];
 
     private function encodeA(EncodingContext $ctx, ResourceData\A $data)
@@ -60,6 +63,11 @@ final class ResourceDataEncoder
         encode_domain_name($ctx, $data->getAuthoritativeServerName());
     }
 
+    private function encodeNULL(EncodingContext $ctx, ResourceData\NULLRecord $data)
+    {
+        $ctx->appendData($data->getData());
+    }
+
     private function encodeSOA(EncodingContext $ctx, ResourceData\SOA $data)
     {
         encode_domain_name($ctx, $data->getMasterServerName());
@@ -73,6 +81,13 @@ final class ResourceDataEncoder
             $data->getExpireTimeout(),
             $data->getTtl()
         ));
+    }
+
+    private function encodeTXT(EncodingContext $ctx, ResourceData\TXT $data)
+    {
+        foreach ($data->getStrings() as $string) {
+            encode_character_data($ctx, $string);
+        }
     }
 
     public function encode(EncodingContext $ctx, ResourceData $data)

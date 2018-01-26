@@ -2,6 +2,7 @@
 
 namespace DaveRandom\LibDNS\Decoding;
 
+use function DaveRandom\LibDNS\decode_character_data;
 use function DaveRandom\LibDNS\decode_domain_name;
 use function DaveRandom\LibDNS\decode_ipv4address;
 use DaveRandom\LibDNS\Records\ResourceData;
@@ -17,7 +18,9 @@ final class ResourceDataDecoder
         ResourceData\MG::TYPE_ID => 'decodeMG', /** @uses decodeMG */
         ResourceData\MR::TYPE_ID => 'decodeMR', /** @uses decodeMR */
         ResourceData\NS::TYPE_ID => 'decodeNS', /** @uses decodeNS */
+        ResourceData\NULLRecord::TYPE_ID => 'decodeNULL', /** @uses decodeNULL */
         ResourceData\SOA::TYPE_ID => 'decodeSOA', /** @uses decodeSOA */
+        ResourceData\TXT::TYPE_ID => 'decodeTXT', /** @uses decodeTXT */
     ];
 
     private function decodeA(DecodingContext $ctx): ResourceData\A
@@ -60,6 +63,11 @@ final class ResourceDataDecoder
         return new ResourceData\NS(decode_domain_name($ctx));
     }
 
+    private function decodeNULL(DecodingContext $ctx, int $length): ResourceData\NULLRecord
+    {
+        return new ResourceData\NULLRecord($ctx->unpack("a{$length}", $length)[1]);
+    }
+
     private function decodeSOA(DecodingContext $ctx): ResourceData\SOA
     {
         $masterServerName = decode_domain_name($ctx);
@@ -72,6 +80,26 @@ final class ResourceDataDecoder
             $meta['serial'], $meta['refresh'], $meta['retry'], $meta['expire'], $meta['ttl'],
             false
         );
+    }
+
+    private function decodeTXT(DecodingContext $ctx, int $length): ResourceData\TXT
+    {
+        $consumed = 0;
+        $strings = [];
+
+        while ($consumed < $length) {
+            $string = decode_character_data($ctx);
+            $strings[] = $string;
+            $consumed += \strlen($string) + 1;
+        }
+
+        if ($consumed !== $length) {
+            throw new \InvalidArgumentException(
+                "Stated length {$length} does not match decoded data length {$consumed}"
+            );
+        }
+
+        return new ResourceData\TXT($strings);
     }
 
     public function decode(DecodingContext $ctx, int $type, int $length): ResourceData

@@ -15,13 +15,13 @@ abstract class ResourceTypes extends Enum
     const MB         = ResourceData\MB::TYPE_ID; // RFC 1035, experimental
     const MG         = ResourceData\MG::TYPE_ID; // RFC 1035, experimental
     const MR         = ResourceData\MR::TYPE_ID; // RFC 1035, experimental
-    const NULL       = 10;
+    const NULL       = ResourceData\NULLRecord::TYPE_ID; // RFC 1035, experimental;
     const WKS        = 11;
     const PTR        = 12;
     const HINFO      = 13;
     const MINFO      = 14;
     const MX         = 15;
-    const TXT        = 16;
+    const TXT        = ResourceData\TXT::TYPE_ID; // RFC 1035
     const RP         = 17;
     const AFSDB      = 18;
     const X25        = 19;
