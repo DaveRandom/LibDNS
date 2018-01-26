@@ -10,6 +10,7 @@ final class ResourceDataEncoder
 {
     const ENCODERS = [
         ResourceData\A::class => 'encodeA', /** @uses encodeA */
+        ResourceData\CNAME::class => 'encodeCNAME', /** @uses encodeCNAME */
         ResourceData\MB::class => 'encodeMB', /** @uses encodeMB */
         ResourceData\MD::class => 'encodeMD', /** @uses encodeMD */
         ResourceData\MF::class => 'encodeMF', /** @uses encodeMF */
@@ -22,6 +23,11 @@ final class ResourceDataEncoder
     private function encodeA(EncodingContext $ctx, ResourceData\A $data)
     {
         encode_ipv4address($ctx, $data->getAddress());
+    }
+
+    private function encodeCNAME(EncodingContext $ctx, ResourceData\CNAME $data)
+    {
+        encode_domain_name($ctx, $data->getCanonicalName());
     }
 
     private function encodeMB(EncodingContext $ctx, ResourceData\MB $data)

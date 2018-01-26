@@ -10,7 +10,7 @@ abstract class ResourceTypes extends Enum
     const NS         = ResourceData\NS::TYPE_ID; // RFC 1035
     const MD         = ResourceData\MD::TYPE_ID; // RFC 1035, obsolete
     const MF         = ResourceData\MF::TYPE_ID; // RFC 1035, obsolete
-    const CNAME      = 5; // RFC 1035
+    const CNAME      = ResourceData\CNAME::TYPE_ID; // RFC 1035
     const SOA        = ResourceData\SOA::TYPE_ID; // RFC 1035
     const MB         = ResourceData\MB::TYPE_ID; // RFC 1035, experimental
     const MG         = ResourceData\MG::TYPE_ID; // RFC 1035, experimental

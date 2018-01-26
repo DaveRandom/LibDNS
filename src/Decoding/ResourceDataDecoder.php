@@ -10,6 +10,7 @@ final class ResourceDataDecoder
 {
     const DECODERS = [
         ResourceData\A::TYPE_ID => 'decodeA', /** @uses decodeA */
+        ResourceData\CNAME::TYPE_ID => 'decodeCNAME', /** @uses decodeCNAME */
         ResourceData\MB::TYPE_ID => 'decodeMB', /** @uses decodeMB */
         ResourceData\MD::TYPE_ID => 'decodeMD', /** @uses decodeMD */
         ResourceData\MF::TYPE_ID => 'decodeMF', /** @uses decodeMF */
@@ -22,6 +23,11 @@ final class ResourceDataDecoder
     private function decodeA(DecodingContext $ctx): ResourceData\A
     {
         return new ResourceData\A(decode_ipv4address($ctx));
+    }
+
+    private function decodeCNAME(DecodingContext $ctx): ResourceData\CNAME
+    {
+        return new ResourceData\CNAME(decode_domain_name($ctx));
     }
 
     private function decodeMB(DecodingContext $ctx): ResourceData\MB
