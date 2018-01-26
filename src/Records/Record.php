@@ -1,101 +1,39 @@
 <?php declare(strict_types=1);
-/**
- * Represents a DNS record
- *
- * PHP version 5.4
- *
- * @category LibDNS
- * @package Records
- * @author Chris Wright <https://github.com/DaveRandom>
- * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license http://www.opensource.org/licenses/mit-license.html MIT License
- * @version 2.0.0
- */
+
 namespace DaveRandom\LibDNS\Records;
 
-use DaveRandom\LibDNS\Records\Types\DomainName;
+use DaveRandom\Network\DomainName;
+use const DaveRandom\LibDNS\UINT16_MASK;
 
-/**
- * Represents a DNS record
- *
- * @category LibDNS
- * @package Records
- * @author Chris Wright <https://github.com/DaveRandom>
- */
 abstract class Record
 {
-    /**
-     * @var DomainName
-     */
-    protected $name;
+    private $name;
+    private $type;
+    private $class;
 
-    /**
-     * @var int
-     */
-    protected $type;
+    protected function __construct(DomainName $name, int $type, int $class)
+    {
+        if (($class & UINT16_MASK) !== $class) {
+            throw new \InvalidArgumentException('Record class must be in the range 0 - 65535');
+        }
 
-    /**
-     * @var int
-     */
-    protected $class = ResourceClasses::IN;
+        $this->name = $name;
+        $this->type = $type;
+        $this->class = $class;
+    }
 
-    /**
-     * Get the value of the record name field
-     *
-     * @return \DaveRandom\LibDNS\Records\Types\DomainName
-     */
     public function getName(): DomainName
     {
         return $this->name;
     }
 
-    /**
-     * Set the value of the record name field
-     *
-     * @param string|\DaveRandom\LibDNS\Records\Types\DomainName $name
-     * @throws \UnexpectedValueException When the supplied value is not a valid domain name
-     */
-    public function setName($name)
-    {
-        if (!($name instanceof DomainName)) {
-            $name = new DomainName((string)$name);
-        }
-
-        $this->name = $name;
-    }
-
-    /**
-     * Get the value of the record type field
-     *
-     * @return int
-     */
     public function getType(): int
     {
         return $this->type;
     }
 
-    /**
-     * Get the value of the record class field
-     *
-     * @return int
-     */
     public function getClass(): int
     {
         return $this->class;
-    }
-
-    /**
-     * Set the value of the record class field
-     *
-     * @param int $class The new value, can be indicated using the ResourceClasses/ResourceQClasses enums
-     * @throws \RangeException When the supplied value is outside the valid range 0 - 65535
-     */
-    public function setClass(int $class)
-    {
-        if ($class < 0 || $class > 65535) {
-            throw new \RangeException('Record class must be in the range 0 - 65535');
-        }
-
-        $this->class = $class;
     }
 }

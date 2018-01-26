@@ -13,7 +13,8 @@
   "require": {
     "php": ">=7.0",
     "ext-ctype": "*",
-    "daverandom/enum": "^1"
+    "daverandom/enum": "^1",
+    "daverandom/network-primitives": "dev-master"
   },
   "suggest": {
     "ext-intl": "Required for IDN support"

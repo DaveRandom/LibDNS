@@ -13,11 +13,11 @@
  */
 namespace DaveRandom\LibDNS\Examples;
 
-use DaveRandom\LibDNS\Decoder\DecoderFactory;
-use DaveRandom\LibDNS\Encoder\Encoder;
+use DaveRandom\LibDNS\Decoding\Decoder;
+use DaveRandom\LibDNS\Encoding\Encoder;
 use DaveRandom\LibDNS\Messages\Message;
 use DaveRandom\LibDNS\Messages\MessageTypes;
-use DaveRandom\LibDNS\Records\Question;
+use DaveRandom\LibDNS\Records\QuestionRecord;
 use DaveRandom\LibDNS\Records\ResourceQTypes;
 use DaveRandom\LibDNS\Records\ResourceTypes;
 use DaveRandom\LibDNS\Records\TypeDefinitions\TypeDefinitionManager;
@@ -30,7 +30,7 @@ $requestTimeout = 3;
 require __DIR__ . '/../vendor/autoload.php';
 
 // Create question record
-$question = new Question(ResourceQTypes::SOA);
+$question = new QuestionRecord(ResourceQTypes::SOA);
 $question->setName($queryName);
 
 // Create request message
@@ -71,7 +71,7 @@ DATA;
 });
 
 // Decode response message
-$decoder = (new DecoderFactory)->create($typeDefs);
+$decoder = new Decoder($typeDefs);
 $responsePacket = fread($socket, 512);
 $response = $decoder->decode($responsePacket);
 
@@ -84,7 +84,7 @@ if ($response->getResponseCode() !== 0) {
 $answers = $response->getAnswerRecords();
 if (count($answers)) {
     foreach ($response->getAnswerRecords() as $record) {
-        /** @var \DaveRandom\LibDNS\Records\Resource $record */
+        /** @var \DaveRandom\LibDNS\Records\ResourceRecord $record */
         echo "    " . $record->getData() . "\n";
     }
 } else {

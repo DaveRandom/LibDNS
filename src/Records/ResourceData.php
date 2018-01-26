@@ -2,7 +2,7 @@
 
 namespace DaveRandom\LibDNS\Records;
 
-final class ResourceQClasses extends ResourceClasses
+interface ResourceData
 {
-    const ANY = 255;
+    function getTypeId(): int;
 }

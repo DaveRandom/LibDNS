@@ -13,12 +13,13 @@
  */
 namespace DaveRandom\LibDNS\Examples;
 
-use DaveRandom\LibDNS\Decoder\DecoderFactory;
-use DaveRandom\LibDNS\Encoder\Encoder;
-use DaveRandom\LibDNS\Messages\Message;
-use DaveRandom\LibDNS\Messages\MessageTypes;
-use DaveRandom\LibDNS\Records\Question;
+use DaveRandom\LibDNS\Decoding\Decoder;
+use DaveRandom\LibDNS\Encoding\Encoder;
+use DaveRandom\LibDNS\Messages\Query;
+use DaveRandom\LibDNS\Records\QuestionRecord;
+use DaveRandom\LibDNS\Records\ResourceData\A;
 use DaveRandom\LibDNS\Records\ResourceQTypes;
+use DaveRandom\Network\DomainName;
 
 // Config
 $queryName      = 'faß.de';
@@ -28,47 +29,46 @@ $requestTimeout = 3;
 require __DIR__ . '/../vendor/autoload.php';
 
 // Create question record
-$question = new Question(ResourceQTypes::A);
-$question->setName($queryName);
+$question = new QuestionRecord(DomainName::createFromString($queryName), ResourceQTypes::A);
 
 // Create request message
-$request = new Message(MessageTypes::QUERY);
-$request->getQuestionRecords()->add($question);
-$request->isRecursionDesired(true);
+$request = new Query(0, [$question]);
 
 // Encode request message
-$encoder = new Encoder();
-$requestPacket = $encoder->encode($request);
+$requestPacket = (new Encoder)->encode($request);
 
 echo "\n" . $queryName . ":\n";
 
 // Send request
-$socket = stream_socket_client("udp://$serverIP:53");
+$socket = stream_socket_client("udp://{$serverIP}:53");
 stream_socket_sendto($socket, $requestPacket);
 $r = [$socket];
 $w = $e = [];
 if (!stream_select($r, $w, $e, $requestTimeout)) {
-    echo "    Request timeout.\n";
+    echo "    Request timeout\n";
     exit;
 }
 
 // Decode response message
-$decoder = (new DecoderFactory)->create();
-$responsePacket = fread($socket, 512);
-$response = $decoder->decode($responsePacket);
+$response = (new Decoder)->decode(fread($socket, 512));
 
 // Handle response
 if ($response->getResponseCode() !== 0) {
-    echo "    Server returned error code " . $response->getResponseCode() . ".\n";
+    echo "    Server returned error code: {$response->getResponseCode()}\n";
     exit;
 }
 
 $answers = $response->getAnswerRecords();
-if (count($answers)) {
-    foreach ($response->getAnswerRecords() as $record) {
-        /** @var \DaveRandom\LibDNS\Records\Resource $record */
-        echo "    " . $record->getData() . "\n";
+
+if (count($answers) === 0) {
+    echo "    Not found\n";
+    exit;
+}
+
+foreach ($answers as $record) {
+    $data = $record->getData();
+
+    if ($data instanceof A) {
+        echo "    {$data->getAddress()}\n";
     }
-} else {
-    echo "    Not found.\n";
 }
