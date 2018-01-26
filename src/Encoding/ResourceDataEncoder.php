@@ -19,6 +19,7 @@ final class ResourceDataEncoder
         ResourceData\MR::class => 'encodeMR', /** @uses encodeMR */
         ResourceData\NS::class => 'encodeNS', /** @uses encodeNS */
         ResourceData\NULLRecord::class => 'encodeNULL', /** @uses encodeNULL */
+        ResourceData\PTR::class => 'encodePTR', /** @uses encodePTR */
         ResourceData\SOA::class => 'encodeSOA', /** @uses encodeSOA */
         ResourceData\TXT::class => 'encodeTXT', /** @uses encodeTXT */
     ];
@@ -66,6 +67,11 @@ final class ResourceDataEncoder
     private function encodeNULL(EncodingContext $ctx, ResourceData\NULLRecord $data)
     {
         $ctx->appendData($data->getData());
+    }
+
+    private function encodePTR(EncodingContext $ctx, ResourceData\PTR $data)
+    {
+        encode_domain_name($ctx, $data->getName());
     }
 
     private function encodeSOA(EncodingContext $ctx, ResourceData\SOA $data)

@@ -17,7 +17,7 @@ abstract class ResourceTypes extends Enum
     const MR         = ResourceData\MR::TYPE_ID; // RFC 1035, experimental
     const NULL       = ResourceData\NULLRecord::TYPE_ID; // RFC 1035, experimental;
     const WKS        = 11;
-    const PTR        = 12;
+    const PTR        = ResourceData\PTR::TYPE_ID; // RFC 1035
     const HINFO      = 13;
     const MINFO      = 14;
     const MX         = 15;

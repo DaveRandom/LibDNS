@@ -19,6 +19,7 @@ final class ResourceDataDecoder
         ResourceData\MR::TYPE_ID => 'decodeMR', /** @uses decodeMR */
         ResourceData\NS::TYPE_ID => 'decodeNS', /** @uses decodeNS */
         ResourceData\NULLRecord::TYPE_ID => 'decodeNULL', /** @uses decodeNULL */
+        ResourceData\PTR::TYPE_ID => 'decodePTR', /** @uses decodePTR */
         ResourceData\SOA::TYPE_ID => 'decodeSOA', /** @uses decodeSOA */
         ResourceData\TXT::TYPE_ID => 'decodeTXT', /** @uses decodeTXT */
     ];
@@ -66,6 +67,11 @@ final class ResourceDataDecoder
     private function decodeNULL(DecodingContext $ctx, int $length): ResourceData\NULLRecord
     {
         return new ResourceData\NULLRecord($ctx->unpack("a{$length}", $length)[1]);
+    }
+
+    private function decodePTR(DecodingContext $ctx): ResourceData\PTR
+    {
+        return new ResourceData\PTR(decode_domain_name($ctx));
     }
 
     private function decodeSOA(DecodingContext $ctx): ResourceData\SOA
