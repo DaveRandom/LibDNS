@@ -6,6 +6,7 @@ use DaveRandom\LibDNS\Decoding\DecodingContext;
 use DaveRandom\LibDNS\Encoding\EncodingContext;
 use DaveRandom\Network\DomainName;
 use DaveRandom\Network\IPv4Address;
+use DaveRandom\Network\IPv6Address;
 
 const UINT16_MIN = 0;
 const UINT16_MAX = 0xffff;
@@ -147,6 +148,30 @@ function decode_ipv4address(DecodingContext $ctx): IPv4Address
     $octets = $ctx->unpack('C4', 4);
 
     return new IPv4Address($octets[1], $octets[2], $octets[3], $octets[4]);
+}
+
+function encode_ipv6address(EncodingContext $ctx, IPv6Address $address)
+{
+    $ctx->appendData(\pack(
+        'n8',
+        $address->getHextet1(),
+        $address->getHextet2(),
+        $address->getHextet3(),
+        $address->getHextet4(),
+        $address->getHextet5(),
+        $address->getHextet6(),
+        $address->getHextet7(),
+        $address->getHextet8()
+    ));
+}
+
+function decode_ipv6address(DecodingContext $ctx): IPv6Address
+{
+    $hextets = $ctx->unpack('n8', 16);
+
+    return new IPv6Address(
+        $hextets[1], $hextets[2], $hextets[3], $hextets[4], $hextets[5], $hextets[6], $hextets[7], $hextets[8]
+    );
 }
 
 function encode_character_data(EncodingContext $ctx, string $data)

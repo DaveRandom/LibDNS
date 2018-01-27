@@ -29,7 +29,7 @@ abstract class ResourceTypes extends Enum
     const RT         = 21;
     const SIG        = 24;
     const KEY        = 25;
-    const AAAA       = 28;
+    const AAAA       = ResourceData\AAAA::TYPE_ID; // RFC 3596
     const LOC        = 29;
     const SRV        = 33;
     const NAPTR      = 35;

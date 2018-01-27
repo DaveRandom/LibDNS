@@ -5,12 +5,14 @@ namespace DaveRandom\LibDNS\Encoding;
 use function DaveRandom\LibDNS\encode_character_data;
 use function DaveRandom\LibDNS\encode_domain_name;
 use function DaveRandom\LibDNS\encode_ipv4address;
+use function DaveRandom\LibDNS\encode_ipv6address;
 use DaveRandom\LibDNS\Records\ResourceData;
 
 final class ResourceDataEncoder
 {
     const ENCODERS = [
         ResourceData\A::class => 'encodeA', /** @uses encodeA */
+        ResourceData\AAAA::class => 'encodeAAAA', /** @uses encodeAAAA */
         ResourceData\CNAME::class => 'encodeCNAME', /** @uses encodeCNAME */
         ResourceData\HINFO::class => 'encodeHINFO', /** @uses encodeHINFO */
         ResourceData\MB::class => 'encodeMB', /** @uses encodeMB */
@@ -31,6 +33,11 @@ final class ResourceDataEncoder
     private function encodeA(EncodingContext $ctx, ResourceData\A $data)
     {
         encode_ipv4address($ctx, $data->getAddress());
+    }
+
+    private function encodeAAAA(EncodingContext $ctx, ResourceData\AAAA $data)
+    {
+        encode_ipv6address($ctx, $data->getAddress());
     }
 
     private function encodeCNAME(EncodingContext $ctx, ResourceData\CNAME $data)

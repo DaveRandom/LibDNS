@@ -5,12 +5,14 @@ namespace DaveRandom\LibDNS\Decoding;
 use function DaveRandom\LibDNS\decode_character_data;
 use function DaveRandom\LibDNS\decode_domain_name;
 use function DaveRandom\LibDNS\decode_ipv4address;
+use function DaveRandom\LibDNS\decode_ipv6address;
 use DaveRandom\LibDNS\Records\ResourceData;
 
 final class ResourceDataDecoder
 {
     const DECODERS = [
         ResourceData\A::TYPE_ID => 'decodeA', /** @uses decodeA */
+        ResourceData\AAAA::TYPE_ID => 'decodeAAAA', /** @uses decodeAAAA */
         ResourceData\CNAME::TYPE_ID => 'decodeCNAME', /** @uses decodeCNAME */
         ResourceData\HINFO::TYPE_ID => 'decodeHINFO', /** @uses decodeHINFO */
         ResourceData\MB::TYPE_ID => 'decodeMB', /** @uses decodeMB */
@@ -31,6 +33,11 @@ final class ResourceDataDecoder
     private function decodeA(DecodingContext $ctx): ResourceData\A
     {
         return new ResourceData\A(decode_ipv4address($ctx));
+    }
+
+    private function decodeAAAA(DecodingContext $ctx): ResourceData\AAAA
+    {
+        return new ResourceData\AAAA(decode_ipv6address($ctx));
     }
 
     private function decodeCNAME(DecodingContext $ctx): ResourceData\CNAME
