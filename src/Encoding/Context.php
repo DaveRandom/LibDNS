@@ -2,9 +2,10 @@
 
 namespace DaveRandom\LibDNS\Encoding;
 
+use DaveRandom\LibDNS\EncodingContext;
 use DaveRandom\LibDNS\Messages\Message;
 
-final class EncodingContext
+final class Context implements EncodingContext
 {
     private $pendingRecordHeaderData = null;
     private $pendingData = '';
@@ -38,12 +39,6 @@ final class EncodingContext
         $this->offset += 2;
     }
 
-    public function appendData(string $data)
-    {
-        $this->pendingData .= $data;
-        $this->offset += \strlen($data);
-    }
-
     public function commitPendingData()
     {
         if ($this->pendingRecordHeaderData !== null) {
@@ -59,5 +54,36 @@ final class EncodingContext
     public function isDataLengthExceeded(): bool
     {
         return ($this->limitTo512Bytes && $this->offset > 512) || $this->offset > 65535;
+    }
+
+    public function appendData(string $data)
+    {
+        $this->pendingData .= $data;
+        $this->offset += \strlen($data);
+    }
+
+    public function getOffset(): int
+    {
+        return $this->offset;
+    }
+
+    public function isCompressionEnabled(): bool
+    {
+        return $this->compress;
+    }
+
+    public function hasIndexForLabel(string $label): bool
+    {
+        return isset($this->labelIndexes[$label]);
+    }
+
+    public function getLabelIndex(string $label): int
+    {
+        return $this->labelIndexes[$label];
+    }
+
+    public function setLabelIndexAtCurrentOffset(string $label)
+    {
+        $this->labelIndexes[$label] = $this->offset;
     }
 }

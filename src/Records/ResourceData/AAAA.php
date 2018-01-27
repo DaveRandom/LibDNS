@@ -2,13 +2,14 @@
 
 namespace DaveRandom\LibDNS\Records\ResourceData;
 
+use DaveRandom\LibDNS\DecodingContext;
+use DaveRandom\LibDNS\EncodingContext;
 use DaveRandom\LibDNS\Records\ResourceData;
+use DaveRandom\LibDNS\Records\ResourceTypes;
 use DaveRandom\Network\IPv6Address;
 
 final class AAAA implements ResourceData
 {
-    const TYPE_ID = 28;
-
     private $address;
 
     public function __construct(IPv6Address $address)
@@ -23,6 +24,16 @@ final class AAAA implements ResourceData
 
     public function getTypeId(): int
     {
-        return self::TYPE_ID;
+        return ResourceTypes::AAAA;
+    }
+
+    public static function decode(DecodingContext $ctx): AAAA
+    {
+        return new AAAA(\DaveRandom\LibDNS\decode_ipv6address($ctx));
+    }
+
+    public static function encode(EncodingContext $ctx, AAAA $record)
+    {
+        \DaveRandom\LibDNS\encode_ipv6address($ctx, $record->address);
     }
 }

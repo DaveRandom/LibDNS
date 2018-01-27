@@ -2,145 +2,76 @@
 
 namespace DaveRandom\LibDNS\Encoding;
 
+use DaveRandom\CallbackValidator\CallbackType;
+use DaveRandom\CallbackValidator\ParameterType;
+use DaveRandom\CallbackValidator\ReturnType;
+use DaveRandom\LibDNS\EncodingContext;
+use DaveRandom\LibDNS\Records\RawResourceData;
 use DaveRandom\LibDNS\Records\ResourceData;
+use DaveRandom\LibDNS\Records\ResourceTypes;
 
 final class ResourceDataEncoder
 {
-    const ENCODERS = [
-        ResourceData\A::class => 'encodeA', /** @uses encodeA */
-        ResourceData\AAAA::class => 'encodeAAAA', /** @uses encodeAAAA */
-        ResourceData\CNAME::class => 'encodeCNAME', /** @uses encodeCNAME */
-        ResourceData\CNAME::class => 'encodeDNAME', /** @uses encodeDNAME */
-        ResourceData\HINFO::class => 'encodeHINFO', /** @uses encodeHINFO */
-        ResourceData\MB::class => 'encodeMB', /** @uses encodeMB */
-        ResourceData\MD::class => 'encodeMD', /** @uses encodeMD */
-        ResourceData\MF::class => 'encodeMF', /** @uses encodeMF */
-        ResourceData\MG::class => 'encodeMG', /** @uses encodeMG */
-        ResourceData\MINFO::class => 'encodeMINFO', /** @uses encodeMINFO */
-        ResourceData\MR::class => 'encodeMR', /** @uses encodeMR */
-        ResourceData\MX::class => 'encodeMX', /** @uses encodeMX */
-        ResourceData\NS::class => 'encodeNS', /** @uses encodeNS */
-        ResourceData\NULLRecord::class => 'encodeNULL', /** @uses encodeNULL */
-        ResourceData\PTR::class => 'encodePTR', /** @uses encodePTR */
-        ResourceData\SOA::class => 'encodeSOA', /** @uses encodeSOA */
-        ResourceData\TXT::class => 'encodeTXT', /** @uses encodeTXT */
-        ResourceData\WKS::class => 'encodeWKS', /** @uses encodeWKS */
+    const DEFAULT_ENCODERS = [
+        ResourceTypes::A => [ResourceData\A::class, 'encode'],
+        ResourceTypes::AAAA => [ResourceData\AAAA::class, 'encode'],
+        ResourceTypes::CNAME => [ResourceData\CNAME::class, 'encode'],
+        ResourceTypes::CNAME => [ResourceData\DNAME::class, 'encode'],
+        ResourceTypes::MX => [ResourceData\MX::class, 'encode'],
+        ResourceTypes::NS => [ResourceData\NS::class, 'encode'],
+        ResourceTypes::PTR => [ResourceData\PTR::class, 'encode'],
+        ResourceTypes::SOA => [ResourceData\SOA::class, 'encode'],
+        ResourceTypes::TXT => [ResourceData\TXT::class, 'encode'],
     ];
 
-    private function encodeA(EncodingContext $ctx, ResourceData\A $data)
+    private static $callbackType;
+
+    private $encoders = self::DEFAULT_ENCODERS;
+
+    public function __construct()
     {
-        \DaveRandom\LibDNS\encode_ipv4address($ctx, $data->getAddress());
+        if (!isset(self::$callbackType)) {
+            self::$callbackType = new CallbackType(
+                new ReturnType(),
+                new ParameterType('context', EncodingContext::class),
+                new ParameterType('record', ResourceData::class, ParameterType::COVARIANT)
+            );
+        }
     }
 
-    private function encodeAAAA(EncodingContext $ctx, ResourceData\AAAA $data)
+    public function registerEncoder(int $type, callable $encoder)
     {
-        \DaveRandom\LibDNS\encode_ipv6address($ctx, $data->getAddress());
+        if (!self::$callbackType->isSatisfiedBy($encoder)) {
+            throw new \LogicException(
+                'Callback with signature ' . CallbackType::createFromCallable($encoder)
+                . ' does not satisfy required signature ' . self::$callbackType
+            );
+        }
+
+        $this->encoders[$type] = $encoder;
     }
 
-    private function encodeCNAME(EncodingContext $ctx, ResourceData\CNAME $data)
+    public function hasEncoderForType(int $type): bool
     {
-        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getCanonicalName());
+        return isset($this->encoders[$type]);
     }
 
-    private function encodeDNAME(EncodingContext $ctx, ResourceData\DNAME $data)
+    public function restoreDefaultEncoder(int $type)
     {
-        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getCanonicalName());
+        $this->encoders[$type] = self::DEFAULT_ENCODERS[$type] ?? null;
     }
 
-    private function encodeHINFO(EncodingContext $ctx, ResourceData\HINFO $data)
+    public function encode(Context $ctx, ResourceData $data)
     {
-        \DaveRandom\LibDNS\encode_character_data($ctx, $data->getCpu());
-        \DaveRandom\LibDNS\encode_character_data($ctx, $data->getOs());
-    }
+        if (isset($this->encoders[$id = $data->getTypeId()])) {
+            $this->encoders[$id]($ctx, $data);
+            return;
+        }
 
-    private function encodeMB(EncodingContext $ctx, ResourceData\MB $data)
-    {
-        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getMailAgentName());
-    }
+        if (!$data instanceof RawResourceData) {
+            throw new \UnexpectedValueException("Unknown resource data type: {{$id}}");
+        }
 
-    private function encodeMD(EncodingContext $ctx, ResourceData\MD $data)
-    {
-        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getMailAgentName());
-    }
-
-    private function encodeMF(EncodingContext $ctx, ResourceData\MF $data)
-    {
-        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getMailAgentName());
-    }
-
-    private function encodeMG(EncodingContext $ctx, ResourceData\MG $data)
-    {
-        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getMailboxName());
-    }
-
-    private function encodeMINFO(EncodingContext $ctx, ResourceData\MINFO $data)
-    {
-        \DaveRandom\LibDNS\encode_character_data($ctx, $data->getResponsibleMailbox());
-        \DaveRandom\LibDNS\encode_character_data($ctx, $data->getErrorMailbox());
-    }
-
-    private function encodeMR(EncodingContext $ctx, ResourceData\MR $data)
-    {
-        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getMailboxName());
-    }
-
-    private function encodeMX(EncodingContext $ctx, ResourceData\MX $data)
-    {
-        $ctx->appendData(\pack('n', $data->getPreference()));
-        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getExchange());
-    }
-
-    private function encodeNS(EncodingContext $ctx, ResourceData\NS $data)
-    {
-        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getAuthoritativeServerName());
-    }
-
-    private function encodeNULL(EncodingContext $ctx, ResourceData\NULLRecord $data)
-    {
         $ctx->appendData($data->getData());
-    }
-
-    private function encodePTR(EncodingContext $ctx, ResourceData\PTR $data)
-    {
-        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getName());
-    }
-
-    private function encodeSOA(EncodingContext $ctx, ResourceData\SOA $data)
-    {
-        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getMasterServerName());
-        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getResponsibleMailAddress());
-
-        $ctx->appendData(\pack(
-            'N5',
-            $data->getSerial(),
-            $data->getRefreshInterval(),
-            $data->getRetryInterval(),
-            $data->getExpireTimeout(),
-            $data->getTtl()
-        ));
-    }
-
-    private function encodeTXT(EncodingContext $ctx, ResourceData\TXT $data)
-    {
-        foreach ($data->getStrings() as $string) {
-            \DaveRandom\LibDNS\encode_character_data($ctx, $string);
-        }
-    }
-
-    private function encodeWKS(EncodingContext $ctx, ResourceData\WKS $data)
-    {
-        \DaveRandom\LibDNS\encode_ipv4address($ctx, $data->getAddress());
-        $ctx->appendData(\pack('Ca*', $data->getProtocol(), $data->getBitMap()));
-    }
-
-    public function encode(EncodingContext $ctx, ResourceData $data)
-    {
-        $class = \get_class($data);
-
-        if (!\array_key_exists($class, self::ENCODERS)) {
-            throw new \UnexpectedValueException("Unknown resource data type: {$class}");
-        }
-
-        ([$this, self::ENCODERS[$class]])($ctx, $data);
     }
 }

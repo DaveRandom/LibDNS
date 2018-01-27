@@ -14,19 +14,12 @@ final class Decoder
 {
     private $resourceDataDecoder;
 
-    public function __construct()
+    public function __construct(ResourceDataDecoder $resourceDataDecoder = null)
     {
-        $this->resourceDataDecoder = new ResourceDataDecoder();
+        $this->resourceDataDecoder = $resourceDataDecoder ?? new ResourceDataDecoder();
     }
 
-    /**
-     * Decode the header section of the message
-     *
-     * @param DecodingContext $ctx
-     * @param Message $message
-     * @throws \UnexpectedValueException When the header section is invalid
-     */
-    private function decodeHeader(DecodingContext $ctx)
+    private function decodeHeader(Context $ctx)
     {
         $header = $ctx->unpack('nid/nmeta/nqd/nan/nns/nar', 12);
 
@@ -40,7 +33,7 @@ final class Decoder
         $ctx->expectedAdditionalRecords = $header['ar'];
     }
 
-    private function decodeQuestionRecord(DecodingContext $ctx): QuestionRecord
+    private function decodeQuestionRecord(Context $ctx): QuestionRecord
     {
         $name = decode_domain_name($ctx);
         $meta = $ctx->unpack('ntype/nclass', 4);
@@ -48,15 +41,7 @@ final class Decoder
         return new QuestionRecord($name, $meta['type'], $meta['class']);
     }
 
-    /**
-     * Decode a resource record
-     *
-     * @param DecodingContext $decodingContext
-     * @return \DaveRandom\LibDNS\Records\ResourceRecord
-     * @throws \UnexpectedValueException When the record is invalid
-     * @throws \InvalidArgumentException When a type subtype is unknown
-     */
-    private function decodeResourceRecord(DecodingContext $ctx): ResourceRecord
+    private function decodeResourceRecord(Context $ctx): ResourceRecord
     {
         $name = decode_domain_name($ctx);
         $meta = $ctx->unpack('ntype/nclass/Nttl/nlength', 10);
@@ -66,17 +51,9 @@ final class Decoder
         return new ResourceRecord($name, $meta['type'], $meta['class'], $meta['ttl'], $resourceData);
     }
 
-    /**
-     * Decode a Message from raw network data
-     *
-     * @param string $data The data string to decode
-     * @return \DaveRandom\LibDNS\Messages\Message
-     * @throws \UnexpectedValueException When the packet data is invalid
-     * @throws \InvalidArgumentException When a type subtype is unknown
-     */
     public function decode(string $data, int $offset = 0): Message
     {
-        $ctx = new DecodingContext($data, $offset);
+        $ctx = new Context($data, $offset);
 
         $this->decodeHeader($ctx);
 

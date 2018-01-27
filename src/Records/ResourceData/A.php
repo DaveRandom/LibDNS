@@ -2,13 +2,14 @@
 
 namespace DaveRandom\LibDNS\Records\ResourceData;
 
+use DaveRandom\LibDNS\DecodingContext;
+use DaveRandom\LibDNS\EncodingContext;
 use DaveRandom\LibDNS\Records\ResourceData;
+use DaveRandom\LibDNS\Records\ResourceTypes;
 use DaveRandom\Network\IPv4Address;
 
 final class A implements ResourceData
 {
-    const TYPE_ID = 1;
-
     private $address;
 
     public function __construct(IPv4Address $address)
@@ -23,6 +24,16 @@ final class A implements ResourceData
 
     public function getTypeId(): int
     {
-        return self::TYPE_ID;
+        return ResourceTypes::A;
+    }
+
+    public static function decode(DecodingContext $ctx): A
+    {
+        return new A(\DaveRandom\LibDNS\decode_ipv4address($ctx));
+    }
+
+    public static function encode(EncodingContext $ctx, A $record)
+    {
+        \DaveRandom\LibDNS\encode_ipv4address($ctx, $record->address);
     }
 }

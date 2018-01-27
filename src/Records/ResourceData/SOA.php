@@ -2,13 +2,14 @@
 
 namespace DaveRandom\LibDNS\Records\ResourceData;
 
+use DaveRandom\LibDNS\DecodingContext;
+use DaveRandom\LibDNS\EncodingContext;
 use DaveRandom\LibDNS\Records\ResourceData;
+use DaveRandom\LibDNS\Records\ResourceTypes;
 use DaveRandom\Network\DomainName;
 
 final class SOA implements ResourceData
 {
-    const TYPE_ID = 6;
-
     private $masterServerName;
     private $responsibleMailAddress;
     private $serial;
@@ -92,6 +93,35 @@ final class SOA implements ResourceData
 
     public function getTypeId(): int
     {
-        return self::TYPE_ID;
+        return ResourceTypes::SOA;
+    }
+
+    public static function decode(DecodingContext $ctx): SOA
+    {
+        $masterServerName = \DaveRandom\LibDNS\decode_domain_name($ctx);
+        $responsibleMailAddress = \DaveRandom\LibDNS\decode_domain_name($ctx);
+        $meta = $ctx->unpack('Nserial/Nrefresh/Nretry/Nexpire/Nttl', 20);
+
+        return new SOA(
+            $masterServerName,
+            $responsibleMailAddress,
+            $meta['serial'], $meta['refresh'], $meta['retry'], $meta['expire'], $meta['ttl'],
+            false
+        );
+    }
+
+    public static function encode(EncodingContext $ctx, SOA $data)
+    {
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getMasterServerName());
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getResponsibleMailAddress());
+
+        $ctx->appendData(\pack(
+            'N5',
+            $data->getSerial(),
+            $data->getRefreshInterval(),
+            $data->getRetryInterval(),
+            $data->getExpireTimeout(),
+            $data->getTtl()
+        ));
     }
 }

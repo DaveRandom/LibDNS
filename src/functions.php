@@ -2,8 +2,6 @@
 
 namespace DaveRandom\LibDNS;
 
-use DaveRandom\LibDNS\Decoding\DecodingContext;
-use DaveRandom\LibDNS\Encoding\EncodingContext;
 use DaveRandom\Network\DomainName;
 use DaveRandom\Network\IPAddress;
 use DaveRandom\Network\IPv4Address;
@@ -33,7 +31,7 @@ function encode_domain_name(EncodingContext $ctx, DomainName $name, bool $neverC
     $result = '';
 
     // If compression is disabled, just encode the whole name literally
-    if ($neverCompress || !$ctx->compress) {
+    if ($neverCompress || !$ctx->isCompressionEnabled()) {
         foreach ($labels as $label) {
             $result .= \chr(\strlen($label)) . $label;
         }
@@ -46,14 +44,14 @@ function encode_domain_name(EncodingContext $ctx, DomainName $name, bool $neverC
         $part = \implode('.', $labels);
 
         // If the remainder of the name exists in the registry, encode a pointer to it and return
-        if (isset($ctx->labelIndexes[$part])) {
-            $ctx->appendData($result . \pack('n', 0b1100000000000000 | $ctx->labelIndexes[$part]));
+        if ($ctx->hasIndexForLabel($part)) {
+            $ctx->appendData($result . \pack('n', 0b1100000000000000 | $ctx->getLabelIndex($part)));
             return;
         }
 
         // Add the remainder of the name to the registry as long as the offset is small enough to fit in a reference
-        if ($ctx->offset <= 0x3fff) {
-            $ctx->labelIndexes[$part] = $ctx->offset;
+        if ($ctx->getOffset() <= 0x3fff) {
+            $ctx->setLabelIndexAtCurrentOffset($part);
         }
 
         // Encode the current label literally
@@ -69,41 +67,42 @@ function encode_domain_name(EncodingContext $ctx, DomainName $name, bool $neverC
 
 function decode_domain_name(DecodingContext $ctx): DomainName
 {
-    $startIndex = $ctx->offset;
+    $startOffset = $ctx->getOffset();
     $result = [];
     $literalLabels = [];
 
     // Read the label length byte from the buffer
-    while (0 !== $length = \ord($ctx->data[$ctx->offset++])) {
+    while (0 !== $length = \ord($ctx->getData(1))) {
         switch ($length & 0b11000000) {
 
             // If the first two bits are set, the label is a pointer to somewhere earlier in the packet
             case 0b11000000: {
-                $index = (($length & 0b00111111) << 8) | \ord($ctx->data[$ctx->offset++]);
+                $offset = (($length & 0b00111111) << 8) | \ord($ctx->getData(1));
 
-                if (!isset($ctx->labelsByIndex[$index])) {
+                if (!$ctx->hasLabelsAtOffset($offset)) {
                     throw new \UnexpectedValueException(\sprintf(
                         'Decode error: Invalid compression pointer reference 0x%X in domain name at position 0x%X',
-                        $index,
-                        $startIndex
+                        $offset,
+                        $startOffset
                     ));
                 }
 
-                $result = $ctx->labelsByIndex[$index];
+                $result = $ctx->getLabelsAtOffset($offset);
                 break 2;
             }
 
             // If the first two bits are clear, the label is $length bytes long
             case 0: {
-                if ($ctx->offset + $length > \strlen($ctx->data)) {
+                $offset = $ctx->getOffset();
+
+                if ($offset + $length > $ctx->getDataLength()) {
                     throw new \UnexpectedValueException(\sprintf(
                         'Decode error: Incomplete label in domain name at position 0x%X',
-                        $startIndex
+                        $startOffset
                     ));
                 }
 
-                $literalLabels[] = [$ctx->offset - 1, \substr($ctx->data, $ctx->offset, $length)];
-                $ctx->offset += $length;
+                $literalLabels[] = [$offset - 1, $ctx->getData($length)];
 
                 break;
             }
@@ -112,22 +111,22 @@ function decode_domain_name(DecodingContext $ctx): DomainName
             default: throw new \UnexpectedValueException(\sprintf(
                 'Decode error: Invalid label type 0x%X in domain name at position 0x%X',
                 $length & 0b11000000,
-                $startIndex
+                $startOffset
             ));
         }
 
-        if (!isset($ctx->data[$ctx->offset])) {
+        if (!$ctx->hasData(1)) {
             throw new \UnexpectedValueException(\sprintf(
                 'Decode error: Incomplete domain name at position 0x%X',
-                $startIndex
+                $startOffset
             ));
         }
     }
 
     // Store decoded label indexes for later compression lookups
-    while (list($index, $label) = \array_pop($literalLabels)) {
+    while (list($offset, $label) = \array_pop($literalLabels)) {
         \array_unshift($result, $label);
-        $ctx->labelsByIndex[$index] = $result;
+        $ctx->setLabelsAtOffset($offset, $result);
     }
 
     return new DomainName($result, false);
@@ -190,7 +189,7 @@ function encode_character_data(EncodingContext $ctx, string $data)
 
 function decode_character_data(DecodingContext $ctx): string
 {
-    $length = \ord($ctx->data[$ctx->offset++]);
+    $length = \ord($ctx->getData(1));
 
     return $ctx->unpack("a{$length}", $length)[1];
 }

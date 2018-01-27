@@ -2,7 +2,9 @@
 
 namespace DaveRandom\LibDNS\Decoding;
 
-final class DecodingContext
+use DaveRandom\LibDNS\DecodingContext;
+
+final class Context implements DecodingContext
 {
     /** @var string */
     public $data;
@@ -47,6 +49,37 @@ final class DecodingContext
         $this->offset = $offset;
     }
 
+    public function getOffset(): int
+    {
+        return $this->offset;
+    }
+
+    public function getDataLength(): int
+    {
+        return $this->dataLength;
+    }
+
+    public function advanceOffset(int $length): int
+    {
+        $current = $this->offset;
+        $this->offset += $length;
+
+        return $current;
+    }
+
+    public function hasData(int $length): bool
+    {
+        return $this->offset + $length <= $this->dataLength;
+    }
+
+    public function getData(int $length): string
+    {
+        $result = \substr($this->data, $this->offset, $length);
+        $this->offset += $length;
+
+        return $result;
+    }
+
     public function unpack(string $spec, int $length): array
     {
         if ($this->offset + $length > $this->dataLength) {
@@ -63,5 +96,20 @@ final class DecodingContext
         $this->offset += $length;
 
         return \unpack($spec, $chunk);
+    }
+
+    public function hasLabelsAtOffset(int $offset): bool
+    {
+        return isset($this->labelsByIndex[$offset]);
+    }
+
+    public function getLabelsAtOffset(int $offset): array
+    {
+        return $this->labelsByIndex[$offset];
+    }
+
+    public function setLabelsAtOffset(int $offset, array $labels)
+    {
+        $this->labelsByIndex[$offset] = $labels;
     }
 }

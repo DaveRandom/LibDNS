@@ -2,13 +2,14 @@
 
 namespace DaveRandom\LibDNS\Records\ResourceData;
 
+use DaveRandom\LibDNS\DecodingContext;
+use DaveRandom\LibDNS\EncodingContext;
 use DaveRandom\LibDNS\Records\ResourceData;
+use DaveRandom\LibDNS\Records\ResourceTypes;
 use DaveRandom\Network\DomainName;
 
 final class NS implements ResourceData
 {
-    const TYPE_ID = 2;
-
     private $authoritativeServerName;
 
     public function __construct(DomainName $authoritativeServerName)
@@ -23,6 +24,16 @@ final class NS implements ResourceData
 
     public function getTypeId(): int
     {
-        return self::TYPE_ID;
+        return ResourceTypes::NS;
+    }
+
+    public static function decode(DecodingContext $ctx): NS
+    {
+        return new NS(\DaveRandom\LibDNS\decode_domain_name($ctx));
+    }
+
+    public static function encode(EncodingContext $ctx, NS $data)
+    {
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getAuthoritativeServerName());
     }
 }

@@ -10,7 +10,7 @@ final class Encoder
 {
     private $resourceDataEncoder;
 
-    private function encodeHeader(EncodingContext $ctx, Message $message, int $qdCount, int $anCount, int $nsCount, int $arCount): string
+    private function encodeHeader(Context $ctx, Message $message, int $qdCount, int $anCount, int $nsCount, int $arCount): string
     {
         return \pack(
             'n6',
@@ -23,7 +23,7 @@ final class Encoder
         );
     }
 
-    private function encodeQuestionRecord(EncodingContext $ctx, QuestionRecord $record): bool
+    private function encodeQuestionRecord(Context $ctx, QuestionRecord $record): bool
     {
         \DaveRandom\LibDNS\encode_domain_name($ctx, $record->getName());
         $ctx->appendData(\pack('n2', $record->getType(), $record->getClass()));
@@ -37,7 +37,7 @@ final class Encoder
         return true;
     }
 
-    private function encodeResourceRecord(EncodingContext $ctx, ResourceRecord $record): bool
+    private function encodeResourceRecord(Context $ctx, ResourceRecord $record): bool
     {
         \DaveRandom\LibDNS\encode_domain_name($ctx, $record->getName());
         $ctx->appendData(\pack('n2N', $record->getType(), $record->getClass(), $record->getTTL()));
@@ -54,9 +54,9 @@ final class Encoder
         return true;
     }
 
-    public function __construct()
+    public function __construct(ResourceDataEncoder $resourceDataEncoder = null)
     {
-        $this->resourceDataEncoder = new ResourceDataEncoder();
+        $this->resourceDataEncoder = $resourceDataEncoder ?? new ResourceDataEncoder();
     }
 
     /**
@@ -68,7 +68,7 @@ final class Encoder
      */
     public function encode(Message $message, int $options = 0): string
     {
-        $ctx = new EncodingContext($options);
+        $ctx = new Context($options);
         $qdCount = $anCount = $nsCount = $arCount = 0;
 
         foreach ($message->getQuestionRecords() as $record) {
