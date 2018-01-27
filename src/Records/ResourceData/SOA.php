@@ -110,18 +110,18 @@ final class SOA implements ResourceData
         );
     }
 
-    public static function encode(EncodingContext $ctx, SOA $data)
+    public static function encode(EncodingContext $ctx, SOA $record)
     {
-        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getMasterServerName());
-        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getResponsibleMailAddress());
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $record->getMasterServerName());
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $record->getResponsibleMailAddress());
 
         $ctx->appendData(\pack(
             'N5',
-            $data->getSerial(),
-            $data->getRefreshInterval(),
-            $data->getRetryInterval(),
-            $data->getExpireTimeout(),
-            $data->getTtl()
+            $record->getSerial(),
+            $record->getRefreshInterval(),
+            $record->getRetryInterval(),
+            $record->getExpireTimeout(),
+            $record->getTtl()
         ));
     }
 }

@@ -32,8 +32,8 @@ final class DNAME implements ResourceData
         return new DNAME(\DaveRandom\LibDNS\decode_domain_name($ctx));
     }
 
-    public static function encode(EncodingContext $ctx, DNAME $data)
+    public static function encode(EncodingContext $ctx, DNAME $record)
     {
-        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getCanonicalName());
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $record->getCanonicalName());
     }
 }

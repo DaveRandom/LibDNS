@@ -42,9 +42,9 @@ final class MX implements ResourceData
         return new MX($preference, $exchange);
     }
 
-    public static function encode(EncodingContext $ctx, MX $data)
+    public static function encode(EncodingContext $ctx, MX $record)
     {
-        $ctx->appendData(\pack('n', $data->getPreference()));
-        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getExchange());
+        $ctx->appendData(\pack('n', $record->getPreference()));
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $record->getExchange());
     }
 }

@@ -32,8 +32,8 @@ final class PTR implements ResourceData
         return new PTR(\DaveRandom\LibDNS\decode_domain_name($ctx));
     }
 
-    public static function encode(EncodingContext $ctx, PTR $data)
+    public static function encode(EncodingContext $ctx, PTR $record)
     {
-        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getName());
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $record->getName());
     }
 }

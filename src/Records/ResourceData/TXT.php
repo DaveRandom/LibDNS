@@ -46,9 +46,9 @@ final class TXT implements ResourceData
         return new TXT($strings);
     }
 
-    public static function encode(EncodingContext $ctx, TXT $data)
+    public static function encode(EncodingContext $ctx, TXT $record)
     {
-        foreach ($data->getStrings() as $string) {
+        foreach ($record->getStrings() as $string) {
             \DaveRandom\LibDNS\encode_character_data($ctx, $string);
         }
     }

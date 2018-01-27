@@ -32,8 +32,8 @@ final class NS implements ResourceData
         return new NS(\DaveRandom\LibDNS\decode_domain_name($ctx));
     }
 
-    public static function encode(EncodingContext $ctx, NS $data)
+    public static function encode(EncodingContext $ctx, NS $record)
     {
-        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getAuthoritativeServerName());
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $record->getAuthoritativeServerName());
     }
 }
