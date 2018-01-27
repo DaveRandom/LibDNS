@@ -16,8 +16,7 @@ abstract class ResourceTypes extends Enum
     const TXT = 16;
 
     // RFC 1183
-    const RP = 17; // todo
-    const AFSDB = 18; // todo
+    const RP = 17;
 
     // RFC 2535
     const SIG = 24; // todo
@@ -127,6 +126,7 @@ abstract class ResourceTypes extends Enum
     /** @deprecated */ const WKS = 11;
     /** @deprecated */ const HINFO = 13;
     /** @deprecated */ const MINFO = 14;
+    /** @deprecated */ const AFSDB = 18;
     /** @deprecated */ const X25 = 19;
     /** @deprecated */ const ISDN = 20;
     /** @deprecated */ const RT = 21;
