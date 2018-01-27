@@ -194,10 +194,28 @@ function decode_character_data(DecodingContext $ctx): string
     return $ctx->unpack("a{$length}", $length)[1];
 }
 
+function validate_nibble(string $description, int $value): int
+{
+    if (($value & 0x0f) !== $value) {
+        throw new \InvalidArgumentException("{$description} must be in the range 0 - 15");
+    }
+
+    return $value;
+}
+
+function validate_byte(string $description, int $value): int
+{
+    if (($value & 0xff) !== $value) {
+        throw new \InvalidArgumentException("{$description} must be in the range 0 - 255");
+    }
+
+    return $value;
+}
+
 function validate_uint16(string $description, int $value): int
 {
-    if (($value & UINT16_MASK) !== $value) {
-        throw new \InvalidArgumentException("{$description} must be in the range " . UINT16_MIN . " - " . UINT16_MAX);
+    if (($value & 0xffff) !== $value) {
+        throw new \InvalidArgumentException("{$description} must be in the range 0 - 65535");
     }
 
     return $value;

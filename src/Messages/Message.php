@@ -4,7 +4,6 @@ namespace DaveRandom\LibDNS\Messages;
 
 use DaveRandom\LibDNS\Records\QuestionRecord;
 use DaveRandom\LibDNS\Records\ResourceRecord;
-use const DaveRandom\LibDNS\UINT16_MASK;
 
 abstract class Message
 {
@@ -35,22 +34,10 @@ abstract class Message
         array $authorityRecords,
         array $additionalRecords
     ) {
-        if (($id & UINT16_MASK) !== $id) {
-            throw new \InvalidArgumentException('Message ID must be in the range 0 - 65535');
-        }
-
-        if (($opCode & 0xf) !== $opCode) {
-            throw new \InvalidArgumentException('Opcode must be in the range 0 - 15');
-        }
-
-        if (($responseCode & 0xf) !== $responseCode) {
-            throw new \InvalidArgumentException('Response code must be in the range 0 - 15');
-        }
-
-        $this->id = $id;
+        $this->id = \DaveRandom\LibDNS\validate_uint16('Message ID', $id);
         $this->flags = $flags & self::FLAGS_MASK;
-        $this->opCode = $opCode;
-        $this->responseCode = $responseCode;
+        $this->opCode = \DaveRandom\LibDNS\validate_nibble('Opcode', $opCode);
+        $this->responseCode = \DaveRandom\LibDNS\validate_nibble('Response code', $responseCode);
         $this->questionRecords = $questionRecords;
         $this->answerRecords = $answerRecords;
         $this->authorityRecords = $authorityRecords;

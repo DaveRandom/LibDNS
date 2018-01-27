@@ -5,7 +5,6 @@ namespace DaveRandom\LibDNS\Encoding;
 use DaveRandom\LibDNS\Messages\Message;
 use DaveRandom\LibDNS\Records\QuestionRecord;
 use DaveRandom\LibDNS\Records\ResourceRecord;
-use function DaveRandom\LibDNS\encode_domain_name;
 
 final class Encoder
 {
@@ -26,7 +25,7 @@ final class Encoder
 
     private function encodeQuestionRecord(EncodingContext $ctx, QuestionRecord $record): bool
     {
-        encode_domain_name($ctx, $record->getName());
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $record->getName());
         $ctx->appendData(\pack('n2', $record->getType(), $record->getClass()));
 
         if ($ctx->isDataLengthExceeded()) {
@@ -40,7 +39,7 @@ final class Encoder
 
     private function encodeResourceRecord(EncodingContext $ctx, ResourceRecord $record): bool
     {
-        encode_domain_name($ctx, $record->getName());
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $record->getName());
         $ctx->appendData(\pack('n2N', $record->getType(), $record->getClass(), $record->getTTL()));
 
         $ctx->beginRecordData();

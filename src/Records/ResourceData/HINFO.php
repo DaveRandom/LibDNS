@@ -4,7 +4,7 @@ namespace DaveRandom\LibDNS\Records\ResourceData;
 
 use DaveRandom\LibDNS\Records\ResourceData;
 
-class HINFO implements ResourceData
+final class HINFO implements ResourceData
 {
     const TYPE_ID = 13;
 

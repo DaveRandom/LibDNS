@@ -4,7 +4,7 @@ namespace DaveRandom\LibDNS\Records\ResourceData;
 
 use DaveRandom\LibDNS\Records\ResourceData;
 
-class MINFO implements ResourceData
+final class MINFO implements ResourceData
 {
     const TYPE_ID = 14;
 
