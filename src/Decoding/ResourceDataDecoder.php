@@ -10,6 +10,7 @@ final class ResourceDataDecoder
         ResourceData\A::TYPE_ID => 'decodeA', /** @uses decodeA */
         ResourceData\AAAA::TYPE_ID => 'decodeAAAA', /** @uses decodeAAAA */
         ResourceData\CNAME::TYPE_ID => 'decodeCNAME', /** @uses decodeCNAME */
+        ResourceData\DNAME::TYPE_ID => 'decodeDNAME', /** @uses decodeDNAME */
         ResourceData\HINFO::TYPE_ID => 'decodeHINFO', /** @uses decodeHINFO */
         ResourceData\MB::TYPE_ID => 'decodeMB', /** @uses decodeMB */
         ResourceData\MD::TYPE_ID => 'decodeMD', /** @uses decodeMD */
@@ -39,6 +40,11 @@ final class ResourceDataDecoder
     private function decodeCNAME(DecodingContext $ctx): ResourceData\CNAME
     {
         return new ResourceData\CNAME(\DaveRandom\LibDNS\decode_domain_name($ctx));
+    }
+
+    private function decodeDNAME(DecodingContext $ctx): ResourceData\DNAME
+    {
+        return new ResourceData\DNAME(\DaveRandom\LibDNS\decode_domain_name($ctx));
     }
 
     private function decodeHINFO(DecodingContext $ctx): ResourceData\HINFO

@@ -10,6 +10,7 @@ final class ResourceDataEncoder
         ResourceData\A::class => 'encodeA', /** @uses encodeA */
         ResourceData\AAAA::class => 'encodeAAAA', /** @uses encodeAAAA */
         ResourceData\CNAME::class => 'encodeCNAME', /** @uses encodeCNAME */
+        ResourceData\CNAME::class => 'encodeDNAME', /** @uses encodeDNAME */
         ResourceData\HINFO::class => 'encodeHINFO', /** @uses encodeHINFO */
         ResourceData\MB::class => 'encodeMB', /** @uses encodeMB */
         ResourceData\MD::class => 'encodeMD', /** @uses encodeMD */
@@ -37,6 +38,11 @@ final class ResourceDataEncoder
     }
 
     private function encodeCNAME(EncodingContext $ctx, ResourceData\CNAME $data)
+    {
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getCanonicalName());
+    }
+
+    private function encodeDNAME(EncodingContext $ctx, ResourceData\DNAME $data)
     {
         \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getCanonicalName());
     }

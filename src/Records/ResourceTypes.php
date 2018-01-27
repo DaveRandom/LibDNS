@@ -35,7 +35,7 @@ abstract class ResourceTypes extends Enum
     const NAPTR      = 35;
     const KX         = 36;
     const CERT       = 37;
-    const DNAME      = 39;
+    const DNAME      = ResourceData\DNAME::TYPE_ID; // RFC 6672
 //    const APL        = 42;
     const DS         = 43;
 //    const IPSECKEY   = 45;
