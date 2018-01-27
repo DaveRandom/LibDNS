@@ -20,6 +20,7 @@ final class ResourceDataEncoder
         ResourceTypes::MX => [ResourceData\MX::class, 'encode'],
         ResourceTypes::NS => [ResourceData\NS::class, 'encode'],
         ResourceTypes::PTR => [ResourceData\PTR::class, 'encode'],
+        ResourceTypes::RP => [ResourceData\RP::class, 'encode'],
         ResourceTypes::SOA => [ResourceData\SOA::class, 'encode'],
         ResourceTypes::TXT => [ResourceData\TXT::class, 'encode'],
     ];

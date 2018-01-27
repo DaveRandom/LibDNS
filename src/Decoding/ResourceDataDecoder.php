@@ -20,6 +20,7 @@ final class ResourceDataDecoder
         ResourceTypes::MX => [ResourceData\MX::class, 'decode'],
         ResourceTypes::NS => [ResourceData\NS::class, 'decode'],
         ResourceTypes::PTR => [ResourceData\PTR::class, 'decode'],
+        ResourceTypes::RP => [ResourceData\RP::class, 'decode'],
         ResourceTypes::SOA => [ResourceData\SOA::class, 'decode'],
         ResourceTypes::TXT => [ResourceData\TXT::class, 'decode'],
     ];
