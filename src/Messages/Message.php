@@ -7,12 +7,17 @@ use DaveRandom\LibDNS\Records\ResourceRecord;
 
 abstract class Message
 {
+    /** @internal */
     const HEADER_SIZE = 12;
+
+    /** @internal */
     const FLAGS_MASK = MessageFlags::IS_RESPONSE
                      | MessageFlags::IS_AUTHORITATIVE
                      | MessageFlags::IS_TRUNCATED
                      | MessageFlags::IS_RECURSION_DESIRED
-                     | MessageFlags::IS_RECURSION_AVAILABLE;
+                     | MessageFlags::IS_RECURSION_AVAILABLE
+                     | MessageFlags::IS_DNSSEC_CHECKING_DISABLED
+                     | MessageFlags::IS_DNSSEC_AUTHENTIC_DATA;
 
     private $id;
     private $opCode;
@@ -77,6 +82,16 @@ abstract class Message
     final public function isRecursionAvailable(): bool
     {
         return (bool)($this->flags & MessageFlags::IS_RECURSION_AVAILABLE);
+    }
+
+    final public function isDnsSecCheckingDisabled(): bool
+    {
+        return (bool)($this->flags & MessageFlags::IS_DNSSEC_CHECKING_DISABLED);
+    }
+
+    final public function isDnsSecAuthenticData(): bool
+    {
+        return (bool)($this->flags & MessageFlags::IS_DNSSEC_AUTHENTIC_DATA);
     }
 
     final public function getOpCode(): int

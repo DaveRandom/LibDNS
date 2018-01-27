@@ -11,4 +11,6 @@ final class MessageFlags extends Enum
     const IS_TRUNCATED = 0x0200;
     const IS_RECURSION_DESIRED = 0x0100;
     const IS_RECURSION_AVAILABLE = 0x0080;
+    const IS_DNSSEC_CHECKING_DISABLED = 0x0020;
+    const IS_DNSSEC_AUTHENTIC_DATA = 0x0010;
 }
