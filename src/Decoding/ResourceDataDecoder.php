@@ -64,7 +64,7 @@ final class ResourceDataDecoder
     public function decode(Context $ctx, int $type, int $length): ResourceData
     {
         if (!isset($this->decoders[$type])) {
-            return new ResourceData\UnknownResourceData($type, $ctx->unpack("a{$length}", $length)[1]);
+            return new ResourceData\UnknownResourceData($type, $ctx->getData($length));
         }
 
         $expectedOffset = $ctx->offset + $length;
