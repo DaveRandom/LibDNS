@@ -2,10 +2,6 @@
 
 namespace DaveRandom\LibDNS\Encoding;
 
-use function DaveRandom\LibDNS\encode_character_data;
-use function DaveRandom\LibDNS\encode_domain_name;
-use function DaveRandom\LibDNS\encode_ipv4address;
-use function DaveRandom\LibDNS\encode_ipv6address;
 use DaveRandom\LibDNS\Records\ResourceData;
 
 final class ResourceDataEncoder
@@ -32,65 +28,65 @@ final class ResourceDataEncoder
 
     private function encodeA(EncodingContext $ctx, ResourceData\A $data)
     {
-        encode_ipv4address($ctx, $data->getAddress());
+        \DaveRandom\LibDNS\encode_ipv4address($ctx, $data->getAddress());
     }
 
     private function encodeAAAA(EncodingContext $ctx, ResourceData\AAAA $data)
     {
-        encode_ipv6address($ctx, $data->getAddress());
+        \DaveRandom\LibDNS\encode_ipv6address($ctx, $data->getAddress());
     }
 
     private function encodeCNAME(EncodingContext $ctx, ResourceData\CNAME $data)
     {
-        encode_domain_name($ctx, $data->getCanonicalName());
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getCanonicalName());
     }
 
     private function encodeHINFO(EncodingContext $ctx, ResourceData\HINFO $data)
     {
-        encode_character_data($ctx, $data->getCpu());
-        encode_character_data($ctx, $data->getOs());
+        \DaveRandom\LibDNS\encode_character_data($ctx, $data->getCpu());
+        \DaveRandom\LibDNS\encode_character_data($ctx, $data->getOs());
     }
 
     private function encodeMB(EncodingContext $ctx, ResourceData\MB $data)
     {
-        encode_domain_name($ctx, $data->getMailAgentName());
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getMailAgentName());
     }
 
     private function encodeMD(EncodingContext $ctx, ResourceData\MD $data)
     {
-        encode_domain_name($ctx, $data->getMailAgentName());
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getMailAgentName());
     }
 
     private function encodeMF(EncodingContext $ctx, ResourceData\MF $data)
     {
-        encode_domain_name($ctx, $data->getMailAgentName());
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getMailAgentName());
     }
 
     private function encodeMG(EncodingContext $ctx, ResourceData\MG $data)
     {
-        encode_domain_name($ctx, $data->getMailboxName());
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getMailboxName());
     }
 
     private function encodeMINFO(EncodingContext $ctx, ResourceData\MINFO $data)
     {
-        encode_character_data($ctx, $data->getResponsibleMailbox());
-        encode_character_data($ctx, $data->getErrorMailbox());
+        \DaveRandom\LibDNS\encode_character_data($ctx, $data->getResponsibleMailbox());
+        \DaveRandom\LibDNS\encode_character_data($ctx, $data->getErrorMailbox());
     }
 
     private function encodeMR(EncodingContext $ctx, ResourceData\MR $data)
     {
-        encode_domain_name($ctx, $data->getMailboxName());
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getMailboxName());
     }
 
     private function encodeMX(EncodingContext $ctx, ResourceData\MX $data)
     {
         $ctx->appendData(\pack('n', $data->getPreference()));
-        encode_domain_name($ctx, $data->getExchange());
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getExchange());
     }
 
     private function encodeNS(EncodingContext $ctx, ResourceData\NS $data)
     {
-        encode_domain_name($ctx, $data->getAuthoritativeServerName());
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getAuthoritativeServerName());
     }
 
     private function encodeNULL(EncodingContext $ctx, ResourceData\NULLRecord $data)
@@ -100,13 +96,13 @@ final class ResourceDataEncoder
 
     private function encodePTR(EncodingContext $ctx, ResourceData\PTR $data)
     {
-        encode_domain_name($ctx, $data->getName());
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getName());
     }
 
     private function encodeSOA(EncodingContext $ctx, ResourceData\SOA $data)
     {
-        encode_domain_name($ctx, $data->getMasterServerName());
-        encode_domain_name($ctx, $data->getResponsibleMailAddress());
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getMasterServerName());
+        \DaveRandom\LibDNS\encode_domain_name($ctx, $data->getResponsibleMailAddress());
 
         $ctx->appendData(\pack(
             'N5',
@@ -121,13 +117,13 @@ final class ResourceDataEncoder
     private function encodeTXT(EncodingContext $ctx, ResourceData\TXT $data)
     {
         foreach ($data->getStrings() as $string) {
-            encode_character_data($ctx, $string);
+            \DaveRandom\LibDNS\encode_character_data($ctx, $string);
         }
     }
 
     private function encodeWKS(EncodingContext $ctx, ResourceData\WKS $data)
     {
-        encode_ipv4address($ctx, $data->getAddress());
+        \DaveRandom\LibDNS\encode_ipv4address($ctx, $data->getAddress());
         $ctx->appendData(\pack('Ca*', $data->getProtocol(), $data->getBitMap()));
     }
 
