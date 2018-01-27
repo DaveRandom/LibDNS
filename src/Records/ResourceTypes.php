@@ -18,10 +18,6 @@ abstract class ResourceTypes extends Enum
     // RFC 1183
     const RP = 17;
 
-    // RFC 2535
-    const SIG = 24; // todo
-    const KEY = 25; // todo
-
     // RFC 3596
     const AAAA = 28;
 
@@ -132,6 +128,8 @@ abstract class ResourceTypes extends Enum
     /** @deprecated */ const RT = 21;
     /** @deprecated */ const NSAP = 22;
     /** @deprecated */ const NSAP_PTR = 23;
+    /** @deprecated */ const SIG = 24;
+    /** @deprecated */ const KEY = 25;
     /** @deprecated */ const PX = 26;
     /** @deprecated */ const GPOS = 27;
     /** @deprecated */ const NXT = 30;
