@@ -5,6 +5,7 @@ namespace DaveRandom\LibDNS;
 use DaveRandom\LibDNS\Decoding\DecodingContext;
 use DaveRandom\LibDNS\Encoding\EncodingContext;
 use DaveRandom\Network\DomainName;
+use DaveRandom\Network\IPAddress;
 use DaveRandom\Network\IPv4Address;
 use DaveRandom\Network\IPv6Address;
 
@@ -228,4 +229,31 @@ function validate_uint32(string $description, int $value): int
     }
 
     return $value;
+}
+
+function ipaddress_to_ptr_name(IPAddress $address): DomainName
+{
+    if ($address instanceof IPv4Address) {
+        return new DomainName([
+            $address->getOctet4(), $address->getOctet3(), $address->getOctet2(), $address->getOctet1(),
+            'in-addr', 'arpa'
+        ]);
+    }
+
+    if (!$address instanceof IPv6Address) {
+        throw new \InvalidArgumentException('Unknown IP address type: ' . \get_class($address));
+    }
+
+    $labels = [];
+    $bin = $address->toBinary();
+
+    for ($i = 15; $i >= 0; $i--) {
+        $byte = \ord($bin[$i]);
+        \array_push($labels, \dechex($byte & 0x0f), \dechex(($byte & 0xf0) >> 4));
+    }
+
+    $labels[] = 'ip6';
+    $labels[] = 'arpa';
+
+    return new DomainName($labels);
 }
