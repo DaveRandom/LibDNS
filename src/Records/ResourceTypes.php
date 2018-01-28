@@ -22,7 +22,7 @@ abstract class ResourceTypes extends Enum
     const AAAA = 28;
 
     // RFC 1876
-    const LOC = 29; // todo
+    const LOC = 29;
 
     // RFC 2782
     const SRV = 33; // todo
