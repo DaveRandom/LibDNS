@@ -174,20 +174,20 @@ function decode_ipv6address(DecodingContext $ctx): IPv6Address
     );
 }
 
-function encode_character_data(EncodingContext $ctx, string $data)
+function encode_character_string(EncodingContext $ctx, string $string)
 {
-    $length = \strlen($data);
+    $length = \strlen($string);
 
     if ($length > 255) {
         throw new \InvalidArgumentException(
-            "Maximum length of character-data string is 255 bytes (got {$length} bytes)"
+            "Maximum length of character-string is 255 bytes (got {$length} bytes)"
         );
     }
 
-    $ctx->appendData(\chr(\strlen($data)) . $data);
+    $ctx->appendData(\chr(\strlen($string)) . $string);
 }
 
-function decode_character_data(DecodingContext $ctx): string
+function decode_character_string(DecodingContext $ctx): string
 {
     $length = \ord($ctx->getData(1));
 

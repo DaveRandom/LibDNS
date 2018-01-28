@@ -38,7 +38,7 @@ final class TXT implements ResourceData
         $strings = [];
 
         while ($consumed < $length) {
-            $string = \DaveRandom\LibDNS\decode_character_data($ctx);
+            $string = \DaveRandom\LibDNS\decode_character_string($ctx);
             $strings[] = $string;
             $consumed += \strlen($string) + 1;
         }
@@ -49,7 +49,7 @@ final class TXT implements ResourceData
     public static function encode(EncodingContext $ctx, TXT $record)
     {
         foreach ($record->getStrings() as $string) {
-            \DaveRandom\LibDNS\encode_character_data($ctx, $string);
+            \DaveRandom\LibDNS\encode_character_string($ctx, $string);
         }
     }
 }
