@@ -18,5 +18,8 @@
     },
     "suggest": {
         "ext-intl": "Required for IDN support"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.5"
     }
 }
