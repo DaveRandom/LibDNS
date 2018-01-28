@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace DaveRandom\LibDNS\Messages;
+namespace DaveRandom\LibDNS\Protocol\Messages;
 
 use DaveRandom\LibDNS\Records\QuestionRecord;
 use DaveRandom\LibDNS\Records\ResourceRecord;
@@ -29,6 +29,7 @@ abstract class Message
     private $authorityRecords;
     private $additionalRecords;
 
+    /** @internal */
     protected function __construct(
         int $id,
         int $flags,

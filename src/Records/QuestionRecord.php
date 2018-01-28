@@ -8,6 +8,7 @@ final class QuestionRecord extends Record
 {
     public function __construct(DomainName $name, int $type, int $class = ResourceClasses::IN)
     {
+        /** @noinspection PhpInternalEntityUsedInspection */
         parent::__construct($name, $type, $class);
     }
 }

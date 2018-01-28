@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace DaveRandom\LibDNS\Encoding;
+namespace DaveRandom\LibDNS\Protocol\Encoding;
 
-use DaveRandom\LibDNS\EncodingContext;
-use DaveRandom\LibDNS\Messages\Message;
+use DaveRandom\LibDNS\Protocol\EncodingContext;
+use DaveRandom\LibDNS\Protocol\Messages\Message;
 
 final class Context implements EncodingContext
 {

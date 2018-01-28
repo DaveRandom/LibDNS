@@ -2,8 +2,8 @@
 
 namespace DaveRandom\LibDNS\Records\ResourceData;
 
-use DaveRandom\LibDNS\DecodingContext;
-use DaveRandom\LibDNS\EncodingContext;
+use DaveRandom\LibDNS\Protocol\DecodingContext;
+use DaveRandom\LibDNS\Protocol\EncodingContext;
 use DaveRandom\LibDNS\Records\ResourceData;
 use DaveRandom\LibDNS\Records\ResourceTypes;
 use DaveRandom\Network\DomainName;

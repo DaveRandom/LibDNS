@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace DaveRandom\LibDNS\Encoding;
+namespace DaveRandom\LibDNS\Protocol\Encoding;
 
 use DaveRandom\CallbackValidator\CallbackType;
 use DaveRandom\CallbackValidator\ParameterType;
 use DaveRandom\CallbackValidator\ReturnType;
-use DaveRandom\LibDNS\EncodingContext;
+use DaveRandom\LibDNS\Protocol\EncodingContext;
 use DaveRandom\LibDNS\Records\RawResourceData;
 use DaveRandom\LibDNS\Records\ResourceData;
 use DaveRandom\LibDNS\Records\ResourceTypes;

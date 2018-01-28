@@ -5,10 +5,10 @@
 
 namespace DaveRandom\LibDNS\Examples;
 
-use DaveRandom\LibDNS\Decoding\Decoder;
-use DaveRandom\LibDNS\Encoding\Encoder;
-use DaveRandom\LibDNS\Messages\MessageResponseCodes;
-use DaveRandom\LibDNS\Messages\Query;
+use DaveRandom\LibDNS\Protocol\Decoding\Decoder;
+use DaveRandom\LibDNS\Protocol\Encoding\Encoder;
+use DaveRandom\LibDNS\Protocol\Messages\MessageResponseCodes;
+use DaveRandom\LibDNS\Protocol\Messages\Query;
 use DaveRandom\LibDNS\Records\QuestionRecord;
 use DaveRandom\LibDNS\Records\ResourceData\SOA;
 use DaveRandom\LibDNS\Records\ResourceQTypes;

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace DaveRandom\LibDNS\Messages;
+namespace DaveRandom\LibDNS\Protocol\Messages;
 
 use DaveRandom\Enum\Enum;
 

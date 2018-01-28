@@ -10,6 +10,7 @@ abstract class Record
     private $type;
     private $class;
 
+    /** @internal */
     protected function __construct(DomainName $name, int $type, int $class)
     {
         $this->name = $name;

@@ -2,14 +2,14 @@
 
 namespace LibDNS\Tests;
 
-use DaveRandom\LibDNS\Decoding\Decoder;
-use DaveRandom\LibDNS\Encoding\Encoder;
-use DaveRandom\LibDNS\Messages\Message;
-use DaveRandom\LibDNS\Messages\MessageFlags;
-use DaveRandom\LibDNS\Messages\MessageOpCodes;
-use DaveRandom\LibDNS\Messages\MessageResponseCodes;
-use DaveRandom\LibDNS\Messages\Query;
-use DaveRandom\LibDNS\Messages\Response;
+use DaveRandom\LibDNS\Protocol\Decoding\Decoder;
+use DaveRandom\LibDNS\Protocol\Encoding\Encoder;
+use DaveRandom\LibDNS\Protocol\Messages\Message;
+use DaveRandom\LibDNS\Protocol\Messages\MessageFlags;
+use DaveRandom\LibDNS\Protocol\Messages\MessageOpCodes;
+use DaveRandom\LibDNS\Protocol\Messages\MessageResponseCodes;
+use DaveRandom\LibDNS\Protocol\Messages\Query;
+use DaveRandom\LibDNS\Protocol\Messages\Response;
 use DaveRandom\LibDNS\Records\QuestionRecord;
 use DaveRandom\LibDNS\Records\ResourceClasses;
 use DaveRandom\LibDNS\Records\ResourceData\A;

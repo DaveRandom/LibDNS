@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace DaveRandom\LibDNS\Messages;
+namespace DaveRandom\LibDNS\Protocol\Messages;
 
 final class Query extends Message
 {
@@ -17,6 +17,7 @@ final class Query extends Message
         int $flags = MessageFlags::IS_RECURSION_DESIRED,
         int $opCode = MessageOpCodes::QUERY
     ) {
+        /** @noinspection PhpInternalEntityUsedInspection */
         parent::__construct($id, $flags & self::FLAGS_MASK, $opCode, 0, $questionRecords, [], [], []);
     }
 }

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace DaveRandom\LibDNS\Encoding;
+namespace DaveRandom\LibDNS\Protocol\Encoding;
 
 use DaveRandom\Enum\Enum;
 

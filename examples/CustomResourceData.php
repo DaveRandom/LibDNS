@@ -2,14 +2,14 @@
 
 namespace DaveRandom\LibDNS\Examples;
 
-use DaveRandom\LibDNS\Decoding\Decoder;
-use DaveRandom\LibDNS\Decoding\ResourceDataDecoder;
-use DaveRandom\LibDNS\DecodingContext;
-use DaveRandom\LibDNS\Encoding\Encoder;
-use DaveRandom\LibDNS\Encoding\ResourceDataEncoder;
-use DaveRandom\LibDNS\EncodingContext;
-use DaveRandom\LibDNS\Messages\MessageResponseCodes;
-use DaveRandom\LibDNS\Messages\Query;
+use DaveRandom\LibDNS\Protocol\Decoding\Decoder;
+use DaveRandom\LibDNS\Protocol\Decoding\ResourceDataDecoder;
+use DaveRandom\LibDNS\Protocol\DecodingContext;
+use DaveRandom\LibDNS\Protocol\Encoding\Encoder;
+use DaveRandom\LibDNS\Protocol\Encoding\ResourceDataEncoder;
+use DaveRandom\LibDNS\Protocol\EncodingContext;
+use DaveRandom\LibDNS\Protocol\Messages\MessageResponseCodes;
+use DaveRandom\LibDNS\Protocol\Messages\Query;
 use DaveRandom\LibDNS\Records\QuestionRecord;
 use DaveRandom\LibDNS\Records\ResourceData;
 use DaveRandom\LibDNS\Records\ResourceQTypes;

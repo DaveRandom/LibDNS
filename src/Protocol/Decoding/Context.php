@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace DaveRandom\LibDNS\Decoding;
+namespace DaveRandom\LibDNS\Protocol\Decoding;
 
-use DaveRandom\LibDNS\DecodingContext;
+use DaveRandom\LibDNS\Protocol\DecodingContext;
 
 final class Context implements DecodingContext
 {

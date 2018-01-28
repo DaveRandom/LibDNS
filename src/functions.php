@@ -2,6 +2,8 @@
 
 namespace DaveRandom\LibDNS;
 
+use DaveRandom\LibDNS\Protocol\DecodingContext;
+use DaveRandom\LibDNS\Protocol\EncodingContext;
 use DaveRandom\Network\DomainName;
 use DaveRandom\Network\IPAddress;
 use DaveRandom\Network\IPv4Address;

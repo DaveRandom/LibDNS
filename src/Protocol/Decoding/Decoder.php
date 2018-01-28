@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace DaveRandom\LibDNS\Decoding;
+namespace DaveRandom\LibDNS\Protocol\Decoding;
 
-use DaveRandom\LibDNS\Messages\Message;
-use DaveRandom\LibDNS\Messages\MessageFlags;
-use DaveRandom\LibDNS\Messages\Query;
-use DaveRandom\LibDNS\Messages\Response;
+use DaveRandom\LibDNS\Protocol\Messages\Message;
+use DaveRandom\LibDNS\Protocol\Messages\MessageFlags;
+use DaveRandom\LibDNS\Protocol\Messages\Query;
+use DaveRandom\LibDNS\Protocol\Messages\Response;
 use DaveRandom\LibDNS\Records\QuestionRecord;
 use DaveRandom\LibDNS\Records\ResourceRecord;
 use function DaveRandom\LibDNS\decode_domain_name;
@@ -26,6 +26,7 @@ final class Decoder
         $ctx->messageId = $header['id'];
         $ctx->messageOpCode = ($header['meta'] & 0b0111100000000000) >> 11;
         $ctx->messageResponseCode = $header['meta'] & 0b0000000000001111;
+        /** @noinspection PhpInternalEntityUsedInspection */
         $ctx->messageFlags = $header['meta'] & Message::FLAGS_MASK;
         $ctx->expectedQuestionRecords = $header['qd'];
         $ctx->expectedAnswerRecords = $header['an'];
