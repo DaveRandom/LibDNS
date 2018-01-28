@@ -1,28 +1,10 @@
 <?php declare(strict_types=1);
-/**
- * Enumeration of possible message response codes
- *
- * PHP version 5.4
- *
- * @category LibDNS
- * @package Messages
- * @author Chris Wright <https://github.com/DaveRandom>
- * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license http://www.opensource.org/licenses/mit-license.html MIT License
- * @version 2.0.0
- */
-namespace LibDNS\Messages;
 
-use \LibDNS\Enumeration;
+namespace DaveRandom\LibDNS\Messages;
 
-/**
- * Enumeration of possible message types
- *
- * @category LibDNS
- * @package Messages
- * @author Chris Wright <https://github.com/DaveRandom>
- */
-final class MessageResponseCodes extends Enumeration
+use DaveRandom\Enum\Enum;
+
+final class MessageResponseCodes extends Enum
 {
     const NO_ERROR = 0;
     const FORMAT_ERROR = 1;
@@ -30,4 +12,18 @@ final class MessageResponseCodes extends Enumeration
     const NAME_ERROR = 3;
     const NOT_IMPLEMENTED = 4;
     const REFUSED = 5;
+    const UNEXPECTED_EXTANT_DOMAIN = 6;
+    const UNEXPECTED_EXTANT_RRSET = 7;
+    const NON_EXISTENT_RRSET = 8;
+    const SERVER_NOT_AUTHORITATIVE = 9;
+    const NOT_AUTHORIZED = 9;
+    const BAD_OPT_VERSION = 16;
+    const BAD_SIGNATURE = 16;
+    const BAD_KEY = 17;
+    const BAD_TIME = 18;
+    const BAD_MODE = 19;
+    const BAD_NAME = 20;
+    const BAD_ALGORITHM = 21;
+    const BAD_TRUNCATION = 22;
+    const BAD_COOKIE = 23;
 }

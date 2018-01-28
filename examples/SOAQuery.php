@@ -1,92 +1,70 @@
 <?php
 /**
  * Makes a simple A record lookup query and outputs the results
- *
- * PHP version 5.4
- *
- * @category LibDNS
- * @package Examples
- * @author Chris Wright <https://github.com/DaveRandom>
- * @copyright Copyright (c) Chris Wright <https://github.com/DaveRandom>
- * @license http://www.opensource.org/licenses/mit-license.html MIT License
- * @version 1.0.0
  */
-namespace LibDNS\Examples;
 
-use \LibDNS\Messages\MessageFactory;
-use \LibDNS\Messages\MessageTypes;
-use \LibDNS\Records\QuestionFactory;
-use \LibDNS\Records\ResourceTypes;
-use \LibDNS\Records\ResourceQTypes;
-use \LibDNS\Encoder\EncoderFactory;
-use \LibDNS\Decoder\DecoderFactory;
-use \LibDNS\Records\TypeDefinitions\TypeDefinitionManagerFactory;
+namespace DaveRandom\LibDNS\Examples;
+
+use DaveRandom\LibDNS\Decoding\Decoder;
+use DaveRandom\LibDNS\Encoding\Encoder;
+use DaveRandom\LibDNS\Messages\MessageResponseCodes;
+use DaveRandom\LibDNS\Messages\Query;
+use DaveRandom\LibDNS\Records\QuestionRecord;
+use DaveRandom\LibDNS\Records\ResourceData\SOA;
+use DaveRandom\LibDNS\Records\ResourceQTypes;
+use DaveRandom\Network\DomainName;
+
+require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/includes/functions.php';
 
 // Config
-$queryName      = 'google.com';
-$serverIP       = '8.8.8.8';
-$requestTimeout = 3;
+const NAME = 'github.com';
 
-require __DIR__ . '/autoload.php';
+echo "\n" . NAME . ":\n";
 
 // Create question record
-$question = (new QuestionFactory)->create(ResourceQTypes::SOA);
-$question->setName($queryName);
+$question = new QuestionRecord(DomainName::createFromString(NAME), ResourceQTypes::SOA);
 
-// Create request message
-$request = (new MessageFactory)->create(MessageTypes::QUERY);
-$request->getQuestionRecords()->add($question);
-$request->isRecursionDesired(true);
+// Create query message
+$query = new Query([$question]);
 
-// Encode request message
-$encoder = (new EncoderFactory)->create();
-$requestPacket = $encoder->encode($request);
+// Encode query message
+$requestPacket = (new Encoder)->encode($query);
 
-echo "\n" . $queryName . ":\n";
-
-// Send request
-$socket = stream_socket_client("udp://$serverIP:53");
-stream_socket_sendto($socket, $requestPacket);
-$r = [$socket];
-$w = $e = [];
-if (!stream_select($r, $w, $e, $requestTimeout)) {
-    echo "    Request timeout.\n";
-    exit;
+// Send query and wait for response
+try {
+    $responsePacket = send_query_to_server($requestPacket);
+} catch (\RuntimeException $e) {
+    exit("  {$e->getMessage()}\n");
 }
-
-// Create type definition manager for custom manipulation
-$typeDefs = (new TypeDefinitionManagerFactory)->create();
-$typeDefs->getTypeDefinition(ResourceTypes::SOA)->setToStringFunction(function($mname, $rname, $serial, $refresh, $retry, $expire, $minimum) {
-    return <<<DATA
-{
-    Primary Name Server : $mname
-    Responsible Mail    : $rname
-    Serial              : $serial
-    Refresh             : $refresh
-    Retry               : $retry
-    Expire              : $expire
-    Default TTL         : $minimum
-}
-DATA;
-});
 
 // Decode response message
-$decoder = (new DecoderFactory)->create($typeDefs);
-$responsePacket = fread($socket, 512);
-$response = $decoder->decode($responsePacket);
+$response = (new Decoder)->decode($responsePacket);
 
 // Handle response
-if ($response->getResponseCode() !== 0) {
-    echo "    Server returned error code " . $response->getResponseCode() . ".\n";
-    exit;
+if ($response->getResponseCode() !== MessageResponseCodes::NO_ERROR) {
+    $errorName = MessageResponseCodes::parseValue($response->getResponseCode());
+    exit("  Server returned error code: {$response->getResponseCode()}: {$errorName}\n");
 }
 
 $answers = $response->getAnswerRecords();
-if (count($answers)) {
-    foreach ($response->getAnswerRecords() as $record) {
-        /** @var \LibDNS\Records\Resource $record */
-        echo "    " . $record->getData() . "\n";
+
+if (count($answers) === 0) {
+    exit("  Not found\n");
+}
+
+foreach ($answers as $record) {
+    $data = $record->getData();
+
+    if ($data instanceof SOA) {
+        echo "  {
+    Primary Name Server : {$data->getMasterServerName()}
+    Responsible Mail    : {$data->getResponsibleMailAddress()}
+    Serial              : {$data->getSerial()}
+    Refresh             : {$data->getRefreshInterval()}
+    Retry               : {$data->getRetryInterval()}
+    Expire              : {$data->getExpireTimeout()}
+    TTL                 : {$data->getTtl()}
+  }\n";
     }
-} else {
-    echo "    Not found.\n";
 }
