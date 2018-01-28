@@ -42,11 +42,11 @@ final class SOA implements ResourceData
 
         // These rules are specified in RFC 1912 sec 2.2
 
-        if ($this->retryInterval >= $this->refreshInterval) {
+        if ($this->retryInterval > $this->refreshInterval) {
             throw new \InvalidArgumentException('Retry interval must be less than refresh interval');
         }
 
-        if ($this->expireTimeout <= $this->refreshInterval + $this->retryInterval) {
+        if ($this->expireTimeout < $this->refreshInterval + $this->retryInterval) {
             throw new \InvalidArgumentException(
                 'Expire timeout must be more than the sum of refresh interval and retry interval'
             );
