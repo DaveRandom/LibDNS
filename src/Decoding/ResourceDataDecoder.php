@@ -18,10 +18,12 @@ final class ResourceDataDecoder
         ResourceTypes::CNAME => [ResourceData\CNAME::class, 'decode'],
         ResourceTypes::DNAME => [ResourceData\DNAME::class, 'decode'],
         ResourceTypes::MX => [ResourceData\MX::class, 'decode'],
+        ResourceTypes::NAPTR => [ResourceData\NAPTR::class, 'decode'],
         ResourceTypes::NS => [ResourceData\NS::class, 'decode'],
         ResourceTypes::PTR => [ResourceData\PTR::class, 'decode'],
         ResourceTypes::RP => [ResourceData\RP::class, 'decode'],
         ResourceTypes::SOA => [ResourceData\SOA::class, 'decode'],
+        ResourceTypes::SRV => [ResourceData\SRV::class, 'decode'],
         ResourceTypes::TXT => [ResourceData\TXT::class, 'decode'],
     ];
 

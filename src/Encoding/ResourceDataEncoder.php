@@ -18,10 +18,12 @@ final class ResourceDataEncoder
         ResourceTypes::CNAME => [ResourceData\CNAME::class, 'encode'],
         ResourceTypes::CNAME => [ResourceData\DNAME::class, 'encode'],
         ResourceTypes::MX => [ResourceData\MX::class, 'encode'],
+        ResourceTypes::NAPTR => [ResourceData\NAPTR::class, 'encode'],
         ResourceTypes::NS => [ResourceData\NS::class, 'encode'],
         ResourceTypes::PTR => [ResourceData\PTR::class, 'encode'],
         ResourceTypes::RP => [ResourceData\RP::class, 'encode'],
         ResourceTypes::SOA => [ResourceData\SOA::class, 'encode'],
+        ResourceTypes::SRV => [ResourceData\SRV::class, 'encode'],
         ResourceTypes::TXT => [ResourceData\TXT::class, 'encode'],
     ];
 

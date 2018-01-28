@@ -25,10 +25,10 @@ abstract class ResourceTypes extends Enum
     const LOC = 29;
 
     // RFC 2782
-    const SRV = 33; // todo
+    const SRV = 33;
 
     // RFC 3403
-    const NAPTR = 35; // todo
+    const NAPTR = 35;
 
     // RFC 2230
     const KX = 36; // todo
