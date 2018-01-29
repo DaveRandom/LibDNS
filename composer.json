@@ -10,6 +10,9 @@
     "psr-4": { "DaveRandom\\LibDNS\\": "src/" },
     "files": ["src/functions.php"]
   },
+  "autoload-dev": {
+    "psr-4": { "DaveRandom\\LibDNS\\Tests\\": "tests/" }
+  },
   "require": {
     "php": ">=7.0",
     "ext-ctype": "*",
