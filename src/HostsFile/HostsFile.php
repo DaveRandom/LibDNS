@@ -2,6 +2,7 @@
 
 namespace DaveRandom\LibDNS\HostsFile;
 
+use DaveRandom\LibDNS\Records\ResourceTypes;
 use DaveRandom\Network\DomainName;
 use DaveRandom\Network\IPAddress;
 
@@ -17,7 +18,7 @@ final class HostsFile
     /**
      * @param string|DomainName $name
      */
-    public function containsName($name, int $family = \STREAM_PF_INET): bool
+    public function containsName($name, int $type = null): bool
     {
         if (!$name instanceof DomainName) {
             try {
@@ -27,10 +28,17 @@ final class HostsFile
             }
         }
 
-        return isset($this->map[(string)$name][$family]);
+        $name = (string)$name;
+
+        return isset($type)
+            ? isset($this->map[$type][$name])
+            : isset($this->map[ResourceTypes::A][$name]) || isset($this->map[ResourceTypes::AAAA][$name]);
     }
 
-    public function getAddressForName($name, int $family = \STREAM_PF_INET): IPAddress
+    /**
+     * @return IPAddress|null
+     */
+    public function getAddressForName($name, int $type = null)
     {
         if (!$name instanceof DomainName) {
             try {
@@ -40,11 +48,13 @@ final class HostsFile
             }
         }
 
-        if (!isset($name, $this->map[(string)$name][$family])) {
-            throw new \OutOfBoundsException("No record defined for name {$name} in address family {$family}");
+        $name = (string)$name;
+
+        if (isset($type)) {
+            return $this->map[$type][$name] ?? null;
         }
 
-        return $this->map[(string)$name][$family];
+        return $this->map[ResourceTypes::A][$name] ?? $this->map[ResourceTypes::AAAA][$name] ?? null;
     }
 
     public function toArray(): array

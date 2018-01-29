@@ -3,9 +3,9 @@
 namespace DaveRandom\LibDNS\Tests\HostsFile;
 
 use DaveRandom\LibDNS\HostsFile\HostsFile;
+use DaveRandom\LibDNS\Records\ResourceTypes;
 use DaveRandom\Network\DomainName;
 use DaveRandom\Network\IPv4Address;
-use DaveRandom\Network\IPv6Address;
 use PHPUnit\Framework\TestCase;
 
 final class HostsFileTest extends TestCase
@@ -19,15 +19,13 @@ final class HostsFileTest extends TestCase
     private function provideData(): array
     {
         return [
-            self::BOTH_RECORD['name'] => [
-                \STREAM_PF_INET  => IPv4Address::parse(self::BOTH_RECORD['v4']),
-                \STREAM_PF_INET6 => IPv6Address::parse(self::BOTH_RECORD['v6']),
+            ResourceTypes::A => [
+                self::BOTH_RECORD['name'] => IPv4Address::parse(self::BOTH_RECORD['v4']),
+                self::IPV4_ONLY_RECORD['name'] => IPv4Address::parse(self::IPV4_ONLY_RECORD['v4']),
             ],
-            self::IPV4_ONLY_RECORD['name'] => [
-                \STREAM_PF_INET  => IPv4Address::parse(self::IPV4_ONLY_RECORD['v4']),
-            ],
-            self::IPV6_ONLY_RECORD['name'] => [
-                \STREAM_PF_INET6 => IPv6Address::parse(self::IPV6_ONLY_RECORD['v6']),
+            ResourceTypes::AAAA => [
+                self::BOTH_RECORD['name'] => IPv4Address::parse(self::BOTH_RECORD['v6']),
+                self::IPV6_ONLY_RECORD['name'] => IPv4Address::parse(self::IPV6_ONLY_RECORD['v6']),
             ],
         ];
     }
@@ -37,13 +35,13 @@ final class HostsFileTest extends TestCase
         $hostsFile = new HostsFile($this->provideData());
 
         $this->assertFalse($hostsFile->containsName(self::NON_EXISTENT_NAME));
-        $this->assertFalse($hostsFile->containsName(self::NON_EXISTENT_NAME, \STREAM_PF_INET));
-        $this->assertFalse($hostsFile->containsName(self::NON_EXISTENT_NAME, \STREAM_PF_INET6));
+        $this->assertFalse($hostsFile->containsName(self::NON_EXISTENT_NAME, ResourceTypes::A));
+        $this->assertFalse($hostsFile->containsName(self::NON_EXISTENT_NAME, ResourceTypes::AAAA));
 
         $name = DomainName::createFromString(self::NON_EXISTENT_NAME);
         $this->assertFalse($hostsFile->containsName($name));
-        $this->assertFalse($hostsFile->containsName($name, \STREAM_PF_INET));
-        $this->assertFalse($hostsFile->containsName($name, \STREAM_PF_INET6));
+        $this->assertFalse($hostsFile->containsName($name, ResourceTypes::A));
+        $this->assertFalse($hostsFile->containsName($name, ResourceTypes::AAAA));
     }
 
     public function testContainsNameWithInvalidName()
@@ -51,8 +49,8 @@ final class HostsFileTest extends TestCase
         $hostsFile = new HostsFile($this->provideData());
 
         $this->assertFalse($hostsFile->containsName(self::INVALID_NAME));
-        $this->assertFalse($hostsFile->containsName(self::INVALID_NAME, \STREAM_PF_INET));
-        $this->assertFalse($hostsFile->containsName(self::INVALID_NAME, \STREAM_PF_INET6));
+        $this->assertFalse($hostsFile->containsName(self::INVALID_NAME, ResourceTypes::A));
+        $this->assertFalse($hostsFile->containsName(self::INVALID_NAME, ResourceTypes::AAAA));
     }
 
     public function testContainsNameWithIPv4Only()
@@ -60,27 +58,27 @@ final class HostsFileTest extends TestCase
         $hostsFile = new HostsFile($this->provideData());
 
         $this->assertTrue($hostsFile->containsName(self::IPV4_ONLY_RECORD['name']));
-        $this->assertTrue($hostsFile->containsName(self::IPV4_ONLY_RECORD['name'], \STREAM_PF_INET));
-        $this->assertFalse($hostsFile->containsName(self::IPV4_ONLY_RECORD['name'], \STREAM_PF_INET6));
+        $this->assertTrue($hostsFile->containsName(self::IPV4_ONLY_RECORD['name'], ResourceTypes::A));
+        $this->assertFalse($hostsFile->containsName(self::IPV4_ONLY_RECORD['name'], ResourceTypes::AAAA));
 
         $name = DomainName::createFromString(self::IPV4_ONLY_RECORD['name']);
         $this->assertTrue($hostsFile->containsName($name));
-        $this->assertTrue($hostsFile->containsName($name, \STREAM_PF_INET));
-        $this->assertFalse($hostsFile->containsName($name, \STREAM_PF_INET6));
+        $this->assertTrue($hostsFile->containsName($name, ResourceTypes::A));
+        $this->assertFalse($hostsFile->containsName($name, ResourceTypes::AAAA));
     }
 
     public function testContainsNameWithIPv6Only()
     {
         $hostsFile = new HostsFile($this->provideData());
 
-        $this->assertFalse($hostsFile->containsName(self::IPV6_ONLY_RECORD['name']));
-        $this->assertFalse($hostsFile->containsName(self::IPV6_ONLY_RECORD['name'], \STREAM_PF_INET));
-        $this->assertTrue($hostsFile->containsName(self::IPV6_ONLY_RECORD['name'], \STREAM_PF_INET6));
+        $this->assertTrue($hostsFile->containsName(self::IPV6_ONLY_RECORD['name']));
+        $this->assertFalse($hostsFile->containsName(self::IPV6_ONLY_RECORD['name'], ResourceTypes::A));
+        $this->assertTrue($hostsFile->containsName(self::IPV6_ONLY_RECORD['name'], ResourceTypes::AAAA));
 
         $name = DomainName::createFromString(self::IPV6_ONLY_RECORD['name']);
-        $this->assertFalse($hostsFile->containsName($name));
-        $this->assertFalse($hostsFile->containsName($name, \STREAM_PF_INET));
-        $this->assertTrue($hostsFile->containsName($name, \STREAM_PF_INET6));
+        $this->assertTrue($hostsFile->containsName($name));
+        $this->assertFalse($hostsFile->containsName($name, ResourceTypes::A));
+        $this->assertTrue($hostsFile->containsName($name, ResourceTypes::AAAA));
     }
 
     public function testContainsNameWithBoth()
@@ -88,61 +86,43 @@ final class HostsFileTest extends TestCase
         $hostsFile = new HostsFile($this->provideData());
 
         $this->assertTrue($hostsFile->containsName(self::BOTH_RECORD['name']));
-        $this->assertTrue($hostsFile->containsName(self::BOTH_RECORD['name'], \STREAM_PF_INET));
-        $this->assertTrue($hostsFile->containsName(self::BOTH_RECORD['name'], \STREAM_PF_INET6));
+        $this->assertTrue($hostsFile->containsName(self::BOTH_RECORD['name'], ResourceTypes::A));
+        $this->assertTrue($hostsFile->containsName(self::BOTH_RECORD['name'], ResourceTypes::AAAA));
 
         $name = DomainName::createFromString(self::BOTH_RECORD['name']);
         $this->assertTrue($hostsFile->containsName($name));
-        $this->assertTrue($hostsFile->containsName($name, \STREAM_PF_INET));
-        $this->assertTrue($hostsFile->containsName($name, \STREAM_PF_INET6));
+        $this->assertTrue($hostsFile->containsName($name, ResourceTypes::A));
+        $this->assertTrue($hostsFile->containsName($name, ResourceTypes::AAAA));
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
     public function testGetAddressForNameWithNonExistentNameDefaultFamily()
     {
-        (new HostsFile($this->provideData()))->getAddressForName(self::NON_EXISTENT_NAME);
+        $this->assertNull((new HostsFile($this->provideData()))->getAddressForName(self::NON_EXISTENT_NAME));
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
     public function testGetAddressForNameWithNonExistentNameIPv4()
     {
-        (new HostsFile($this->provideData()))->getAddressForName(self::NON_EXISTENT_NAME, \STREAM_PF_INET);
+        $this->assertNull((new HostsFile($this->provideData()))->getAddressForName(self::NON_EXISTENT_NAME, ResourceTypes::A));
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
     public function testGetAddressForNameWithNonExistentNameIPv6()
     {
-        (new HostsFile($this->provideData()))->getAddressForName(self::NON_EXISTENT_NAME, \STREAM_PF_INET6);
+        $this->assertNull((new HostsFile($this->provideData()))->getAddressForName(self::NON_EXISTENT_NAME, ResourceTypes::AAAA));
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
     public function testGetAddressForNameWithInvalidNameDefaultFamily()
     {
-        (new HostsFile($this->provideData()))->getAddressForName(self::INVALID_NAME);
+        $this->assertNull((new HostsFile($this->provideData()))->getAddressForName(self::INVALID_NAME));
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
     public function testGetAddressForNameWithInvalidNameIPv4()
     {
-        (new HostsFile($this->provideData()))->getAddressForName(self::INVALID_NAME, \STREAM_PF_INET);
+        $this->assertNull((new HostsFile($this->provideData()))->getAddressForName(self::INVALID_NAME, ResourceTypes::A));
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
     public function testGetAddressForNameWithInvalidNameIPv6()
     {
-        (new HostsFile($this->provideData()))->getAddressForName(self::INVALID_NAME, \STREAM_PF_INET6);
+        $this->assertNull((new HostsFile($this->provideData()))->getAddressForName(self::INVALID_NAME, ResourceTypes::AAAA));
     }
 
     public function testGetAddressForNameWithExistingIPv4()
@@ -150,38 +130,24 @@ final class HostsFileTest extends TestCase
         $hostsFile = new HostsFile($this->provideData());
 
         $this->assertSame(self::IPV4_ONLY_RECORD['v4'], (string)$hostsFile->getAddressForName(self::IPV4_ONLY_RECORD['name']));
-        $this->assertSame(self::IPV4_ONLY_RECORD['v4'], (string)$hostsFile->getAddressForName(self::IPV4_ONLY_RECORD['name'], \STREAM_PF_INET));
+        $this->assertSame(self::IPV4_ONLY_RECORD['v4'], (string)$hostsFile->getAddressForName(self::IPV4_ONLY_RECORD['name'], ResourceTypes::A));
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
-    public function testGetAddressForNameWithNonExistentIPv4DefaultFamily()
+    public function testGetAddressForNameWithNonExistentIPv4()
     {
-        (new HostsFile($this->provideData()))->getAddressForName(self::IPV6_ONLY_RECORD['name']);
-    }
-
-    /**
-     * @expectedException \OutOfBoundsException
-     */
-    public function testGetAddressForNameWithNonExistentIPv4ExplicitFamily()
-    {
-        (new HostsFile($this->provideData()))->getAddressForName(self::IPV6_ONLY_RECORD['name'], \STREAM_PF_INET);
+        $this->assertNull((new HostsFile($this->provideData()))->getAddressForName(self::IPV6_ONLY_RECORD['name'], ResourceTypes::A));
     }
 
     public function testGetAddressForNameWithExistingIPv6()
     {
         $hostsFile = new HostsFile($this->provideData());
 
-        $this->assertSame(self::IPV6_ONLY_RECORD['v6'], (string)$hostsFile->getAddressForName(self::IPV6_ONLY_RECORD['name'], \STREAM_PF_INET6));
+        $this->assertSame(self::IPV6_ONLY_RECORD['v6'], (string)$hostsFile->getAddressForName(self::IPV6_ONLY_RECORD['name'], ResourceTypes::AAAA));
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
     public function testGetAddressForNameWithNonExistentIPv6()
     {
-        (new HostsFile($this->provideData()))->getAddressForName(self::IPV4_ONLY_RECORD['name'], \STREAM_PF_INET6);
+        $this->assertNull((new HostsFile($this->provideData()))->getAddressForName(self::IPV4_ONLY_RECORD['name'], ResourceTypes::AAAA));
     }
 
     public function testToArray()

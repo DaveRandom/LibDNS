@@ -2,8 +2,11 @@
 
 namespace DaveRandom\LibDNS\HostsFile;
 
+use DaveRandom\LibDNS\Records\ResourceTypes;
 use DaveRandom\Network\DomainName;
 use DaveRandom\Network\IPAddress;
+use DaveRandom\Network\IPv4Address;
+use DaveRandom\Network\IPv6Address;
 
 final class ParsingContext
 {
@@ -25,7 +28,7 @@ final class ParsingContext
             return;
         }
 
-        $family = $address->getProtocolFamily();
+        $type = $address->getProtocolFamily() === STREAM_PF_INET ? ResourceTypes::A : ResourceTypes::AAAA;
 
         for ($i = 1; isset($parts[$i]); $i++) {
             try {
@@ -34,8 +37,16 @@ final class ParsingContext
                 continue;
             }
 
-            $this->map[$name][$family] = $address;
+            $this->map[$type][$name] = $address;
         }
+    }
+
+    public function __construct()
+    {
+        $this->map = [
+            ResourceTypes::A => ['localhost' => IPv4Address::createFromString('127.0.0.1')],
+            ResourceTypes::AAAA => ['localhost' => IPv6Address::createFromString('::1')],
+        ];
     }
 
     public function addData(string $data)
