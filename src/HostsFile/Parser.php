@@ -23,7 +23,7 @@ final class Parser
 
         $ctx = new ParsingContext();
 
-        while (false !== $chunk = \fread($stream, $chunkSize)) {
+        while ('' !== (string)$chunk = \fread($stream, $chunkSize)) {
             $ctx->addData($chunk);
         }
 
