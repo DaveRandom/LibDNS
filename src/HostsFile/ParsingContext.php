@@ -11,8 +11,10 @@ use DaveRandom\Network\IPv6Address;
 final class ParsingContext
 {
     private $map = [];
-
+    private $hostsFile = null;
     private $pendingData = '';
+
+    private $useSystemLocalhostBehaviour;
 
     private function parseLine(string $line)
     {
@@ -41,16 +43,53 @@ final class ParsingContext
         }
     }
 
-    public function __construct()
+    private static function getSystemLocalhostEntries(): array
     {
-        $this->map = [
-            ResourceTypes::A => ['localhost' => IPv4Address::createFromString('127.0.0.1')],
-            ResourceTypes::AAAA => ['localhost' => IPv6Address::createFromString('::1')],
-        ];
+        static $entries = null;
+
+        if ($entries !== null) {
+            return $entries;
+        }
+
+        $entries = [];
+
+        if (\stripos(\PHP_OS, 'win') !== 0) {
+            return $entries;
+        }
+
+        /* On Windows (since Vista) the handling of localhost is built in to the system resolver. The hosts file no
+           longer contains an entry for localhost, and if an entry is created then it is ignored.
+           See https://serverfault.com/a/9665/92780
+
+           I have been unable to find a way to modify the address mapped to localhost - although I suspect there is an
+           undocumented registry setting - so for now, these values are hard-coded. This code uses checkdnsrr() to
+           determine whether the system resolver returns A/AAAA records for localhost, because we want to emulate the
+           system resolver's behaviour exactly.
+
+           checkdnsrr() is an instantaneous call in this case, the system resolver will never query a remote server for
+           an unqualified lookup of localhost, so this code shouldn't make a meaningful difference to performance. */
+        if (\checkdnsrr('localhost', 'A')) {
+            $entries[ResourceTypes::A] = ['localhost' => new IPv4Address(127, 0, 0, 1)];
+        }
+
+        if (\checkdnsrr('localhost', 'AAAA')) {
+            $entries[ResourceTypes::AAAA] = ['localhost' => new IPv6Address(0, 0, 0, 0, 0, 0, 0, 1)];
+        }
+
+        return $entries;
     }
 
-    public function addData(string $data)
+    public function __construct(bool $useSystemLocalhostBehaviour = true)
     {
+        $this->useSystemLocalhostBehaviour = $useSystemLocalhostBehaviour;
+    }
+
+    public function addData(string $data): self
+    {
+        if ($this->hostsFile !== null) {
+            throw new \LogicException('Parsing context already finalized');
+        }
+
         $data = $this->pendingData . $data;
         $length = \strlen($data);
         $pos = 0;
@@ -66,15 +105,30 @@ final class ParsingContext
             $this->parseLine(\substr($data, $pos, $lineLength));
             $pos += $lineLength;
         }
+
+        return $this;
     }
 
     public function getResult(): HostsFile
     {
+        if ($this->hostsFile !== null) {
+            return $this->hostsFile;
+        }
+
         if ($this->pendingData !== '') {
             $this->parseLine($this->pendingData);
             $this->pendingData = '';
         }
 
-        return new HostsFile($this->map);
+        // Overwrite loaded entries with hard-coded ones
+        if ($this->useSystemLocalhostBehaviour) {
+            foreach (self::getSystemLocalhostEntries() as $type => $entries) {
+                foreach ($entries as $name => $address) {
+                    $this->map[$type][$name] = $address;
+                }
+            }
+        }
+
+        return $this->hostsFile = new HostsFile($this->map);
     }
 }
