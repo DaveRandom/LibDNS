@@ -21,12 +21,22 @@ final class PTR implements ResourceData
         return $this->name;
     }
 
-    public static function decode(DecodingContext $ctx): PTR
+    public function __toString(): string
     {
-        return new PTR(\DaveRandom\LibDNS\decode_domain_name($ctx));
+        return self::zoneFileEncode($this);
     }
 
-    public static function encode(EncodingContext $ctx, PTR $record)
+    public static function zoneFileEncode(self $record): string
+    {
+        return "{$record->name}.";
+    }
+
+    public static function protocolDecode(DecodingContext $ctx): self
+    {
+        return new self(\DaveRandom\LibDNS\decode_domain_name($ctx));
+    }
+
+    public static function protocolEncode(EncodingContext $ctx, self $record)
     {
         \DaveRandom\LibDNS\encode_domain_name($ctx, $record->getName());
     }

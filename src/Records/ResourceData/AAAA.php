@@ -21,12 +21,22 @@ final class AAAA implements ResourceData
         return $this->address;
     }
 
-    public static function decode(DecodingContext $ctx): AAAA
+    public function __toString(): string
     {
-        return new AAAA(\DaveRandom\LibDNS\decode_ipv6address($ctx));
+        return self::zoneFileEncode($this);
     }
 
-    public static function encode(EncodingContext $ctx, AAAA $record)
+    public static function zoneFileEncode(self $record): string
+    {
+        return (string)$record->address;
+    }
+
+    public static function protocolDecode(DecodingContext $ctx): self
+    {
+        return new self(\DaveRandom\LibDNS\decode_ipv6address($ctx));
+    }
+
+    public static function protocolEncode(EncodingContext $ctx, self $record)
     {
         \DaveRandom\LibDNS\encode_ipv6address($ctx, $record->address);
     }

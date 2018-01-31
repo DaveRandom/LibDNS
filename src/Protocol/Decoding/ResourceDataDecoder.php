@@ -13,18 +13,18 @@ use DaveRandom\LibDNS\Records\ResourceTypes;
 final class ResourceDataDecoder
 {
     const DEFAULT_DECODERS = [
-        ResourceTypes::A => [ResourceData\A::class, 'decode'],
-        ResourceTypes::AAAA => [ResourceData\AAAA::class, 'decode'],
-        ResourceTypes::CNAME => [ResourceData\CNAME::class, 'decode'],
-        ResourceTypes::DNAME => [ResourceData\DNAME::class, 'decode'],
-        ResourceTypes::MX => [ResourceData\MX::class, 'decode'],
-        ResourceTypes::NAPTR => [ResourceData\NAPTR::class, 'decode'],
-        ResourceTypes::NS => [ResourceData\NS::class, 'decode'],
-        ResourceTypes::PTR => [ResourceData\PTR::class, 'decode'],
-        ResourceTypes::RP => [ResourceData\RP::class, 'decode'],
-        ResourceTypes::SOA => [ResourceData\SOA::class, 'decode'],
-        ResourceTypes::SRV => [ResourceData\SRV::class, 'decode'],
-        ResourceTypes::TXT => [ResourceData\TXT::class, 'decode'],
+        ResourceTypes::A => [ResourceData\A::class, 'protocolDecode'],
+        ResourceTypes::AAAA => [ResourceData\AAAA::class, 'protocolDecode'],
+        ResourceTypes::CNAME => [ResourceData\CNAME::class, 'protocolDecode'],
+        ResourceTypes::DNAME => [ResourceData\DNAME::class, 'protocolDecode'],
+        ResourceTypes::MX => [ResourceData\MX::class, 'protocolDecode'],
+        ResourceTypes::NAPTR => [ResourceData\NAPTR::class, 'protocolDecode'],
+        ResourceTypes::NS => [ResourceData\NS::class, 'protocolDecode'],
+        ResourceTypes::PTR => [ResourceData\PTR::class, 'protocolDecode'],
+        ResourceTypes::RP => [ResourceData\RP::class, 'protocolDecode'],
+        ResourceTypes::SOA => [ResourceData\SOA::class, 'protocolDecode'],
+        ResourceTypes::SRV => [ResourceData\SRV::class, 'protocolDecode'],
+        ResourceTypes::TXT => [ResourceData\TXT::class, 'protocolDecode'],
     ];
 
     private static $callbackType;

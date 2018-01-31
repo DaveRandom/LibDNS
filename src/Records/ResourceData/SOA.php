@@ -90,13 +90,24 @@ final class SOA implements ResourceData
         return $this->ttl;
     }
 
-    public static function decode(DecodingContext $ctx): SOA
+    public function __toString(): string
+    {
+        return self::zoneFileEncode($this);
+    }
+
+    public static function zoneFileEncode(self $record): string
+    {
+        return "{$record->masterServerName}. {$record->responsibleMailAddress}. {$record->serial}"
+            . " {$record->refreshInterval} {$record->retryInterval} {$record->expireTimeout} {$record->ttl}";
+    }
+
+    public static function protocolDecode(DecodingContext $ctx): self
     {
         $masterServerName = \DaveRandom\LibDNS\decode_domain_name($ctx);
         $responsibleMailAddress = \DaveRandom\LibDNS\decode_domain_name($ctx);
         $meta = $ctx->unpack('Nserial/Nrefresh/Nretry/Nexpire/Nttl', 20);
 
-        return new SOA(
+        return new self(
             $masterServerName,
             $responsibleMailAddress,
             $meta['serial'], $meta['refresh'], $meta['retry'], $meta['expire'], $meta['ttl'],
@@ -104,7 +115,7 @@ final class SOA implements ResourceData
         );
     }
 
-    public static function encode(EncodingContext $ctx, SOA $record)
+    public static function protocolEncode(EncodingContext $ctx, self $record)
     {
         \DaveRandom\LibDNS\encode_domain_name($ctx, $record->getMasterServerName());
         \DaveRandom\LibDNS\encode_domain_name($ctx, $record->getResponsibleMailAddress());

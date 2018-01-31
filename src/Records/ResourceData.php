@@ -2,4 +2,7 @@
 
 namespace DaveRandom\LibDNS\Records;
 
-interface ResourceData { }
+interface ResourceData
+{
+    function __toString(): string;
+}

@@ -15,6 +15,11 @@ final class UnknownResourceData implements RawResourceData
         $this->data = $data;
     }
 
+    public function __toString(): string
+    {
+        return $this->data;
+    }
+
     public function getData(): string
     {
         return $this->data;

@@ -21,7 +21,7 @@ abstract class ResourceTypes extends Enum
     // RFC 3596
     const AAAA = 28;
 
-    // RFC 1876
+    // RFC 1876, Experimental
     const LOC = 29;
 
     // RFC 2782
@@ -30,8 +30,8 @@ abstract class ResourceTypes extends Enum
     // RFC 3403
     const NAPTR = 35;
 
-    // RFC 2230
-    const KX = 36; // todo
+    // RFC 2230, Informational
+    const KX = 36;
 
     // RFC 4398
     const CERT = 37; // todo

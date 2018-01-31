@@ -56,7 +56,18 @@ final class NAPTR implements ResourceData
         return $this->replacement;
     }
 
-    public static function decode(DecodingContext $ctx): NAPTR
+    public function __toString(): string
+    {
+        return self::zoneFileEncode($this);
+    }
+
+    public static function zoneFileEncode(self $record): string
+    {
+        return "{$record->order} {$record->preference} {$record->flags}"
+            . " {$record->services} {$record->regex} {$record->replacement}.";
+    }
+
+    public static function protocolDecode(DecodingContext $ctx): self
     {
         $parts = $ctx->unpack('norder/npreference', 4);
         $flags = \DaveRandom\LibDNS\decode_character_string($ctx);
@@ -64,10 +75,10 @@ final class NAPTR implements ResourceData
         $regex = \DaveRandom\LibDNS\decode_character_string($ctx);
         $replacement = \DaveRandom\LibDNS\decode_domain_name($ctx);
 
-        return new NAPTR($parts['order'], $parts['preference'], $flags, $services, $regex, $replacement);
+        return new self($parts['order'], $parts['preference'], $flags, $services, $regex, $replacement);
     }
 
-    public static function encode(EncodingContext $ctx, NAPTR $record)
+    public static function protocolEncode(EncodingContext $ctx, self $record)
     {
         $ctx->appendData(\pack('n2', $record->order, $record->preference));
         \DaveRandom\LibDNS\encode_character_string($ctx, $record->flags);

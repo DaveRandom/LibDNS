@@ -28,15 +28,25 @@ final class MX implements ResourceData
         return $this->exchange;
     }
 
-    public static function decode(DecodingContext $ctx): MX
+    public function __toString(): string
+    {
+        return self::zoneFileEncode($this);
+    }
+
+    public static function zoneFileEncode(self $record): string
+    {
+        return "{$record->preference} {$record->exchange}.";
+    }
+
+    public static function protocolDecode(DecodingContext $ctx): self
     {
         $preference = $ctx->unpack('n', 2)[1];
         $exchange = \DaveRandom\LibDNS\decode_domain_name($ctx);
 
-        return new MX($preference, $exchange);
+        return new self($preference, $exchange);
     }
 
-    public static function encode(EncodingContext $ctx, MX $record)
+    public static function protocolEncode(EncodingContext $ctx, self $record)
     {
         $ctx->appendData(\pack('n', $record->getPreference()));
         \DaveRandom\LibDNS\encode_domain_name($ctx, $record->getExchange());

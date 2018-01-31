@@ -13,18 +13,18 @@ use DaveRandom\LibDNS\Records\ResourceTypes;
 final class ResourceDataEncoder
 {
     const DEFAULT_ENCODERS = [
-        ResourceTypes::A => [ResourceData\A::class, 'encode'],
-        ResourceTypes::AAAA => [ResourceData\AAAA::class, 'encode'],
-        ResourceTypes::CNAME => [ResourceData\CNAME::class, 'encode'],
-        ResourceTypes::CNAME => [ResourceData\DNAME::class, 'encode'],
-        ResourceTypes::MX => [ResourceData\MX::class, 'encode'],
-        ResourceTypes::NAPTR => [ResourceData\NAPTR::class, 'encode'],
-        ResourceTypes::NS => [ResourceData\NS::class, 'encode'],
-        ResourceTypes::PTR => [ResourceData\PTR::class, 'encode'],
-        ResourceTypes::RP => [ResourceData\RP::class, 'encode'],
-        ResourceTypes::SOA => [ResourceData\SOA::class, 'encode'],
-        ResourceTypes::SRV => [ResourceData\SRV::class, 'encode'],
-        ResourceTypes::TXT => [ResourceData\TXT::class, 'encode'],
+        ResourceTypes::A => [ResourceData\A::class, 'protocolEncode'],
+        ResourceTypes::AAAA => [ResourceData\AAAA::class, 'protocolEncode'],
+        ResourceTypes::CNAME => [ResourceData\CNAME::class, 'protocolEncode'],
+        ResourceTypes::CNAME => [ResourceData\DNAME::class, 'protocolEncode'],
+        ResourceTypes::MX => [ResourceData\MX::class, 'protocolEncode'],
+        ResourceTypes::NAPTR => [ResourceData\NAPTR::class, 'protocolEncode'],
+        ResourceTypes::NS => [ResourceData\NS::class, 'protocolEncode'],
+        ResourceTypes::PTR => [ResourceData\PTR::class, 'protocolEncode'],
+        ResourceTypes::RP => [ResourceData\RP::class, 'protocolEncode'],
+        ResourceTypes::SOA => [ResourceData\SOA::class, 'protocolEncode'],
+        ResourceTypes::SRV => [ResourceData\SRV::class, 'protocolEncode'],
+        ResourceTypes::TXT => [ResourceData\TXT::class, 'protocolEncode'],
     ];
 
     private static $callbackType;

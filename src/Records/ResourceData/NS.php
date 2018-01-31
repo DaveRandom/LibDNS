@@ -21,12 +21,22 @@ final class NS implements ResourceData
         return $this->authoritativeServerName;
     }
 
-    public static function decode(DecodingContext $ctx): NS
+    public function __toString(): string
     {
-        return new NS(\DaveRandom\LibDNS\decode_domain_name($ctx));
+        return self::zoneFileEncode($this);
     }
 
-    public static function encode(EncodingContext $ctx, NS $record)
+    public static function zoneFileEncode(self $record): string
+    {
+        return "{$record->authoritativeServerName}.";
+    }
+
+    public static function protocolDecode(DecodingContext $ctx): self
+    {
+        return new self(\DaveRandom\LibDNS\decode_domain_name($ctx));
+    }
+
+    public static function protocolEncode(EncodingContext $ctx, self $record)
     {
         \DaveRandom\LibDNS\encode_domain_name($ctx, $record->getAuthoritativeServerName());
     }

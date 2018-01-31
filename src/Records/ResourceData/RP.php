@@ -28,15 +28,25 @@ final class RP implements ResourceData
         return $this->txtName;
     }
 
-    public static function decode(DecodingContext $ctx): RP
+    public function __toString(): string
+    {
+        return self::zoneFileEncode($this);
+    }
+
+    public static function zoneFileEncode(self $record): string
+    {
+        return "{$record->mailboxName}. {$record->txtName}.";
+    }
+
+    public static function protocolDecode(DecodingContext $ctx): self
     {
         $mailboxName = \DaveRandom\LibDNS\decode_domain_name($ctx);
         $txtName = \DaveRandom\LibDNS\decode_domain_name($ctx);
 
-        return new RP($mailboxName, $txtName);
+        return new self($mailboxName, $txtName);
     }
 
-    public static function encode(EncodingContext $ctx, RP $record)
+    public static function protocolEncode(EncodingContext $ctx, self $record)
     {
         \DaveRandom\LibDNS\encode_domain_name($ctx, $record->mailboxName);
         \DaveRandom\LibDNS\encode_domain_name($ctx, $record->txtName);

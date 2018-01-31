@@ -42,15 +42,25 @@ final class SRV implements ResourceData
         return $this->target;
     }
 
-    public static function decode(DecodingContext $ctx): SRV
+    public function __toString(): string
+    {
+        return self::zoneFileEncode($this);
+    }
+
+    public static function zoneFileEncode(self $record): string
+    {
+        return "{$record->priority} {$record->weight} {$record->port} {$record->target}.";
+    }
+
+    public static function protocolDecode(DecodingContext $ctx): self
     {
         $parts = $ctx->unpack('npriority/nweight/nport', 6);
         $target = \DaveRandom\LibDNS\decode_domain_name($ctx);
 
-        return new SRV($parts['priority'], $parts['weight'], $parts['port'], $target);
+        return new self($parts['priority'], $parts['weight'], $parts['port'], $target);
     }
 
-    public static function encode(EncodingContext $ctx, SRV $record)
+    public static function protocolEncode(EncodingContext $ctx, self $record)
     {
         $ctx->appendData(\pack('n3', $record->priority, $record->weight, $record->port));
         \DaveRandom\LibDNS\encode_domain_name($ctx, $record->target);

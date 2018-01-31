@@ -26,7 +26,17 @@ final class TXT implements ResourceData
         return $this->strings;
     }
 
-    public static function decode(DecodingContext $ctx, int $length): TXT
+    public function __toString(): string
+    {
+        return self::zoneFileEncode($this);
+    }
+
+    public static function zoneFileEncode(self $record): string
+    {
+        return \implode(' ', $record->strings);
+    }
+
+    public static function protocolDecode(DecodingContext $ctx, int $length): self
     {
         $consumed = 0;
         $strings = [];
@@ -37,10 +47,10 @@ final class TXT implements ResourceData
             $consumed += \strlen($string) + 1;
         }
 
-        return new TXT($strings);
+        return new self($strings);
     }
 
-    public static function encode(EncodingContext $ctx, TXT $record)
+    public static function protocolEncode(EncodingContext $ctx, self $record)
     {
         foreach ($record->getStrings() as $string) {
             \DaveRandom\LibDNS\encode_character_string($ctx, $string);
