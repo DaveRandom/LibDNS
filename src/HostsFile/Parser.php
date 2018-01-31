@@ -4,16 +4,18 @@ namespace DaveRandom\LibDNS\HostsFile;
 
 final class Parser
 {
-    private $useSystemLocalhostBehaviour;
+    const USE_SYSTEM_LOCALHOST_BEHAVIOUR = 0b1;
 
-    public function __construct(bool $useSystemLocalhostBehaviour = true)
+    private $flags;
+
+    public function __construct(int $flags = Parser::USE_SYSTEM_LOCALHOST_BEHAVIOUR)
     {
-        $this->useSystemLocalhostBehaviour = $useSystemLocalhostBehaviour;
+        $this->flags = $flags;
     }
 
     public function parseString(string $data): HostsFile
     {
-        return (new ParsingContext($this->useSystemLocalhostBehaviour))
+        return (new ParsingContext($this->flags))
             ->addData($data)
             ->getResult();
     }
@@ -27,7 +29,7 @@ final class Parser
             throw new \InvalidArgumentException("Supplied argument is not a valid stream resource");
         }
 
-        $ctx = new ParsingContext($this->useSystemLocalhostBehaviour);
+        $ctx = new ParsingContext($this->flags);
 
         while ('' !== (string)$chunk = \fread($stream, $chunkSize)) {
             $ctx->addData($chunk);
@@ -47,7 +49,7 @@ final class Parser
 
     public function beginParseString(string $initialData = ''): ParsingContext
     {
-        return (new ParsingContext($this->useSystemLocalhostBehaviour))
+        return (new ParsingContext($this->flags))
             ->addData($initialData);
     }
 }

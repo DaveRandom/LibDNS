@@ -14,7 +14,7 @@ final class ParsingContext
     private $hostsFile = null;
     private $pendingData = '';
 
-    private $useSystemLocalhostBehaviour;
+    private $flags;
 
     private function parseLine(string $line)
     {
@@ -79,9 +79,9 @@ final class ParsingContext
         return $entries;
     }
 
-    public function __construct(bool $useSystemLocalhostBehaviour = true)
+    public function __construct(int $flags = Parser::USE_SYSTEM_LOCALHOST_BEHAVIOUR)
     {
-        $this->useSystemLocalhostBehaviour = $useSystemLocalhostBehaviour;
+        $this->flags = $flags;
     }
 
     public function addData(string $data): self
@@ -121,7 +121,7 @@ final class ParsingContext
         }
 
         // Overwrite loaded entries with hard-coded ones
-        if ($this->useSystemLocalhostBehaviour) {
+        if ($this->flags & Parser::USE_SYSTEM_LOCALHOST_BEHAVIOUR) {
             foreach (self::getSystemLocalhostEntries() as $type => $entries) {
                 foreach ($entries as $name => $address) {
                     $this->map[$type][$name] = $address;
