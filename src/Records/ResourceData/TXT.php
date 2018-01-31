@@ -5,7 +5,6 @@ namespace DaveRandom\LibDNS\Records\ResourceData;
 use DaveRandom\LibDNS\Protocol\DecodingContext;
 use DaveRandom\LibDNS\Protocol\EncodingContext;
 use DaveRandom\LibDNS\Records\ResourceData;
-use DaveRandom\LibDNS\Records\ResourceTypes;
 
 final class TXT implements ResourceData
 {
@@ -25,11 +24,6 @@ final class TXT implements ResourceData
     public function getStrings(): array
     {
         return $this->strings;
-    }
-
-    public function getTypeId(): int
-    {
-        return ResourceTypes::TXT;
     }
 
     public static function decode(DecodingContext $ctx, int $length): TXT

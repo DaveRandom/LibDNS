@@ -43,7 +43,7 @@ final class Encoder
         $ctx->appendData(\pack('n2N', $record->getType(), $record->getClass(), $record->getTTL()));
 
         $ctx->beginRecordData();
-        $this->resourceDataEncoder->encode($ctx, $record->getData());
+        $this->resourceDataEncoder->encode($ctx, $record->getType(), $record->getData());
 
         if ($ctx->isDataLengthExceeded()) {
             $ctx->isTruncated = true;

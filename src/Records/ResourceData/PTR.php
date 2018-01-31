@@ -5,7 +5,6 @@ namespace DaveRandom\LibDNS\Records\ResourceData;
 use DaveRandom\LibDNS\Protocol\DecodingContext;
 use DaveRandom\LibDNS\Protocol\EncodingContext;
 use DaveRandom\LibDNS\Records\ResourceData;
-use DaveRandom\LibDNS\Records\ResourceTypes;
 use DaveRandom\Network\DomainName;
 
 final class PTR implements ResourceData
@@ -20,11 +19,6 @@ final class PTR implements ResourceData
     public function getName(): DomainName
     {
         return $this->name;
-    }
-
-    public function getTypeId(): int
-    {
-        return ResourceTypes::PTR;
     }
 
     public static function decode(DecodingContext $ctx): PTR

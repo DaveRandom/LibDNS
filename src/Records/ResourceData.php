@@ -2,7 +2,4 @@
 
 namespace DaveRandom\LibDNS\Records;
 
-interface ResourceData
-{
-    function getTypeId(): int;
-}
+interface ResourceData { }

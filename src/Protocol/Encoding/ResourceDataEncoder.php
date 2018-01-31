@@ -64,15 +64,15 @@ final class ResourceDataEncoder
         $this->encoders[$type] = self::DEFAULT_ENCODERS[$type] ?? null;
     }
 
-    public function encode(Context $ctx, ResourceData $data)
+    public function encode(Context $ctx, int $typeId, ResourceData $data)
     {
-        if (isset($this->encoders[$id = $data->getTypeId()])) {
-            $this->encoders[$id]($ctx, $data);
+        if (isset($this->encoders[$typeId])) {
+            $this->encoders[$typeId]($ctx, $data);
             return;
         }
 
         if (!$data instanceof RawResourceData) {
-            throw new \UnexpectedValueException("Unknown resource data type: {{$id}}");
+            throw new \UnexpectedValueException("Unknown resource data type: {{$typeId}}");
         }
 
         $ctx->appendData($data->getData());

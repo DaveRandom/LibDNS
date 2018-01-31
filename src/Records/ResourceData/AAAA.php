@@ -5,7 +5,6 @@ namespace DaveRandom\LibDNS\Records\ResourceData;
 use DaveRandom\LibDNS\Protocol\DecodingContext;
 use DaveRandom\LibDNS\Protocol\EncodingContext;
 use DaveRandom\LibDNS\Records\ResourceData;
-use DaveRandom\LibDNS\Records\ResourceTypes;
 use DaveRandom\Network\IPv6Address;
 
 final class AAAA implements ResourceData
@@ -20,11 +19,6 @@ final class AAAA implements ResourceData
     public function getAddress(): IPv6Address
     {
         return $this->address;
-    }
-
-    public function getTypeId(): int
-    {
-        return ResourceTypes::AAAA;
     }
 
     public static function decode(DecodingContext $ctx): AAAA

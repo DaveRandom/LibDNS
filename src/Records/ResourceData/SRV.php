@@ -5,7 +5,6 @@ namespace DaveRandom\LibDNS\Records\ResourceData;
 use DaveRandom\LibDNS\Protocol\DecodingContext;
 use DaveRandom\LibDNS\Protocol\EncodingContext;
 use DaveRandom\LibDNS\Records\ResourceData;
-use DaveRandom\LibDNS\Records\ResourceTypes;
 use DaveRandom\Network\DomainName;
 
 final class SRV implements ResourceData
@@ -41,11 +40,6 @@ final class SRV implements ResourceData
     public function getTarget(): DomainName
     {
         return $this->target;
-    }
-
-    public function getTypeId(): int
-    {
-        return ResourceTypes::SRV;
     }
 
     public static function decode(DecodingContext $ctx): SRV

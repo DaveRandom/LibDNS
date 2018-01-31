@@ -15,11 +15,6 @@ final class UnknownResourceData implements RawResourceData
         $this->data = $data;
     }
 
-    public function getTypeId(): int
-    {
-        return $this->typeId;
-    }
-
     public function getData(): string
     {
         return $this->data;

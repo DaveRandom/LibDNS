@@ -5,7 +5,6 @@ namespace DaveRandom\LibDNS\Records\ResourceData;
 use DaveRandom\LibDNS\Protocol\DecodingContext;
 use DaveRandom\LibDNS\Protocol\EncodingContext;
 use DaveRandom\LibDNS\Records\ResourceData;
-use DaveRandom\LibDNS\Records\ResourceTypes;
 use DaveRandom\Network\DomainName;
 
 final class SOA implements ResourceData
@@ -89,11 +88,6 @@ final class SOA implements ResourceData
     public function getTtl(): int
     {
         return $this->ttl;
-    }
-
-    public function getTypeId(): int
-    {
-        return ResourceTypes::SOA;
     }
 
     public static function decode(DecodingContext $ctx): SOA

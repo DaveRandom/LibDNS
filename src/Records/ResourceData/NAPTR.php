@@ -5,7 +5,6 @@ namespace DaveRandom\LibDNS\Records\ResourceData;
 use DaveRandom\LibDNS\Protocol\DecodingContext;
 use DaveRandom\LibDNS\Protocol\EncodingContext;
 use DaveRandom\LibDNS\Records\ResourceData;
-use DaveRandom\LibDNS\Records\ResourceTypes;
 use DaveRandom\Network\DomainName;
 
 final class NAPTR implements ResourceData
@@ -55,11 +54,6 @@ final class NAPTR implements ResourceData
     public function getReplacement(): DomainName
     {
         return $this->replacement;
-    }
-
-    public function getTypeId(): int
-    {
-        return ResourceTypes::NAPTR;
     }
 
     public static function decode(DecodingContext $ctx): NAPTR

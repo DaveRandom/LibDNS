@@ -5,7 +5,6 @@ namespace DaveRandom\LibDNS\Records\ResourceData;
 use DaveRandom\LibDNS\Protocol\DecodingContext;
 use DaveRandom\LibDNS\Protocol\EncodingContext;
 use DaveRandom\LibDNS\Records\ResourceData;
-use DaveRandom\LibDNS\Records\ResourceTypes;
 use DaveRandom\Network\DomainName;
 
 final class MX implements ResourceData
@@ -27,11 +26,6 @@ final class MX implements ResourceData
     public function getExchange(): DomainName
     {
         return $this->exchange;
-    }
-
-    public function getTypeId(): int
-    {
-        return ResourceTypes::MX;
     }
 
     public static function decode(DecodingContext $ctx): MX

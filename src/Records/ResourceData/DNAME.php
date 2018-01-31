@@ -5,7 +5,6 @@ namespace DaveRandom\LibDNS\Records\ResourceData;
 use DaveRandom\LibDNS\Protocol\DecodingContext;
 use DaveRandom\LibDNS\Protocol\EncodingContext;
 use DaveRandom\LibDNS\Records\ResourceData;
-use DaveRandom\LibDNS\Records\ResourceTypes;
 use DaveRandom\Network\DomainName;
 
 final class DNAME implements ResourceData
@@ -20,11 +19,6 @@ final class DNAME implements ResourceData
     public function getCanonicalName(): DomainName
     {
         return $this->canonicalName;
-    }
-
-    public function getTypeId(): int
-    {
-        return ResourceTypes::DNAME;
     }
 
     public static function decode(DecodingContext $ctx): DNAME
