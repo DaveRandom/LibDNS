@@ -53,7 +53,7 @@ final class ParsingContext
 
         $entries = [];
 
-        if (\stripos(\PHP_OS, 'win') !== 0) {
+        if (\PHP_OS !== 'WINNT') {
             return $entries;
         }
 
