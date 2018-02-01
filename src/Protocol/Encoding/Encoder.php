@@ -120,6 +120,6 @@ final class Encoder
             new \Error('TCP packet exceeds 65535 byte limit: got ' . \strlen($packet) . ' bytes')
         );
 
-        return $packet . \pack('n', \strlen($packet));
+        return \pack('n', \strlen($packet)) . $packet;
     }
 }
