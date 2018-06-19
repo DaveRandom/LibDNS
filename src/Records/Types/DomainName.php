@@ -57,7 +57,24 @@ class DomainName extends Type
      */
     public function setValue($value)
     {
-        $this->setLabels(\explode('.', (string)$value));
+
+        $labels = preg_split(
+            '~(?<!\\\)' . preg_quote('.', '~') . '~',
+            (string) $value
+        );
+        $labels = array_map(
+            function ($label) {
+                return strtr(
+                    $label,
+                    [
+                        '\.' => '.',
+                    ]
+                );
+            },
+            $labels
+        );
+
+        $this->setLabels($labels);
     }
 
     /**
