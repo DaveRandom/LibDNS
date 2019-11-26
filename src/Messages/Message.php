@@ -255,7 +255,7 @@ class Message
      */
     public function getResponseCode(): int
     {
-        return $this->opCode;
+        return $this->responseCode;
     }
 
     /**
