@@ -226,6 +226,7 @@ class TypeDefinitionManager
             ],
             ResourceTypes::TXT => [ // RFC 1035
                 'txtdata+' => Types::CHARACTER_STRING,
+                '__toString' => static function() { return \implode('', \func_get_args()); },
             ],
             ResourceTypes::WKS => [ // RFC 1035
                 'address'  => Types::IPV4_ADDRESS,
