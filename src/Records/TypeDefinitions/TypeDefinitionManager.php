@@ -222,7 +222,7 @@ class TypeDefinitionManager
                 'priority' => Types::SHORT,
                 'weight'   => Types::SHORT,
                 'port'     => Types::SHORT,
-                'name'     => Types::DOMAIN_NAME | DomainName::FLAG_NO_COMPRESSION,
+                'name'     => Types::DOMAIN_NAME | (DomainName::FLAG_NO_COMPRESSION << 16),
             ],
             ResourceTypes::TXT => [ // RFC 1035
                 'txtdata+' => Types::CHARACTER_STRING,
