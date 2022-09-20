@@ -38,10 +38,12 @@ class Long extends Type
     {
         $value = (int)$value;
 
-        if ($value < 0) {
-            throw new \UnderflowException('Long integer value must be in the range 0 - 4294967296');
-        } else if ($value > 0xffffffff) {
-            throw new \OverflowException('Long integer value must be in the range 0 - 4294967296');
+        if (\PHP_INT_SIZE > 4) {
+            if ($value < 0) {
+                throw new \UnderflowException('Long integer value must be in the range 0 - 4294967296');
+            } else if ($value > 0xffffffff) {
+                throw new \OverflowException('Long integer value must be in the range 0 - 4294967296');
+            }
         }
 
         $this->value = $value;

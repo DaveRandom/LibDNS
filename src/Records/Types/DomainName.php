@@ -22,7 +22,7 @@ namespace LibDNS\Records\Types;
  */
 class DomainName extends Type
 {
-    const FLAG_NO_COMPRESSION = 0x80000000;
+    const FLAG_NO_COMPRESSION = \PHP_INT_SIZE === 4 ? -2147483648 : 0x80000000;
 
     /**
      * @var string
